@@ -3,6 +3,7 @@
 import { Typewriter } from './typewriter.js';
 import { UI } from './ui.js';
 import * as Storage from './storage.js';
+import { loginWithGoogle, logout, onUserChanged } from './auth.js';
 
 // Debounce helper
 function debounce(fn, ms) {
@@ -22,17 +23,21 @@ function init() {
   const screenEl = document.getElementById('etype-screen');
   const wordCountEl = document.getElementById('word-count');
   const titleInputEl = document.getElementById('title-input');
+  const authBtnEl = document.getElementById('btn-auth');
   const newBtnEl = document.getElementById('btn-new');
   const downloadBtnEl = document.getElementById('btn-download');
   const dialogEl = document.getElementById('new-draft-dialog');
   const confirmBtnEl = document.getElementById('btn-confirm-new');
   const cancelBtnEl = document.getElementById('btn-cancel-new');
   
+  let currentUser = null;
+
   // ---- Initialize UI ----
   const ui = new UI({
     screen: screenEl,
     wordCount: wordCountEl,
     titleInput: titleInputEl,
+    authBtn: authBtnEl,
     newBtn: newBtnEl,
     downloadBtn: downloadBtnEl,
     dialog: dialogEl,
@@ -70,8 +75,30 @@ function init() {
     requestAnimationFrame(() => ui.scrollToBottom());
   }
   
+  // ---- Auth state subscription ----
+  onUserChanged((user) => {
+    currentUser = user;
+    ui.setAuthState(user);
+  });
+
   // ---- Bind UI handlers ----
   ui.bindHandlers({
+    onAuth: async () => {
+      if (currentUser) {
+        try {
+          await logout();
+        } catch (err) {
+          console.error('Logout failed:', err);
+        }
+      } else {
+        try {
+          await loginWithGoogle();
+        } catch (err) {
+          console.error('Login failed:', err);
+        }
+      }
+    },
+
     onNew: () => {
       // If there's text, confirm first
       const currentText = typewriter.getText();

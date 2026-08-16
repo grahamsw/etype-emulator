@@ -1,4 +1,12 @@
 {
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "E-Type Emulator",
+        "supportEmail": "graham.stalker@gmail.com"
+      }
+    }
+  },
   "hosting": {
     "public": "public",
     "ignore": [

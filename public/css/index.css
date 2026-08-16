@@ -134,6 +134,24 @@ body {
   transform: scale(0.95);
 }
 
+.btn-auth {
+  gap: 6px;
+  padding: 4px 10px !important;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.user-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.auth-label {
+  white-space: nowrap;
+}
+
 #etype-screen {
   background-color: var(--paper-bg);
   margin: 0 20px 20px 20px;
