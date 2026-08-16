@@ -362,9 +362,14 @@ export class UI {
           this.gdriveDialog.close();
         }
       });
-      this.gdriveDialog.addEventListener('close', () => {
-        this._onGDriveConfirm = null;
-      });
-    }
+    // Bind close events on all dialogs to refocus typewriter
+    const allDialogs = [this.dialog, this.gdriveDialog, this.infoDialog, this.settingsDialog];
+    allDialogs.forEach((d) => {
+      if (d) {
+        d.addEventListener('close', () => {
+          if (handlers.onDialogClose) handlers.onDialogClose();
+        });
+      }
+    });
   }
 }
