@@ -82,30 +82,37 @@ function init() {
     toastMessage: toastMessageEl,
   });
   
-  // ---- Distraction-Free Controls Visibility ----
-  const updateControlsVisibility = (e) => {
-    if (!screenContainerEl) return;
-    const rect = screenContainerEl.getBoundingClientRect();
-    const isOutsideScreen = (
-      e.clientX < rect.left ||
-      e.clientX > rect.right ||
-      e.clientY < rect.top ||
-      e.clientY > rect.bottom
-    );
+  // ---- Distraction-Free Controls & Bottom Bar Visibility ----
+  let mouseIdleTimer = null;
 
-    if (isOutsideScreen) {
-      document.body.classList.add('show-controls');
-    } else {
+  const showControls = () => {
+    document.body.classList.add('show-controls');
+    if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
+    // Controls hang around for 3 seconds after mouse stops moving
+    mouseIdleTimer = setTimeout(() => {
+      const focusedElement = document.activeElement;
+      const isFocusedInControls = focusedElement && focusedElement.closest('#toolbar, .floating-controls, dialog');
+      if (!isFocusedInControls) {
+        document.body.classList.remove('show-controls');
+      }
+    }, 3000);
+  };
+
+  const hideControlsImmediately = () => {
+    if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
+    const focusedElement = document.activeElement;
+    const isFocusedInControls = focusedElement && focusedElement.closest('#toolbar, .floating-controls, dialog');
+    if (!isFocusedInControls) {
       document.body.classList.remove('show-controls');
     }
   };
 
-  window.addEventListener('mousemove', updateControlsVisibility);
+  window.addEventListener('mousemove', () => {
+    showControls();
+  });
 
-  window.addEventListener('touchstart', (e) => {
-    if (e.touches && e.touches.length > 0) {
-      updateControlsVisibility(e.touches[0]);
-    }
+  window.addEventListener('touchstart', () => {
+    showControls();
   }, { passive: true });
 
   // ---- Auto-save (debounced) ----
@@ -126,7 +133,7 @@ function init() {
       autoSave();
     },
     onTypingStart: () => {
-      document.body.classList.remove('show-controls');
+      hideControlsImmediately();
     },
   });
   
