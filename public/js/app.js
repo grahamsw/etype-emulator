@@ -82,39 +82,31 @@ function init() {
     toastMessage: toastMessageEl,
   });
   
-  // ---- Distraction-Free Auto-Hide Handling ----
-  let autohideTimer = null;
+  // ---- Distraction-Free Controls Visibility ----
+  const updateControlsVisibility = (e) => {
+    if (!screenContainerEl) return;
+    const rect = screenContainerEl.getBoundingClientRect();
+    const isOutsideScreen = (
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom
+    );
 
-  const revealUI = () => {
-    ui.setAutohide(false);
+    if (isOutsideScreen) {
+      document.body.classList.add('show-controls');
+    } else {
+      document.body.classList.remove('show-controls');
+    }
   };
 
-  const hideUI = () => {
-    ui.setAutohide(true);
-  };
+  window.addEventListener('mousemove', updateControlsVisibility);
 
-  // Mouse movement auto-hide rules
-  document.addEventListener('mousemove', (e) => {
-    // If mouse is outside screen container (outer margins / edges), reveal controls
-    const rect = screenContainerEl ? screenContainerEl.getBoundingClientRect() : null;
-    if (rect) {
-      const isInsidePaper = (
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom
-      );
-      if (!isInsidePaper) {
-        revealUI();
-        return;
-      }
+  window.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches.length > 0) {
+      updateControlsVisibility(e.touches[0]);
     }
-
-    // Inside paper area while typing -> auto-hide UI
-    if (typewriter.hasTyped) {
-      hideUI();
-    }
-  });
+  }, { passive: true });
 
   // ---- Auto-save (debounced) ----
   let createdAt = new Date().toISOString();
@@ -134,7 +126,7 @@ function init() {
       autoSave();
     },
     onTypingStart: () => {
-      hideUI();
+      document.body.classList.remove('show-controls');
     },
   });
   
@@ -155,7 +147,6 @@ function init() {
     ui.setAuthState(user);
     if (!user) {
       resetDriveCache();
-      revealUI();
     }
   });
 
@@ -241,7 +232,6 @@ function init() {
           ui.updateWordCount('');
           createdAt = new Date().toISOString();
           Storage.clearStorage();
-          revealUI();
           typewriter.focus();
         });
       } else {
@@ -250,7 +240,6 @@ function init() {
         ui.setTitle('Untitled Draft');
         createdAt = new Date().toISOString();
         Storage.clearStorage();
-        revealUI();
         typewriter.focus();
       }
     },
