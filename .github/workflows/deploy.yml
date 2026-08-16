@@ -33,7 +33,8 @@ jobs:
               'public/js/typewriter.js',
               'public/js/storage.js',
               'public/js/ui.js',
-              'public/js/auth.js'
+              'public/js/auth.js',
+              'public/js/drive.js'
             ];
             files.forEach(f => {
               if (!fs.existsSync(f)) throw new Error('File does not exist: ' + f);

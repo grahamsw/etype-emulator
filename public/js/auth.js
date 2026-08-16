@@ -1,4 +1,4 @@
-// auth.js — Google Authentication via Firebase Auth SDK
+// auth.js — Google Authentication via Firebase Auth SDK & OAuth Scopes
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { 
@@ -23,15 +23,24 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();
+// Request Google Drive file scope for saving drafts to etype_drafts folder
+googleProvider.addScope('https://www.googleapis.com/auth/drive.file');
+
+let currentAccessToken = sessionStorage.getItem('etype_gdrive_token') || null;
 
 /**
  * Sign in with Google using popup.
- * @returns {Promise<import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').User>}
+ * @returns {Promise<{user: import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').User, accessToken: string|null}>}
  */
 export async function loginWithGoogle() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    if (credential && credential.accessToken) {
+      currentAccessToken = credential.accessToken;
+      sessionStorage.setItem('etype_gdrive_token', currentAccessToken);
+    }
+    return { user: result.user, accessToken: currentAccessToken };
   } catch (error) {
     if (error.code !== 'auth/popup-closed-by-user') {
       console.error('E-Type Auth Error:', error);
@@ -41,12 +50,22 @@ export async function loginWithGoogle() {
 }
 
 /**
+ * Get current Google OAuth access token.
+ * @returns {string|null}
+ */
+export function getAccessToken() {
+  return currentAccessToken;
+}
+
+/**
  * Sign out current user.
  * @returns {Promise<void>}
  */
 export async function logout() {
   try {
     await signOut(auth);
+    currentAccessToken = null;
+    sessionStorage.removeItem('etype_gdrive_token');
   } catch (error) {
     console.error('E-Type Logout Error:', error);
     throw error;
@@ -59,5 +78,11 @@ export async function logout() {
  * @returns {Function} Unsubscribe function
  */
 export function onUserChanged(callback) {
-  return onAuthStateChanged(auth, callback);
+  return onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      currentAccessToken = null;
+      sessionStorage.removeItem('etype_gdrive_token');
+    }
+    callback(user);
+  });
 }
