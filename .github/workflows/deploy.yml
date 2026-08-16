@@ -1,0 +1,78 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Verify & Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate HTML structure & contracts
+        run: |
+          grep -q 'id="text-display"' public/index.html || (echo "Missing #text-display" && exit 1)
+          grep -q 'id="hidden-input"' public/index.html || (echo "Missing #hidden-input" && exit 1)
+          grep -q 'id="toolbar"' public/index.html || (echo "Missing #toolbar" && exit 1)
+          grep -q 'id="btn-auth"' public/index.html || (echo "Missing #btn-auth" && exit 1)
+          echo "HTML structure verified successfully."
+
+      - name: Validate JS ES modules
+        run: |
+          node -e "
+            const fs = require('fs');
+            const files = [
+              'public/js/app.js',
+              'public/js/typewriter.js',
+              'public/js/storage.js',
+              'public/js/ui.js',
+              'public/js/auth.js'
+            ];
+            files.forEach(f => {
+              if (!fs.existsSync(f)) throw new Error('File does not exist: ' + f);
+              const content = fs.readFileSync(f, 'utf8');
+              if (!content.trim()) throw new Error('File is empty: ' + f);
+            });
+            console.log('All JS ES modules validated.');
+          "
+
+  deploy-preview:
+    name: Deploy PR Preview
+    if: github.event_name == 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Firebase Hosting Preview
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ETYPE_EMULATOR_APP }}'
+          channelId: 'pr-${{ github.event.number }}'
+          projectId: etype-emulator-app
+
+  deploy-live:
+    name: Deploy to Firebase Hosting Live
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Firebase Hosting Live
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ETYPE_EMULATOR_APP }}'
+          channelId: live
+          projectId: etype-emulator-app

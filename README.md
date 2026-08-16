@@ -52,16 +52,14 @@ npx -y firebase-tools@latest emulators:start --only hosting --project <PROJECT_I
 # Or just open public/index.html directly in a browser
 ```
 
-## Deployment
+## Deployment & CI/CD
 
+Deployment is fully automated via **GitHub Actions** (`.github/workflows/deploy.yml`):
+- **Pull Requests**: Pull requests targeting `main` trigger validation checks and deploy preview channels.
+- **Merges to `main`**: Merging a PR into `main` automatically runs verification tests and deploys the app live to [https://etype-emulator-app.web.app](https://etype-emulator-app.web.app).
+
+Manual deployment via Firebase CLI:
 ```bash
-# Login to Firebase (first time only)
-npx -y firebase-tools@latest login
-
-# Set active project
-npx -y firebase-tools@latest use <PROJECT_ID>
-
-# Deploy
 npx -y firebase-tools@latest deploy --only hosting
 ```
 
