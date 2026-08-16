@@ -49,7 +49,6 @@ These IDs are referenced across HTML, CSS, and JS. Do not rename without updatin
 - `#text-display` — text rendering container
 - `#hidden-input` — hidden textarea for input capture
 - `#cursor` — blinking block cursor
-- `#placeholder` — "Just start typing…" placeholder
 - `#new-draft-dialog` — native `<dialog>` for new draft confirmation
 - `#btn-confirm-new` — confirm button in dialog
 - `#btn-cancel-new` — cancel button in dialog

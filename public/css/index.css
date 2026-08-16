@@ -188,16 +188,7 @@ body {
   -webkit-user-select: none;
 }
 
-.placeholder {
-  color: var(--ghost-color);
-  font-style: italic;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
 
-.placeholder.hidden {
-  opacity: 0;
-}
 
 .char {
   /* Base character - no special styling needed once settled */
