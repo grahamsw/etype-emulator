@@ -409,48 +409,51 @@ dialog::backdrop {
 /* Floating Controls (Info & Settings) */
 .floating-controls {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 100;
+  top: 24px;
+  left: 24px;
+  z-index: 1000;
   display: flex;
-  gap: 10px;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-
-.btn-icon {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--device-bezel);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.btn-icon:hover {
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
-}
-
-/* Distraction-Free Auto-Hide Rules */
-#toolbar,
-.floating-controls {
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-
-body.autohide-active #toolbar,
-body.autohide-active .floating-controls {
+  gap: 12px;
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  transform: translateY(-4px);
+}
+
+body.show-controls .floating-controls {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.btn-icon {
+  background: var(--surface-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paper-bg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.btn-icon:hover {
+  background: #2b2b2b;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+.btn-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
 /* Dialog Form Enhancements */
@@ -528,7 +531,7 @@ body.autohide-active .floating-controls {
     font-size: 0.65rem;
   }
   .floating-controls {
-    bottom: 12px;
+    top: 12px;
     left: 12px;
   }
 }
