@@ -3,7 +3,8 @@
 import { Typewriter } from './typewriter.js';
 import { UI } from './ui.js';
 import * as Storage from './storage.js';
-import { loginWithGoogle, logout, onUserChanged } from './auth.js';
+import { loginWithGoogle, logout, onUserChanged, getAccessToken } from './auth.js';
+import { saveDraftToDrive, resetDriveCache } from './drive.js';
 
 // Debounce helper
 function debounce(fn, ms) {
@@ -23,11 +24,19 @@ function init() {
   const wordCountEl = document.getElementById('word-count');
   const titleInputEl = document.getElementById('title-input');
   const authBtnEl = document.getElementById('btn-auth');
+  const gdriveBtnEl = document.getElementById('btn-gdrive');
   const newBtnEl = document.getElementById('btn-new');
   const downloadBtnEl = document.getElementById('btn-download');
   const dialogEl = document.getElementById('new-draft-dialog');
   const confirmBtnEl = document.getElementById('btn-confirm-new');
   const cancelBtnEl = document.getElementById('btn-cancel-new');
+
+  const gdriveDialogEl = document.getElementById('gdrive-dialog');
+  const gdriveTitleInputEl = document.getElementById('gdrive-title-input');
+  const confirmGdriveBtnEl = document.getElementById('btn-confirm-gdrive');
+  const cancelGdriveBtnEl = document.getElementById('btn-cancel-gdrive');
+  const toastEl = document.getElementById('toast');
+  const toastMessageEl = document.getElementById('toast-message');
   
   let currentUser = null;
 
@@ -37,11 +46,18 @@ function init() {
     wordCount: wordCountEl,
     titleInput: titleInputEl,
     authBtn: authBtnEl,
+    gdriveBtn: gdriveBtnEl,
     newBtn: newBtnEl,
     downloadBtn: downloadBtnEl,
     dialog: dialogEl,
     confirmBtn: confirmBtnEl,
     cancelBtn: cancelBtnEl,
+    gdriveDialog: gdriveDialogEl,
+    gdriveTitleInput: gdriveTitleInputEl,
+    confirmGdriveBtn: confirmGdriveBtnEl,
+    cancelGdriveBtn: cancelGdriveBtnEl,
+    toast: toastEl,
+    toastMessage: toastMessageEl,
   });
   
   // ---- Auto-save (debounced) ----
@@ -78,6 +94,9 @@ function init() {
   onUserChanged((user) => {
     currentUser = user;
     ui.setAuthState(user);
+    if (!user) {
+      resetDriveCache();
+    }
   });
 
   // ---- Bind UI handlers ----
@@ -86,6 +105,7 @@ function init() {
       if (currentUser) {
         try {
           await logout();
+          resetDriveCache();
         } catch (err) {
           console.error('Logout failed:', err);
         }
@@ -96,6 +116,37 @@ function init() {
           console.error('Login failed:', err);
         }
       }
+    },
+
+    onGDrive: async () => {
+      let token = getAccessToken();
+      if (!currentUser || !token) {
+        try {
+          const authResult = await loginWithGoogle();
+          token = authResult.accessToken;
+        } catch (err) {
+          return;
+        }
+      }
+
+      const text = typewriter.getText();
+      if (!text.trim()) {
+        ui.showToast('Draft is empty. Type something first!');
+        return;
+      }
+
+      ui.showGDriveDialog(ui.getTitle(), async (customTitle) => {
+        try {
+          ui.showToast('Saving to Google Drive...');
+          const activeToken = getAccessToken();
+          const file = await saveDraftToDrive(activeToken, customTitle, text);
+          ui.setTitle(customTitle);
+          ui.showToast(`Saved "${file.name}" to etype_drafts in Google Drive!`);
+        } catch (err) {
+          console.error('Google Drive save error:', err);
+          ui.showToast('Failed to save to Google Drive. Please try again.');
+        }
+      });
     },
 
     onNew: () => {
