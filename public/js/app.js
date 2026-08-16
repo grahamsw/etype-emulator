@@ -21,6 +21,7 @@ function init() {
   const inputEl = document.getElementById('hidden-input');
   const cursorEl = document.getElementById('cursor');
   const screenEl = document.getElementById('etype-screen');
+  const screenContainerEl = document.getElementById('screen-container');
   const wordCountEl = document.getElementById('word-count');
   const titleInputEl = document.getElementById('title-input');
   const authBtnEl = document.getElementById('btn-auth');
@@ -35,10 +36,22 @@ function init() {
   const gdriveTitleInputEl = document.getElementById('gdrive-title-input');
   const confirmGdriveBtnEl = document.getElementById('btn-confirm-gdrive');
   const cancelGdriveBtnEl = document.getElementById('btn-cancel-gdrive');
+  const gdriveFolderDisplayEl = document.getElementById('gdrive-folder-display');
+
+  const infoBtnEl = document.getElementById('btn-info');
+  const settingsBtnEl = document.getElementById('btn-settings');
+  const infoDialogEl = document.getElementById('info-dialog');
+  const closeInfoBtnEl = document.getElementById('btn-close-info');
+  const settingsDialogEl = document.getElementById('settings-dialog');
+  const settingsFolderInputEl = document.getElementById('settings-drive-folder');
+  const cancelSettingsBtnEl = document.getElementById('btn-cancel-settings');
+  const saveSettingsBtnEl = document.getElementById('btn-save-settings');
+
   const toastEl = document.getElementById('toast');
   const toastMessageEl = document.getElementById('toast-message');
   
   let currentUser = null;
+  let appSettings = Storage.loadSettings();
 
   // ---- Initialize UI ----
   const ui = new UI({
@@ -56,10 +69,53 @@ function init() {
     gdriveTitleInput: gdriveTitleInputEl,
     confirmGdriveBtn: confirmGdriveBtnEl,
     cancelGdriveBtn: cancelGdriveBtnEl,
+    gdriveFolderDisplay: gdriveFolderDisplayEl,
+    infoBtn: infoBtnEl,
+    settingsBtn: settingsBtnEl,
+    infoDialog: infoDialogEl,
+    closeInfoBtn: closeInfoBtnEl,
+    settingsDialog: settingsDialogEl,
+    settingsFolderInput: settingsFolderInputEl,
+    cancelSettingsBtn: cancelSettingsBtnEl,
+    saveSettingsBtn: saveSettingsBtnEl,
     toast: toastEl,
     toastMessage: toastMessageEl,
   });
   
+  // ---- Distraction-Free Auto-Hide Handling ----
+  let autohideTimer = null;
+
+  const revealUI = () => {
+    ui.setAutohide(false);
+  };
+
+  const hideUI = () => {
+    ui.setAutohide(true);
+  };
+
+  // Mouse movement auto-hide rules
+  document.addEventListener('mousemove', (e) => {
+    // If mouse is outside screen container (outer margins / edges), reveal controls
+    const rect = screenContainerEl ? screenContainerEl.getBoundingClientRect() : null;
+    if (rect) {
+      const isInsidePaper = (
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+      );
+      if (!isInsidePaper) {
+        revealUI();
+        return;
+      }
+    }
+
+    // Inside paper area while typing -> auto-hide UI
+    if (typewriter.hasTyped) {
+      hideUI();
+    }
+  });
+
   // ---- Auto-save (debounced) ----
   let createdAt = new Date().toISOString();
   
@@ -76,6 +132,9 @@ function init() {
     onTextChange: (text) => {
       ui.updateWordCount(text);
       autoSave();
+    },
+    onTypingStart: () => {
+      hideUI();
     },
   });
   
@@ -96,6 +155,7 @@ function init() {
     ui.setAuthState(user);
     if (!user) {
       resetDriveCache();
+      revealUI();
     }
   });
 
@@ -116,6 +176,14 @@ function init() {
           console.error('Login failed:', err);
         }
       }
+    },
+
+    onRequestSettings: () => {
+      ui.showSettingsDialog(appSettings, (newSettings) => {
+        appSettings = newSettings;
+        Storage.saveSettings(newSettings);
+        ui.showToast(`Settings saved. Folder: ${appSettings.driveFolder}`);
+      });
     },
 
     onGDrive: async () => {
@@ -146,14 +214,16 @@ function init() {
         return;
       }
 
+      const folderName = appSettings.driveFolder || 'etype_drafts';
+
       // Open Save to Google Drive modal dialog
-      ui.showGDriveDialog(ui.getTitle(), async (customTitle) => {
+      ui.showGDriveDialog(ui.getTitle(), folderName, async (customTitle) => {
         try {
-          ui.showToast('Saving to etype_drafts folder in Google Drive...');
+          ui.showToast(`Saving to ${folderName} folder in Google Drive...`);
           const activeToken = getAccessToken() || token;
-          const file = await saveDraftToDrive(activeToken, customTitle, text);
+          const file = await saveDraftToDrive(activeToken, customTitle, text, folderName);
           ui.setTitle(customTitle);
-          ui.showToast(`Saved "${file.name}" to etype_drafts in Google Drive!`);
+          ui.showToast(`Saved "${file.name}" to ${folderName} in Google Drive!`);
         } catch (err) {
           console.error('Google Drive save error:', err);
           ui.showToast(`Drive Error: ${err.message || 'Failed to save'}`);
@@ -171,6 +241,7 @@ function init() {
           ui.updateWordCount('');
           createdAt = new Date().toISOString();
           Storage.clearStorage();
+          revealUI();
           typewriter.focus();
         });
       } else {
@@ -179,6 +250,7 @@ function init() {
         ui.setTitle('Untitled Draft');
         createdAt = new Date().toISOString();
         Storage.clearStorage();
+        revealUI();
         typewriter.focus();
       }
     },
@@ -205,7 +277,6 @@ function init() {
   });
   
   // ---- Focus the typewriter on load ----
-  // Small delay to ensure everything is rendered
   setTimeout(() => typewriter.focus(), 100);
 }
 
