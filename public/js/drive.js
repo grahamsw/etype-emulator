@@ -1,5 +1,7 @@
 // drive.js — Google Drive API integration for etype_drafts folder and uploads
 
+import { clearAccessToken } from './auth.js';
+
 const DRIVE_API_BASE = 'https://www.googleapis.com/drive/v3';
 const UPLOAD_API_BASE = 'https://www.googleapis.com/upload/drive/v3';
 const FOLDER_NAME = 'etype_drafts';
@@ -29,6 +31,12 @@ export async function getOrCreateDraftsFolder(accessToken) {
     }
   });
 
+  if (response.status === 401) {
+    clearAccessToken();
+    resetDriveCache();
+    throw new Error('Google authorization expired. Please sign in again.');
+  }
+
   if (!response.ok) {
     const errText = await response.text();
     throw new Error(`Google Drive API error (${response.status}): ${errText}`);
@@ -52,6 +60,12 @@ export async function getOrCreateDraftsFolder(accessToken) {
       mimeType: 'application/vnd.google-apps.folder'
     })
   });
+
+  if (createResponse.status === 401) {
+    clearAccessToken();
+    resetDriveCache();
+    throw new Error('Google authorization expired. Please sign in again.');
+  }
 
   if (!createResponse.ok) {
     const errText = await createResponse.text();
@@ -103,6 +117,12 @@ export async function saveDraftToDrive(accessToken, title, content) {
     },
     body: multipartRequestBody
   });
+
+  if (response.status === 401) {
+    clearAccessToken();
+    resetDriveCache();
+    throw new Error('Google authorization expired. Please sign in again.');
+  }
 
   if (!response.ok) {
     const errText = await response.text();

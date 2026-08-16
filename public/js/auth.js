@@ -26,7 +26,7 @@ const googleProvider = new GoogleAuthProvider();
 // Request Google Drive file scope for saving drafts to etype_drafts folder
 googleProvider.addScope('https://www.googleapis.com/auth/drive.file');
 
-let currentAccessToken = sessionStorage.getItem('etype_gdrive_token') || null;
+let currentAccessToken = localStorage.getItem('etype_gdrive_token') || null;
 
 /**
  * Sign in with Google using popup.
@@ -38,7 +38,7 @@ export async function loginWithGoogle() {
     const credential = GoogleAuthProvider.credentialFromResult(result);
     if (credential && credential.accessToken) {
       currentAccessToken = credential.accessToken;
-      sessionStorage.setItem('etype_gdrive_token', currentAccessToken);
+      localStorage.setItem('etype_gdrive_token', currentAccessToken);
     }
     return { user: result.user, accessToken: currentAccessToken };
   } catch (error) {
@@ -54,7 +54,18 @@ export async function loginWithGoogle() {
  * @returns {string|null}
  */
 export function getAccessToken() {
+  if (!currentAccessToken) {
+    currentAccessToken = localStorage.getItem('etype_gdrive_token');
+  }
   return currentAccessToken;
+}
+
+/**
+ * Clear cached access token (e.g. on 401 error).
+ */
+export function clearAccessToken() {
+  currentAccessToken = null;
+  localStorage.removeItem('etype_gdrive_token');
 }
 
 /**
@@ -64,8 +75,7 @@ export function getAccessToken() {
 export async function logout() {
   try {
     await signOut(auth);
-    currentAccessToken = null;
-    sessionStorage.removeItem('etype_gdrive_token');
+    clearAccessToken();
   } catch (error) {
     console.error('E-Type Logout Error:', error);
     throw error;
@@ -80,8 +90,7 @@ export async function logout() {
 export function onUserChanged(callback) {
   return onAuthStateChanged(auth, (user) => {
     if (!user) {
-      currentAccessToken = null;
-      sessionStorage.removeItem('etype_gdrive_token');
+      clearAccessToken();
     }
     callback(user);
   });
