@@ -28,11 +28,21 @@ export class UI {
     this.gdriveTitleInput = elements.gdriveTitleInput;
     this.confirmGdriveBtn = elements.confirmGdriveBtn;
     this.cancelGdriveBtn = elements.cancelGdriveBtn;
+    this.gdriveFolderDisplay = elements.gdriveFolderDisplay;
+    this.infoBtn = elements.infoBtn;
+    this.settingsBtn = elements.settingsBtn;
+    this.infoDialog = elements.infoDialog;
+    this.closeInfoBtn = elements.closeInfoBtn;
+    this.settingsDialog = elements.settingsDialog;
+    this.settingsFolderInput = elements.settingsFolderInput;
+    this.cancelSettingsBtn = elements.cancelSettingsBtn;
+    this.saveSettingsBtn = elements.saveSettingsBtn;
     this.toast = elements.toast;
     this.toastMessage = elements.toastMessage;
     
     this._onNewDraftConfirm = null;
     this._onGDriveConfirm = null;
+    this._onSaveSettingsConfirm = null;
     this._toastTimer = null;
   }
   
@@ -133,17 +143,56 @@ export class UI {
   /**
    * Show the Google Drive save dialog.
    * @param {string} defaultTitle - Initial title string
+   * @param {string} folderName - Destination folder name
    * @param {Function} onConfirm - Called with (title) if confirmed
    */
-  showGDriveDialog(defaultTitle, onConfirm) {
+  showGDriveDialog(defaultTitle, folderName, onConfirm) {
     if (!this.gdriveDialog) return;
     this._onGDriveConfirm = onConfirm;
+    if (this.gdriveFolderDisplay) {
+      this.gdriveFolderDisplay.textContent = folderName || 'etype_drafts';
+    }
     if (this.gdriveTitleInput) {
       this.gdriveTitleInput.value = defaultTitle || 'Untitled Draft';
     }
     this.gdriveDialog.showModal();
     if (this.gdriveTitleInput) {
       this.gdriveTitleInput.select();
+    }
+  }
+
+  /**
+   * Show the Info modal dialog.
+   */
+  showInfoDialog() {
+    if (this.infoDialog) {
+      this.infoDialog.showModal();
+    }
+  }
+
+  /**
+   * Show the Settings modal dialog.
+   * @param {Object} currentSettings - { driveFolder }
+   * @param {Function} onSave - Called with (newSettings)
+   */
+  showSettingsDialog(currentSettings, onSave) {
+    if (!this.settingsDialog) return;
+    this._onSaveSettingsConfirm = onSave;
+    if (this.settingsFolderInput) {
+      this.settingsFolderInput.value = currentSettings.driveFolder || 'etype_drafts';
+    }
+    this.settingsDialog.showModal();
+  }
+
+  /**
+   * Toggle distraction-free auto-hide of toolbar and floating controls.
+   * @param {boolean} hide - True to hide UI, false to reveal UI
+   */
+  setAutohide(hide) {
+    if (hide) {
+      document.body.classList.add('autohide-active');
+    } else {
+      document.body.classList.remove('autohide-active');
     }
   }
 
@@ -171,6 +220,7 @@ export class UI {
    * @param {Function} handlers.onGDrive - Called when "Save to Google Drive" button clicked
    * @param {Function} handlers.onTitleChange - Called when title input changes
    * @param {Function} handlers.onAuth - Called when auth button clicked
+   * @param {Function} handlers.onSaveSettings - Called with ({ driveFolder })
    */
   bindHandlers(handlers) {
     // Auth button
@@ -184,6 +234,59 @@ export class UI {
     if (this.gdriveBtn) {
       this.gdriveBtn.addEventListener('click', () => {
         if (handlers.onGDrive) handlers.onGDrive();
+      });
+    }
+
+    // Info button
+    if (this.infoBtn) {
+      this.infoBtn.addEventListener('click', () => {
+        this.showInfoDialog();
+      });
+    }
+
+    // Settings button
+    if (this.settingsBtn) {
+      this.settingsBtn.addEventListener('click', () => {
+        if (handlers.onRequestSettings) handlers.onRequestSettings();
+      });
+    }
+
+    // Close Info dialog
+    if (this.closeInfoBtn && this.infoDialog) {
+      this.closeInfoBtn.addEventListener('click', () => {
+        this.infoDialog.close();
+      });
+      this.infoDialog.addEventListener('click', (e) => {
+        if (e.target === this.infoDialog) this.infoDialog.close();
+      });
+    }
+
+    // Settings Dialog save & cancel
+    if (this.saveSettingsBtn && this.settingsDialog) {
+      this.saveSettingsBtn.addEventListener('click', () => {
+        const driveFolder = (this.settingsFolderInput ? this.settingsFolderInput.value : '').trim() || 'etype_drafts';
+        const cb = this._onSaveSettingsConfirm;
+        this._onSaveSettingsConfirm = null;
+        this.settingsDialog.close();
+        if (cb) {
+          cb({ driveFolder });
+        }
+      });
+    }
+
+    if (this.cancelSettingsBtn && this.settingsDialog) {
+      this.cancelSettingsBtn.addEventListener('click', () => {
+        this._onSaveSettingsConfirm = null;
+        this.settingsDialog.close();
+      });
+      this.settingsDialog.addEventListener('click', (e) => {
+        if (e.target === this.settingsDialog) {
+          this._onSaveSettingsConfirm = null;
+          this.settingsDialog.close();
+        }
+      });
+      this.settingsDialog.addEventListener('close', () => {
+        this._onSaveSettingsConfirm = null;
       });
     }
 
