@@ -313,6 +313,60 @@ dialog::backdrop {
   background: #1a1a1a;
 }
 
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  color: var(--toolbar-text);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-group input {
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--ink-color);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink-color);
+  color: var(--paper-bg);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.toast.hidden {
+  opacity: 0;
+  transform: translate(-50%, 10px);
+}
+
 @media (max-width: 640px) {
   body {
     align-items: flex-start;

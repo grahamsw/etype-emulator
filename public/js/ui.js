@@ -18,13 +18,22 @@ export class UI {
     this.titleInput = elements.titleInput;
     this.newBtn = elements.newBtn;
     this.downloadBtn = elements.downloadBtn;
+    this.gdriveBtn = elements.gdriveBtn;
     this.authBtn = elements.authBtn;
     this.authLabel = this.authBtn ? this.authBtn.querySelector('.auth-label') : null;
     this.dialog = elements.dialog;
     this.confirmBtn = elements.confirmBtn;
     this.cancelBtn = elements.cancelBtn;
+    this.gdriveDialog = elements.gdriveDialog;
+    this.gdriveTitleInput = elements.gdriveTitleInput;
+    this.confirmGdriveBtn = elements.confirmGdriveBtn;
+    this.cancelGdriveBtn = elements.cancelGdriveBtn;
+    this.toast = elements.toast;
+    this.toastMessage = elements.toastMessage;
     
     this._onNewDraftConfirm = null;
+    this._onGDriveConfirm = null;
+    this._toastTimer = null;
   }
   
   /**
@@ -122,10 +131,44 @@ export class UI {
   }
 
   /**
+   * Show the Google Drive save dialog.
+   * @param {string} defaultTitle - Initial title string
+   * @param {Function} onConfirm - Called with (title) if confirmed
+   */
+  showGDriveDialog(defaultTitle, onConfirm) {
+    if (!this.gdriveDialog) return;
+    this._onGDriveConfirm = onConfirm;
+    if (this.gdriveTitleInput) {
+      this.gdriveTitleInput.value = defaultTitle || 'Untitled Draft';
+    }
+    this.gdriveDialog.showModal();
+    if (this.gdriveTitleInput) {
+      this.gdriveTitleInput.select();
+    }
+  }
+
+  /**
+   * Display a floating toast notification.
+   * @param {string} message
+   * @param {number} [duration=3500]
+   */
+  showToast(message, duration = 3500) {
+    if (!this.toast || !this.toastMessage) return;
+    this.toastMessage.textContent = message;
+    this.toast.classList.remove('hidden');
+
+    if (this._toastTimer) clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => {
+      this.toast.classList.add('hidden');
+    }, duration);
+  }
+
+  /**
    * Bind UI event handlers.
    * @param {Object} handlers
    * @param {Function} handlers.onNew - Called when "New Draft" button clicked
    * @param {Function} handlers.onDownload - Called when "Download" button clicked
+   * @param {Function} handlers.onGDrive - Called when "Save to Google Drive" button clicked
    * @param {Function} handlers.onTitleChange - Called when title input changes
    * @param {Function} handlers.onAuth - Called when auth button clicked
    */
@@ -134,6 +177,13 @@ export class UI {
     if (this.authBtn) {
       this.authBtn.addEventListener('click', () => {
         if (handlers.onAuth) handlers.onAuth();
+      });
+    }
+
+    // Google Drive button
+    if (this.gdriveBtn) {
+      this.gdriveBtn.addEventListener('click', () => {
+        if (handlers.onGDrive) handlers.onGDrive();
       });
     }
 
@@ -152,7 +202,7 @@ export class UI {
       if (handlers.onTitleChange) handlers.onTitleChange(this.getTitle());
     });
     
-    // Dialog confirm
+    // New draft Dialog confirm
     this.confirmBtn.addEventListener('click', () => {
       this.dialog.close();
       if (this._onNewDraftConfirm) {
@@ -161,13 +211,13 @@ export class UI {
       }
     });
     
-    // Dialog cancel
+    // New draft Dialog cancel
     this.cancelBtn.addEventListener('click', () => {
       this.dialog.close();
       this._onNewDraftConfirm = null;
     });
     
-    // Close dialog on backdrop click
+    // Close new draft dialog on backdrop click
     this.dialog.addEventListener('click', (e) => {
       if (e.target === this.dialog) {
         this.dialog.close();
@@ -175,9 +225,41 @@ export class UI {
       }
     });
     
-    // Close dialog on Escape (native behavior, but clean up callback)
+    // Close new draft dialog on Escape
     this.dialog.addEventListener('close', () => {
       this._onNewDraftConfirm = null;
     });
+
+    // Google Drive Dialog confirm
+    if (this.confirmGdriveBtn) {
+      this.confirmGdriveBtn.addEventListener('click', () => {
+        const title = (this.gdriveTitleInput ? this.gdriveTitleInput.value : '').trim();
+        this.gdriveDialog.close();
+        if (this._onGDriveConfirm) {
+          this._onGDriveConfirm(title || this.getTitle());
+          this._onGDriveConfirm = null;
+        }
+      });
+    }
+
+    // Google Drive Dialog cancel
+    if (this.cancelGdriveBtn) {
+      this.cancelGdriveBtn.addEventListener('click', () => {
+        this.gdriveDialog.close();
+        this._onGDriveConfirm = null;
+      });
+    }
+
+    if (this.gdriveDialog) {
+      this.gdriveDialog.addEventListener('click', (e) => {
+        if (e.target === this.gdriveDialog) {
+          this.gdriveDialog.close();
+          this._onGDriveConfirm = null;
+        }
+      });
+      this.gdriveDialog.addEventListener('close', () => {
+        this._onGDriveConfirm = null;
+      });
+    }
   }
 }
