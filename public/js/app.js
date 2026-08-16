@@ -119,29 +119,39 @@ function init() {
     },
 
     onGDrive: async () => {
-      const text = typewriter.getText();
-      if (!text.trim()) {
-        ui.showToast('Draft is empty. Type something first!');
+      let token = getAccessToken();
+
+      // If not logged in or token missing, authenticate immediately on button click gesture
+      if (!currentUser || !token) {
+        try {
+          ui.showToast('Signing in with Google...');
+          const authResult = await loginWithGoogle();
+          token = authResult ? authResult.accessToken : getAccessToken();
+        } catch (err) {
+          if (err && err.code !== 'auth/popup-closed-by-user') {
+            ui.showToast(`Auth Error: ${err.message || 'Sign in failed'}`);
+          }
+          return;
+        }
+      }
+
+      if (!token) {
+        ui.showToast('Google Sign-In is required to save to Google Drive.');
         return;
       }
 
-      // Open Save to Google Drive modal dialog immediately
+      const text = typewriter.getText();
+      if (!text.trim()) {
+        ui.showToast('Draft is empty. Type a few words before saving!');
+        return;
+      }
+
+      // Open Save to Google Drive modal dialog
       ui.showGDriveDialog(ui.getTitle(), async (customTitle) => {
         try {
-          ui.showToast('Connecting to Google Drive...');
-          let token = getAccessToken();
-
-          if (!currentUser || !token) {
-            const authResult = await loginWithGoogle();
-            token = authResult ? authResult.accessToken : getAccessToken();
-          }
-
-          if (!token) {
-            throw new Error('Google Sign-In is required to save to Google Drive.');
-          }
-
-          ui.showToast('Saving to etype_drafts folder...');
-          const file = await saveDraftToDrive(token, customTitle, text);
+          ui.showToast('Saving to etype_drafts folder in Google Drive...');
+          const activeToken = getAccessToken() || token;
+          const file = await saveDraftToDrive(activeToken, customTitle, text);
           ui.setTitle(customTitle);
           ui.showToast(`Saved "${file.name}" to etype_drafts in Google Drive!`);
         } catch (err) {
