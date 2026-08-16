@@ -19,7 +19,6 @@ function init() {
   const displayEl = document.getElementById('text-display');
   const inputEl = document.getElementById('hidden-input');
   const cursorEl = document.getElementById('cursor');
-  const placeholderEl = document.getElementById('placeholder');
   const screenEl = document.getElementById('etype-screen');
   const wordCountEl = document.getElementById('word-count');
   const titleInputEl = document.getElementById('title-input');
@@ -57,7 +56,7 @@ function init() {
   }, 1500);
   
   // ---- Initialize Typewriter ----
-  const typewriter = new Typewriter(displayEl, inputEl, cursorEl, placeholderEl, {
+  const typewriter = new Typewriter(displayEl, inputEl, cursorEl, {
     onTextChange: (text) => {
       ui.updateWordCount(text);
       autoSave();

@@ -8,23 +8,21 @@ export class Typewriter {
    * @param {HTMLElement} displayEl - #text-display
    * @param {HTMLTextAreaElement} inputEl - #hidden-input
    * @param {HTMLElement} cursorEl - #cursor
-   * @param {HTMLElement} placeholderEl - #placeholder
    * @param {Object} options
    * @param {Function} options.onTextChange - callback(text) on every change
    * @param {Function} options.onFirstChar - callback() on first character typed
    */
-  constructor(displayEl, inputEl, cursorEl, placeholderEl, options = {}) {
+  constructor(displayEl, inputEl, cursorEl, options = {}) {
     this.displayEl = displayEl;
     this.inputEl = inputEl;
     this.cursorEl = cursorEl;
-    this.placeholderEl = placeholderEl;
     this.onTextChange = options.onTextChange || null;
     this.onFirstChar = options.onFirstChar || null;
     
     this.text = '';           // canonical text buffer (append-only during typing)
     this.queue = [];          // characters waiting to be rendered
     this.isProcessing = false;
-    this.hasTyped = false;    // tracks if user has typed anything (for placeholder)
+    this.hasTyped = false;
     
     this._bindEvents();
   }
@@ -168,12 +166,8 @@ export class Typewriter {
   }
   
   _renderChar(char) {
-    // Hide placeholder on first character
     if (!this.hasTyped) {
       this.hasTyped = true;
-      if (this.placeholderEl) {
-        this.placeholderEl.classList.add('hidden');
-      }
       if (this.onFirstChar) {
         this.onFirstChar();
       }
@@ -211,35 +205,20 @@ export class Typewriter {
     
     // Clear existing rendered characters (preserve cursor)
     const cursor = this.cursorEl;
-    const placeholder = this.placeholderEl;
     
     // Remove all children except cursor
     while (this.displayEl.firstChild) {
       if (this.displayEl.firstChild === cursor) break;
-      if (this.displayEl.firstChild === placeholder) {
-        this.displayEl.removeChild(placeholder);
-        continue;
-      }
       this.displayEl.removeChild(this.displayEl.firstChild);
     }
     
     // Insert restored text as a plain text node (no animation)
     if (text) {
       this.hasTyped = true;
-      if (placeholder && this.displayEl.contains(placeholder)) {
-        placeholder.classList.add('hidden');
-      }
       const textNode = document.createTextNode(text);
       this.displayEl.insertBefore(textNode, cursor);
     } else {
       this.hasTyped = false;
-      // Re-show placeholder if it exists
-      if (placeholder) {
-        placeholder.classList.remove('hidden');
-        if (!this.displayEl.contains(placeholder)) {
-          this.displayEl.insertBefore(placeholder, cursor);
-        }
-      }
     }
     
     this._forceCursorToEnd();
@@ -253,17 +232,11 @@ export class Typewriter {
     this.inputEl.value = '';
     this.hasTyped = false;
     
-    // Remove all children except cursor, then re-add placeholder
+    // Remove all children except cursor
     while (this.displayEl.firstChild) {
+      if (this.displayEl.firstChild === this.cursorEl) break;
       this.displayEl.removeChild(this.displayEl.firstChild);
     }
-    
-    // Re-add placeholder and cursor
-    if (this.placeholderEl) {
-      this.placeholderEl.classList.remove('hidden');
-      this.displayEl.appendChild(this.placeholderEl);
-    }
-    this.displayEl.appendChild(this.cursorEl);
     
     this._notifyChange();
   }
