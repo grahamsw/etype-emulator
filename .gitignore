@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Firebase
+.firebase/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
