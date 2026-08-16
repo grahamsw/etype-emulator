@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- E-paper cream background rounded card -->
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#f5f0e8"/>
+
+  <!-- Paper sheet feeding out the top -->
+  <rect x="20" y="10" width="24" height="18" rx="2" fill="#fffdfa" stroke="#4a572c" stroke-width="2"/>
+  <line x1="24" y1="16" x2="36" y2="16" stroke="#8a9965" stroke-width="2" stroke-linecap="round"/>
+  <line x1="24" y1="20" x2="40" y2="20" stroke="#8a9965" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Platen roller / Carriage bar -->
+  <rect x="12" y="24" width="40" height="6" rx="3" fill="#2d351e"/>
+
+  <!-- Main Olive Green Typewriter Body -->
+  <path d="M 14 30 L 50 30 L 54 54 C 54 56.2 52.2 58 50 58 L 14 58 C 11.8 58 10 56.2 10 54 Z" fill="#5c6b3c"/>
+
+  <!-- Keyboard frame inset -->
+  <rect x="16" y="36" width="32" height="16" rx="3" fill="#2d351e"/>
+
+  <!-- Keys row 1 -->
+  <circle cx="21" cy="40" r="2.2" fill="#8a9965"/>
+  <circle cx="27" cy="40" r="2.2" fill="#8a9965"/>
+  <circle cx="33" cy="40" r="2.2" fill="#8a9965"/>
+  <circle cx="39" cy="40" r="2.2" fill="#8a9965"/>
+  <circle cx="45" cy="40" r="2.2" fill="#8a9965"/>
+
+  <!-- Keys row 2 (with Red Ribbon key accent) -->
+  <circle cx="21" cy="47" r="2.2" fill="#8a9965"/>
+  <circle cx="27" cy="47" r="2.2" fill="#d62828"/>
+  <circle cx="33" cy="47" r="2.2" fill="#8a9965"/>
+  <circle cx="39" cy="47" r="2.2" fill="#8a9965"/>
+  <circle cx="45" cy="47" r="2.2" fill="#8a9965"/>
+</svg>

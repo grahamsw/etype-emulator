@@ -28,6 +28,7 @@ jobs:
           grep -q 'id="toolbar"' public/index.html || (echo "Missing #toolbar" && exit 1)
           grep -q 'id="btn-auth"' public/index.html || (echo "Missing #btn-auth" && exit 1)
           grep -q 'id="btn-gdrive"' public/index.html || (echo "Missing #btn-gdrive" && exit 1)
+          grep -q 'rel="icon"' public/index.html || (echo "Missing favicon link" && exit 1)
           echo "HTML structure verified successfully."
 
       - name: Validate JS ES modules
