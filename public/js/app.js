@@ -44,6 +44,7 @@ function init() {
   const closeInfoBtnEl = document.getElementById('btn-close-info');
   const settingsDialogEl = document.getElementById('settings-dialog');
   const settingsFolderInputEl = document.getElementById('settings-drive-folder');
+  const settingsWordCountInputEl = document.getElementById('settings-show-wordcount');
   const cancelSettingsBtnEl = document.getElementById('btn-cancel-settings');
   const saveSettingsBtnEl = document.getElementById('btn-save-settings');
 
@@ -76,11 +77,15 @@ function init() {
     closeInfoBtn: closeInfoBtnEl,
     settingsDialog: settingsDialogEl,
     settingsFolderInput: settingsFolderInputEl,
+    settingsWordCountInput: settingsWordCountInputEl,
     cancelSettingsBtn: cancelSettingsBtnEl,
     saveSettingsBtn: saveSettingsBtnEl,
     toast: toastEl,
     toastMessage: toastMessageEl,
   });
+
+  // Apply initial word count visibility setting
+  ui.setWordCountVisibility(appSettings.showWordCount !== false);
   
   // ---- Distraction-Free Controls & Bottom Bar Visibility ----
   let mouseIdleTimer = null;
@@ -180,7 +185,8 @@ function init() {
       ui.showSettingsDialog(appSettings, (newSettings) => {
         appSettings = newSettings;
         Storage.saveSettings(newSettings);
-        ui.showToast(`Settings saved. Folder: ${appSettings.driveFolder}`);
+        ui.setWordCountVisibility(appSettings.showWordCount !== false);
+        ui.showToast(`Settings saved.`);
       });
     },
 
