@@ -119,32 +119,34 @@ function init() {
     },
 
     onGDrive: async () => {
-      let token = getAccessToken();
-      if (!currentUser || !token) {
-        try {
-          const authResult = await loginWithGoogle();
-          token = authResult.accessToken;
-        } catch (err) {
-          return;
-        }
-      }
-
       const text = typewriter.getText();
       if (!text.trim()) {
         ui.showToast('Draft is empty. Type something first!');
         return;
       }
 
+      // Open Save to Google Drive modal dialog immediately
       ui.showGDriveDialog(ui.getTitle(), async (customTitle) => {
         try {
-          ui.showToast('Saving to Google Drive...');
-          const activeToken = getAccessToken();
-          const file = await saveDraftToDrive(activeToken, customTitle, text);
+          ui.showToast('Connecting to Google Drive...');
+          let token = getAccessToken();
+
+          if (!currentUser || !token) {
+            const authResult = await loginWithGoogle();
+            token = authResult ? authResult.accessToken : getAccessToken();
+          }
+
+          if (!token) {
+            throw new Error('Google Sign-In is required to save to Google Drive.');
+          }
+
+          ui.showToast('Saving to etype_drafts folder...');
+          const file = await saveDraftToDrive(token, customTitle, text);
           ui.setTitle(customTitle);
           ui.showToast(`Saved "${file.name}" to etype_drafts in Google Drive!`);
         } catch (err) {
           console.error('Google Drive save error:', err);
-          ui.showToast('Failed to save to Google Drive. Please try again.');
+          ui.showToast(`Drive Error: ${err.message || 'Failed to save'}`);
         }
       });
     },
