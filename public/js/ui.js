@@ -185,18 +185,6 @@ export class UI {
   }
 
   /**
-   * Toggle distraction-free auto-hide of toolbar and floating controls.
-   * @param {boolean} hide - True to hide UI, false to reveal UI
-   */
-  setAutohide(hide) {
-    if (hide) {
-      document.body.classList.add('autohide-active');
-    } else {
-      document.body.classList.remove('autohide-active');
-    }
-  }
-
-  /**
    * Display a floating toast notification.
    * @param {string} message
    * @param {number} [duration=3500]
@@ -362,6 +350,8 @@ export class UI {
           this.gdriveDialog.close();
         }
       });
+    }
+
     // Bind close events on all dialogs to refocus typewriter
     const allDialogs = [this.dialog, this.gdriveDialog, this.infoDialog, this.settingsDialog];
     allDialogs.forEach((d) => {
