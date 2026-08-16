@@ -77,9 +77,11 @@ The design system uses CSS custom properties on `:root`. Key tokens:
 - CSS uses BEM-ish naming (`.block--modifier`)
 
 ### Git Workflow
-- Branch from `main` for features/fixes
+- All work on GitHub issues must be done on a dedicated feature branch named after the issue number and title (e.g., `1-google-identity-auth`).
+- Branch from `main` before starting work.
 - Conventional commit messages: `feat:`, `fix:`, `refactor:`, `docs:`, `style:`, `chore:`
-- Keep commits atomic — one logical change per commit
+- Keep commits atomic — one logical change per commit.
+- Submit a Pull Request targeting `main` (using `gh pr create`) when work and manual verification are complete.
 
 ### Testing
 - No test framework currently — verify manually using Firebase Hosting emulator:
