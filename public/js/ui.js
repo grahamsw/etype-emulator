@@ -35,6 +35,7 @@ export class UI {
     this.closeInfoBtn = elements.closeInfoBtn;
     this.settingsDialog = elements.settingsDialog;
     this.settingsFolderInput = elements.settingsFolderInput;
+    this.settingsWordCountInput = elements.settingsWordCountInput;
     this.cancelSettingsBtn = elements.cancelSettingsBtn;
     this.saveSettingsBtn = elements.saveSettingsBtn;
     this.toast = elements.toast;
@@ -172,7 +173,7 @@ export class UI {
 
   /**
    * Show the Settings modal dialog.
-   * @param {Object} currentSettings - { driveFolder }
+   * @param {Object} currentSettings - { driveFolder, showWordCount }
    * @param {Function} onSave - Called with (newSettings)
    */
   showSettingsDialog(currentSettings, onSave) {
@@ -181,7 +182,23 @@ export class UI {
     if (this.settingsFolderInput) {
       this.settingsFolderInput.value = currentSettings.driveFolder || 'etype_drafts';
     }
+    if (this.settingsWordCountInput) {
+      this.settingsWordCountInput.checked = currentSettings.showWordCount !== false;
+    }
     this.settingsDialog.showModal();
+  }
+
+  /**
+   * Toggle visibility of the word count in the status bar.
+   * @param {boolean} visible
+   */
+  setWordCountVisibility(visible) {
+    if (!this.wordCount) return;
+    if (visible) {
+      this.wordCount.classList.remove('hidden');
+    } else {
+      this.wordCount.classList.add('hidden');
+    }
   }
 
   /**
@@ -208,7 +225,7 @@ export class UI {
    * @param {Function} handlers.onGDrive - Called when "Save to Google Drive" button clicked
    * @param {Function} handlers.onTitleChange - Called when title input changes
    * @param {Function} handlers.onAuth - Called when auth button clicked
-   * @param {Function} handlers.onSaveSettings - Called with ({ driveFolder })
+   * @param {Function} handlers.onSaveSettings - Called with ({ driveFolder, showWordCount })
    */
   bindHandlers(handlers) {
     // Auth button
@@ -253,11 +270,12 @@ export class UI {
     if (this.saveSettingsBtn && this.settingsDialog) {
       this.saveSettingsBtn.addEventListener('click', () => {
         const driveFolder = (this.settingsFolderInput ? this.settingsFolderInput.value : '').trim() || 'etype_drafts';
+        const showWordCount = this.settingsWordCountInput ? this.settingsWordCountInput.checked : true;
         const cb = this._onSaveSettingsConfirm;
         this._onSaveSettingsConfirm = null;
         this.settingsDialog.close();
         if (cb) {
-          cb({ driveFolder });
+          cb({ driveFolder, showWordCount });
         }
       });
     }

@@ -569,6 +569,31 @@ body.show-controls .floating-controls {
   font-size: 0.8rem;
 }
 
+.form-group-checkbox {
+  margin-top: 14px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--ink-color);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ink-color);
+  cursor: pointer;
+}
+
+#word-count.hidden {
+  display: none !important;
+}
+
 @media (max-width: 640px) {
   body {
     align-items: flex-start;

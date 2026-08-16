@@ -56,13 +56,14 @@ export function saveSettings(settings) {
 export function loadSettings() {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return { driveFolder: 'etype_drafts' };
+    if (!raw) return { driveFolder: 'etype_drafts', showWordCount: true };
     const parsed = JSON.parse(raw);
     return {
-      driveFolder: parsed.driveFolder || 'etype_drafts'
+      driveFolder: parsed.driveFolder || 'etype_drafts',
+      showWordCount: parsed.showWordCount !== false,
     };
   } catch (e) {
-    return { driveFolder: 'etype_drafts' };
+    return { driveFolder: 'etype_drafts', showWordCount: true };
   }
 }
 
