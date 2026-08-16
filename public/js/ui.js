@@ -204,24 +204,25 @@ export class UI {
     
     // New draft Dialog confirm
     this.confirmBtn.addEventListener('click', () => {
+      const cb = this._onNewDraftConfirm;
+      this._onNewDraftConfirm = null;
       this.dialog.close();
-      if (this._onNewDraftConfirm) {
-        this._onNewDraftConfirm();
-        this._onNewDraftConfirm = null;
+      if (cb) {
+        cb();
       }
     });
     
     // New draft Dialog cancel
     this.cancelBtn.addEventListener('click', () => {
-      this.dialog.close();
       this._onNewDraftConfirm = null;
+      this.dialog.close();
     });
     
     // Close new draft dialog on backdrop click
     this.dialog.addEventListener('click', (e) => {
       if (e.target === this.dialog) {
-        this.dialog.close();
         this._onNewDraftConfirm = null;
+        this.dialog.close();
       }
     });
     
@@ -234,10 +235,11 @@ export class UI {
     if (this.confirmGdriveBtn) {
       this.confirmGdriveBtn.addEventListener('click', () => {
         const title = (this.gdriveTitleInput ? this.gdriveTitleInput.value : '').trim();
+        const cb = this._onGDriveConfirm;
+        this._onGDriveConfirm = null;
         this.gdriveDialog.close();
-        if (this._onGDriveConfirm) {
-          this._onGDriveConfirm(title || this.getTitle());
-          this._onGDriveConfirm = null;
+        if (cb) {
+          cb(title || this.getTitle());
         }
       });
     }
@@ -245,16 +247,16 @@ export class UI {
     // Google Drive Dialog cancel
     if (this.cancelGdriveBtn) {
       this.cancelGdriveBtn.addEventListener('click', () => {
-        this.gdriveDialog.close();
         this._onGDriveConfirm = null;
+        this.gdriveDialog.close();
       });
     }
 
     if (this.gdriveDialog) {
       this.gdriveDialog.addEventListener('click', (e) => {
         if (e.target === this.gdriveDialog) {
-          this.gdriveDialog.close();
           this._onGDriveConfirm = null;
+          this.gdriveDialog.close();
         }
       });
       this.gdriveDialog.addEventListener('close', () => {
