@@ -18,6 +18,7 @@ export class Typewriter {
     this.cursorEl = cursorEl;
     this.onTextChange = options.onTextChange || null;
     this.onFirstChar = options.onFirstChar || null;
+    this.onTypingStart = options.onTypingStart || null;
     
     this.text = '';           // canonical text buffer (append-only during typing)
     this.queue = [];          // characters waiting to be rendered
@@ -59,6 +60,10 @@ export class Typewriter {
   // ---- Key Blocking ----
   
   _onKeyDown(e) {
+    if (this.onTypingStart) {
+      this.onTypingStart();
+    }
+
     // Block destructive / backward-movement keys
     const blockedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowUp', 'Home'];
     if (blockedKeys.includes(e.key)) {

@@ -35,6 +35,37 @@ export function load() {
   }
 }
 
+const SETTINGS_KEY = 'etype-settings';
+
+/**
+ * Save app settings to localStorage.
+ * @param {Object} settings - { driveFolder, theme, font }
+ */
+export function saveSettings(settings) {
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch (e) {
+    console.warn('E-Type: Failed to save settings', e);
+  }
+}
+
+/**
+ * Load app settings from localStorage.
+ * @returns {Object} Saved settings or defaults.
+ */
+export function loadSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return { driveFolder: 'etype_drafts' };
+    const parsed = JSON.parse(raw);
+    return {
+      driveFolder: parsed.driveFolder || 'etype_drafts'
+    };
+  } catch (e) {
+    return { driveFolder: 'etype_drafts' };
+  }
+}
+
 /**
  * Clear saved draft from localStorage.
  */
