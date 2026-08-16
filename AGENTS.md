@@ -96,10 +96,11 @@ The design system uses CSS custom properties on `:root`. Key tokens:
   5. "New Draft" dialog works correctly
   6. Responsive layout on mobile viewports
 
-### Deployment
-- Firebase Hosting (static site, no SSR)
-- Deploy: `npx -y firebase-tools@latest deploy --only hosting`
-- Always use `npx -y firebase-tools@latest` (never bare `firebase`)
+### Deployment & CI/CD
+- GitHub Actions CI/CD workflow (`.github/workflows/deploy.yml`) handles automated testing and deployment.
+- Merges to `main` automatically run test validations and deploy live to Firebase Hosting.
+- Manual deploy: `npx -y firebase-tools@latest deploy --only hosting`
+- Always use `npx -y firebase-tools@latest` (never bare `firebase`).
 
 ## Planned Features (Future Work)
 
