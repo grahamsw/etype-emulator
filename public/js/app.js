@@ -278,6 +278,7 @@ function init() {
     if (document.querySelector('dialog[open]')) return;
     const isInteractive = e.target.closest('button, input, select, textarea, a, label, dialog');
     if (!isInteractive) {
+      hideControlsImmediately();
       focusTypewriter();
     }
   });
