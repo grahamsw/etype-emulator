@@ -254,6 +254,30 @@ function init() {
     onTitleChange: () => {
       autoSave();
     },
+
+    onDialogClose: () => {
+      focusTypewriter();
+    },
+  });
+
+  // ---- Global Focus Management (Distraction-Free Typewriter Focus) ----
+  const focusTypewriter = () => {
+    if (document.querySelector('dialog[open]')) return;
+    typewriter.focus();
+  };
+
+  // Global click listener: clicking background canvas, bezel, or paper sets focus to typewriter
+  document.addEventListener('click', (e) => {
+    if (document.querySelector('dialog[open]')) return;
+    const isInteractive = e.target.closest('button, input, select, textarea, a, label, dialog');
+    if (!isInteractive) {
+      focusTypewriter();
+    }
+  });
+
+  // Window focus listener (switching tabs or returning to app)
+  window.addEventListener('focus', () => {
+    focusTypewriter();
   });
   
   // ---- Save on page unload ----
@@ -266,7 +290,7 @@ function init() {
   });
   
   // ---- Focus the typewriter on load ----
-  setTimeout(() => typewriter.focus(), 100);
+  setTimeout(() => focusTypewriter(), 100);
 }
 
 // ---- Boot ----
