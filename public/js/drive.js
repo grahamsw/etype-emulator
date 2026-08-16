@@ -22,7 +22,7 @@ export async function getOrCreateDraftsFolder(accessToken) {
   }
 
   // 1. Search for existing folder
-  const query = encodeURIComponent(`name = '${FOLDER_NAME}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`);
+  const query = encodeURIComponent(`name='${FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false`);
   const searchUrl = `${DRIVE_API_BASE}/files?q=${query}&fields=files(id,name)`;
 
   const response = await fetch(searchUrl, {
