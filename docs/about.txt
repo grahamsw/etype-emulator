@@ -1,0 +1,11 @@
+There's a theory that there are two stages to writing.
+
+First drafts, where you get everything out without overthinking, and editing, where you can overthink as much as you want
+
+This app is for first drafts.
+
+Log in with your Google ID, give it permission to save things to a folder in your Google Drive. (That's all it does. All the code for this is in your browser, and you can see the app in the repo here.)
+
+You can't backspace, you can't delete, you can't move the cursor around. It's a typewriter. Write your draft, save it to Google Drive, and then edit it there.
+
+Enjoy.

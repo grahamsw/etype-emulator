@@ -42,6 +42,14 @@
         <div id="text-display"><span id="cursor" class="cursor">█</span></div>
       </div>
     </div>
+    <div id="floating-controls" class="floating-controls">
+      <button id="btn-info" type="button" class="btn-icon" title="About E-Type" aria-label="About E-Type">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </button>
+      <button id="btn-settings" type="button" class="btn-icon" title="Settings" aria-label="Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
   </div>
 
   <textarea id="hidden-input" autocapitalize="sentences" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Type your draft here"></textarea>
@@ -60,7 +68,7 @@
   <dialog id="gdrive-dialog">
     <div class="dialog-content">
       <h2>Save to Google Drive</h2>
-      <p>Save draft to <strong>etype_drafts</strong> folder in Google Drive.</p>
+      <p>Save draft to <strong id="gdrive-folder-display">etype_drafts</strong> folder in Google Drive.</p>
       <div class="form-group">
         <label for="gdrive-title-input">Document Title</label>
         <input type="text" id="gdrive-title-input" autocomplete="off" spellcheck="false">
@@ -68,6 +76,53 @@
       <div class="dialog-actions">
         <button id="btn-cancel-gdrive" type="button" class="btn-secondary">Cancel</button>
         <button id="btn-confirm-gdrive" type="button" class="btn-primary">Save to Drive</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="info-dialog">
+    <div class="dialog-content">
+      <h2>About E-Type</h2>
+      <p>There's a theory that there are two stages to writing: <strong>first drafts</strong>, where you get everything out without overthinking, and <strong>editing</strong>, where you can overthink as much as you want.</p>
+      <p>This app is for first drafts.</p>
+      <p>Log in with your Google ID and give it permission to save things to a folder in your Google Drive. (That's all it does. All the code for this is in your browser.)</p>
+      <p>You can't backspace, you can't delete, you can't move the cursor around. It's a typewriter. Write your draft, save it to Google Drive, and edit it there.</p>
+      <p>Enjoy.</p>
+      <div class="dialog-footer-links">
+        <a href="https://github.com/grahamsw/etype-emulator" target="_blank" rel="noopener">View Source on GitHub ↗</a>
+      </div>
+      <div class="dialog-actions">
+        <button id="btn-close-info" type="button" class="btn-primary">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="settings-dialog">
+    <div class="dialog-content">
+      <h2>Settings</h2>
+      <div class="form-group">
+        <label for="settings-drive-folder">Google Drive Folder Name</label>
+        <input type="text" id="settings-drive-folder" value="etype_drafts" autocomplete="off" spellcheck="false">
+        <small class="field-help">Drafts will be saved to this folder in your Google Drive.</small>
+      </div>
+      <div class="form-group">
+        <label>Font & Aesthetic</label>
+        <select id="settings-font-select" disabled>
+          <option value="courier">Courier Prime (Default Typewriter)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Theme</label>
+        <select id="settings-theme-select" disabled>
+          <option value="warm-cream">Warm Cream E-Paper (Default)</option>
+        </select>
+      </div>
+      <div class="dialog-footer-links">
+        <a href="mailto:graham.stalker@gmail.com?subject=E-Type%20Feedback" target="_blank" rel="noopener">Contact Developer / Send Feedback ✉</a>
+      </div>
+      <div class="dialog-actions">
+        <button id="btn-cancel-settings" type="button" class="btn-secondary">Cancel</button>
+        <button id="btn-save-settings" type="button" class="btn-primary">Save Settings</button>
       </div>
     </div>
   </dialog>
