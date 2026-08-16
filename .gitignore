@@ -14,3 +14,7 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Local App Credentials
+public/config.json
+

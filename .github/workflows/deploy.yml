@@ -79,6 +79,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Inject config.json from GitHub Secret
+        run: |
+          if [ -n "${{ secrets.FIREBASE_API_KEY }}" ]; then
+            echo "{\"apiKey\": \"${{ secrets.FIREBASE_API_KEY }}\"}" > public/config.json
+            echo "Injected public/config.json from secrets."
+          else
+            echo "Notice: FIREBASE_API_KEY repository secret not set."
+          fi
+
       - name: Deploy to Firebase Hosting Live
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:

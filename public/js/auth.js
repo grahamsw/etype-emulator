@@ -14,10 +14,23 @@ const firebaseConfig = {
   projectId: "etype-emulator-app",
   appId: "1:14967080007:web:7957aaeeb05d0c5d589d62",
   storageBucket: "etype-emulator-app.firebasestorage.app",
-  apiKey: "REPLACE_WITH_RESTRICTED_API_KEY",
+  apiKey: "",
   authDomain: "etype-emulator-app.firebaseapp.com",
   messagingSenderId: "14967080007",
 };
+
+// Fetch API key dynamically from runtime /config.json (gitignored for zero alerts)
+try {
+  const configRes = await fetch('/config.json');
+  if (configRes.ok) {
+    const configData = await configRes.json();
+    if (configData && configData.apiKey) {
+      firebaseConfig.apiKey = configData.apiKey;
+    }
+  }
+} catch (e) {
+  console.warn('E-Type: config.json not present or failed to load');
+}
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
