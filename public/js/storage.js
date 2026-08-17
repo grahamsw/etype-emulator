@@ -63,6 +63,8 @@ export function loadSettings() {
         enableTimestamp: true,
         timestampFormat: 'YYYY-MM-DD HH-mm',
         timestampPosition: 'after',
+        font: 'courier',
+        fontSize: 'medium',
       };
     }
     const parsed = JSON.parse(raw);
@@ -72,6 +74,8 @@ export function loadSettings() {
       enableTimestamp: parsed.enableTimestamp !== false,
       timestampFormat: parsed.timestampFormat || 'YYYY-MM-DD HH-mm',
       timestampPosition: parsed.timestampPosition || 'after',
+      font: parsed.font || 'courier',
+      fontSize: parsed.fontSize || 'medium',
     };
   } catch (e) {
     return {
@@ -80,6 +84,8 @@ export function loadSettings() {
       enableTimestamp: true,
       timestampFormat: 'YYYY-MM-DD HH-mm',
       timestampPosition: 'after',
+      font: 'courier',
+      fontSize: 'medium',
     };
   }
 }

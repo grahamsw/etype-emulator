@@ -49,6 +49,8 @@ function init() {
   const settingsEnableTimestampInputEl = document.getElementById('settings-enable-timestamp');
   const settingsTimestampFormatSelectEl = document.getElementById('settings-timestamp-format');
   const settingsTimestampPositionSelectEl = document.getElementById('settings-timestamp-position');
+  const settingsFontSelectEl = document.getElementById('settings-font-select');
+  const settingsFontsizeSelectEl = document.getElementById('settings-fontsize-select');
   const cancelSettingsBtnEl = document.getElementById('btn-cancel-settings');
   const saveSettingsBtnEl = document.getElementById('btn-save-settings');
 
@@ -86,14 +88,17 @@ function init() {
     settingsEnableTimestampInput: settingsEnableTimestampInputEl,
     settingsTimestampFormatSelect: settingsTimestampFormatSelectEl,
     settingsTimestampPositionSelect: settingsTimestampPositionSelectEl,
+    settingsFontSelect: settingsFontSelectEl,
+    settingsFontsizeSelect: settingsFontsizeSelectEl,
     cancelSettingsBtn: cancelSettingsBtnEl,
     saveSettingsBtn: saveSettingsBtnEl,
     toast: toastEl,
     toastMessage: toastMessageEl,
   });
 
-  // Apply initial word count visibility setting
+  // Apply initial word count visibility and font settings
   ui.setWordCountVisibility(appSettings.showWordCount !== false);
+  ui.applyFontSettings(appSettings.font, appSettings.fontSize);
   
   // ---- Distraction-Free Controls & Bottom Bar Visibility ----
   let mouseIdleTimer = null;
@@ -212,6 +217,7 @@ function init() {
         appSettings = newSettings;
         Storage.saveSettings(newSettings);
         ui.setWordCountVisibility(appSettings.showWordCount !== false);
+        ui.applyFontSettings(appSettings.font, appSettings.fontSize);
         ui.showToast(`Settings saved.`);
       });
     },
