@@ -77,6 +77,7 @@
       <div class="form-group">
         <label for="gdrive-title-input">Document Title</label>
         <input type="text" id="gdrive-title-input" autocomplete="off" spellcheck="false">
+        <small class="field-help">You can include subfolders, e.g. <code>old man/and the sea</code></small>
       </div>
       <div class="dialog-actions">
         <button id="btn-cancel-gdrive" type="button" class="btn-secondary">Cancel</button>
@@ -116,6 +117,28 @@
           <input type="checkbox" id="settings-show-wordcount" checked>
           <span>Show word count in status bar</span>
         </label>
+      </div>
+      <div class="form-group form-group-checkbox">
+        <label class="checkbox-label" for="settings-enable-timestamp">
+          <input type="checkbox" id="settings-enable-timestamp" checked>
+          <span>Add timestamp to saved filenames</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="settings-timestamp-format">Timestamp Format</label>
+        <select id="settings-timestamp-format">
+          <option value="YYYY-MM-DD HH-mm">2026-08-17 12-02 (Default)</option>
+          <option value="YYYY-MM-DD">2026-08-17 (Date only)</option>
+          <option value="YYYYMMDD-HHmm">20260817-1202 (Compact)</option>
+          <option value="ISO">2026-08-17T12-02 (ISO style)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="settings-timestamp-position">Timestamp Position</label>
+        <select id="settings-timestamp-position">
+          <option value="after">After Title (title-2026-08-17 12-02.md)</option>
+          <option value="before">Before Title (2026-08-17 12-02-title.md)</option>
+        </select>
       </div>
       <div class="form-group">
         <label>Font & Aesthetic</label>

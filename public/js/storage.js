@@ -56,14 +56,31 @@ export function saveSettings(settings) {
 export function loadSettings() {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return { driveFolder: 'etype_drafts', showWordCount: true };
+    if (!raw) {
+      return {
+        driveFolder: 'etype_drafts',
+        showWordCount: true,
+        enableTimestamp: true,
+        timestampFormat: 'YYYY-MM-DD HH-mm',
+        timestampPosition: 'after',
+      };
+    }
     const parsed = JSON.parse(raw);
     return {
       driveFolder: parsed.driveFolder || 'etype_drafts',
       showWordCount: parsed.showWordCount !== false,
+      enableTimestamp: parsed.enableTimestamp !== false,
+      timestampFormat: parsed.timestampFormat || 'YYYY-MM-DD HH-mm',
+      timestampPosition: parsed.timestampPosition || 'after',
     };
   } catch (e) {
-    return { driveFolder: 'etype_drafts', showWordCount: true };
+    return {
+      driveFolder: 'etype_drafts',
+      showWordCount: true,
+      enableTimestamp: true,
+      timestampFormat: 'YYYY-MM-DD HH-mm',
+      timestampPosition: 'after',
+    };
   }
 }
 
@@ -79,12 +96,90 @@ export function clearStorage() {
 }
 
 /**
+ * Format a Date object according to chosen format.
+ * @param {Date} [date=new Date()]
+ * @param {string} [format='YYYY-MM-DD HH-mm']
+ * @returns {string}
+ */
+export function formatFormattedTimestamp(date = new Date(), format = 'YYYY-MM-DD HH-mm') {
+  const d = date instanceof Date ? date : new Date(date);
+  const pad = (n) => String(n).padStart(2, '0');
+
+  const year = d.getFullYear();
+  const month = pad(d.getMonth() + 1);
+  const day = pad(d.getDate());
+  const hours = pad(d.getHours());
+  const minutes = pad(d.getMinutes());
+
+  switch (format) {
+    case 'YYYY-MM-DD':
+      return `${year}-${month}-${day}`;
+    case 'YYYYMMDD-HHmm':
+      return `${year}${month}${day}-${hours}${minutes}`;
+    case 'ISO':
+      return `${year}-${month}-${day}T${hours}-${minutes}`;
+    case 'YYYY-MM-DD HH-mm':
+    default:
+      return `${year}-${month}-${day} ${hours}-${minutes}`;
+  }
+}
+
+/**
+ * Parse raw title/path and format filename & subfolder.
+ * @param {string} rawPath - e.g. "old man/and the sea" or "untitled"
+ * @param {Object} [settings] - App settings
+ * @param {Date} [date=new Date()]
+ * @returns {{ subfolderPath: string, cleanTitle: string, filename: string }}
+ */
+export function processFilename(rawPath, settings = {}, date = new Date()) {
+  const currentSettings = {
+    enableTimestamp: true,
+    timestampFormat: 'YYYY-MM-DD HH-mm',
+    timestampPosition: 'after',
+    ...settings,
+  };
+
+  const normalized = (rawPath || 'untitled-draft').replace(/\\/g, '/').trim();
+  const parts = normalized.split('/').map(p => p.trim()).filter(Boolean);
+
+  let rawTitle = 'untitled-draft';
+  let subfolderParts = [];
+
+  if (parts.length > 1) {
+    rawTitle = parts[parts.length - 1];
+    subfolderParts = parts.slice(0, parts.length - 1);
+  } else if (parts.length === 1) {
+    rawTitle = parts[0];
+  }
+
+  const cleanTitle = sanitizeFilename(rawTitle) || 'draft';
+  const subfolderPath = subfolderParts.join('/');
+
+  let nameWithoutExt = cleanTitle;
+  if (currentSettings.enableTimestamp) {
+    const ts = formatFormattedTimestamp(date, currentSettings.timestampFormat);
+    if (currentSettings.timestampPosition === 'before') {
+      nameWithoutExt = `${ts}-${cleanTitle}`;
+    } else {
+      nameWithoutExt = `${cleanTitle}-${ts}`;
+    }
+  }
+
+  return {
+    subfolderPath,
+    cleanTitle,
+    filename: `${nameWithoutExt}.md`,
+  };
+}
+
+/**
  * Download text as a markdown (.md) file.
  * @param {string} text - The markdown content.
  * @param {string} title - Used for the filename.
+ * @param {Object} [settings] - App settings for timestamp formatting
  */
-export function downloadAsMarkdown(text, title) {
-  const filename = sanitizeFilename(title || 'untitled-draft') + '.md';
+export function downloadAsMarkdown(text, title, settings = {}) {
+  const { filename } = processFilename(title, settings);
   const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   
