@@ -92,6 +92,51 @@ export async function getOrCreateDraftsFolder(accessToken, folderPath = FOLDER_N
 }
 
 /**
+ * Queries Google Drive folder for files created today and computes the next sequence number.
+ * Uses existing drive.file scope with zero new permissions.
+ * @param {string} accessToken
+ * @param {string} folderId
+ * @param {string} cleanTitle
+ * @param {string} dateStr - e.g. "2026-08-17"
+ * @returns {Promise<number>} Next sequence number
+ */
+async function getNextDriveSequence(accessToken, folderId, cleanTitle, dateStr) {
+  try {
+    const query = encodeURIComponent(`'${folderId}' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed=false`);
+    const searchUrl = `${DRIVE_API_BASE}/files?q=${query}&fields=files(id,name)`;
+
+    const response = await fetch(searchUrl, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    if (!response.ok) return 1;
+
+    const data = await response.json();
+    if (!data.files || data.files.length === 0) return 1;
+
+    let maxSeq = 0;
+    const targetPattern = `${dateStr}.`;
+
+    for (const file of data.files) {
+      const name = file.name || '';
+      if (name.includes(targetPattern) && name.includes(cleanTitle)) {
+        const match = name.match(new RegExp(`${dateStr}\\.(\\d+)`));
+        if (match && match[1]) {
+          const num = parseInt(match[1], 10);
+          if (num > maxSeq) maxSeq = num;
+        }
+      }
+    }
+
+    return maxSeq + 1;
+  } catch (e) {
+    return 1;
+  }
+}
+
+/**
  * Saves a markdown draft to Google Drive.
  * @param {string} accessToken - Google OAuth Access Token
  * @param {string} title - File title/path (can contain subfolders, e.g. "old man/and the sea")
@@ -101,10 +146,26 @@ export async function getOrCreateDraftsFolder(accessToken, folderPath = FOLDER_N
  * @returns {Promise<{id: string, name: string, webViewLink: string}>} Uploaded file details
  */
 export async function saveDraftToDrive(accessToken, title, content, rootFolderName = FOLDER_NAME, settings = {}) {
-  const { subfolderPath, filename } = processFilename(title, settings);
+  const normalizedPath = (title || 'untitled-draft').replace(/\\/g, '/').trim();
+  const parts = normalizedPath.split('/').map(p => p.trim()).filter(Boolean);
+  const rawTitle = parts.length > 0 ? parts[parts.length - 1] : 'untitled-draft';
+  const subfolderParts = parts.length > 1 ? parts.slice(0, parts.length - 1) : [];
+
+  const subfolderPath = subfolderParts.join('/');
   const targetFolderPath = [rootFolderName, subfolderPath].filter(Boolean).join('/');
 
   const folderId = await getOrCreateDraftsFolder(accessToken, targetFolderPath);
+
+  let seqNum = null;
+  if (settings && settings.enableTimestamp && settings.timestampFormat === 'YYYY-MM-DD.seq') {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const dateStr = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const cleanTitle = rawTitle.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').slice(0, 60) || 'draft';
+    seqNum = await getNextDriveSequence(accessToken, folderId, cleanTitle, dateStr);
+  }
+
+  const { filename } = processFilename(title, settings, new Date(), seqNum);
 
   const metadata = {
     name: filename,

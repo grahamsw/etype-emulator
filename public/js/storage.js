@@ -96,12 +96,31 @@ export function clearStorage() {
 }
 
 /**
+ * Track and increment daily download sequence counter in localStorage.
+ * @param {string} titleKey
+ * @param {string} dateStr
+ * @returns {number} Next sequence number
+ */
+export function getAndIncrementLocalSequence(titleKey, dateStr) {
+  try {
+    const key = `etype-seq-${dateStr}-${titleKey}`;
+    const current = parseInt(localStorage.getItem(key) || '0', 10);
+    const next = current + 1;
+    localStorage.setItem(key, String(next));
+    return next;
+  } catch (e) {
+    return 1;
+  }
+}
+
+/**
  * Format a Date object according to chosen format.
  * @param {Date} [date=new Date()]
  * @param {string} [format='YYYY-MM-DD HH-mm']
+ * @param {number|null} [seqNum=null]
  * @returns {string}
  */
-export function formatFormattedTimestamp(date = new Date(), format = 'YYYY-MM-DD HH-mm') {
+export function formatFormattedTimestamp(date = new Date(), format = 'YYYY-MM-DD HH-mm', seqNum = null) {
   const d = date instanceof Date ? date : new Date(date);
   const pad = (n) => String(n).padStart(2, '0');
 
@@ -112,6 +131,8 @@ export function formatFormattedTimestamp(date = new Date(), format = 'YYYY-MM-DD
   const minutes = pad(d.getMinutes());
 
   switch (format) {
+    case 'YYYY-MM-DD.seq':
+      return `${year}-${month}-${day}.${seqNum || 1}`;
     case 'YYYY-MM-DD':
       return `${year}-${month}-${day}`;
     case 'YYYYMMDD-HHmm':
@@ -129,9 +150,10 @@ export function formatFormattedTimestamp(date = new Date(), format = 'YYYY-MM-DD
  * @param {string} rawPath - e.g. "old man/and the sea" or "untitled"
  * @param {Object} [settings] - App settings
  * @param {Date} [date=new Date()]
+ * @param {number|null} [overrideSeq=null] - Sequence number override
  * @returns {{ subfolderPath: string, cleanTitle: string, filename: string }}
  */
-export function processFilename(rawPath, settings = {}, date = new Date()) {
+export function processFilename(rawPath, settings = {}, date = new Date(), overrideSeq = null) {
   const currentSettings = {
     enableTimestamp: true,
     timestampFormat: 'YYYY-MM-DD HH-mm',
@@ -157,7 +179,14 @@ export function processFilename(rawPath, settings = {}, date = new Date()) {
 
   let nameWithoutExt = cleanTitle;
   if (currentSettings.enableTimestamp) {
-    const ts = formatFormattedTimestamp(date, currentSettings.timestampFormat);
+    let seqNum = overrideSeq;
+    if (currentSettings.timestampFormat === 'YYYY-MM-DD.seq' && seqNum === null) {
+      const pad = (n) => String(n).padStart(2, '0');
+      const dateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+      seqNum = getAndIncrementLocalSequence(cleanTitle, dateStr);
+    }
+
+    const ts = formatFormattedTimestamp(date, currentSettings.timestampFormat, seqNum);
     if (currentSettings.timestampPosition === 'before') {
       nameWithoutExt = `${ts}-${cleanTitle}`;
     } else {
