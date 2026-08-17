@@ -529,20 +529,25 @@ body.show-controls .floating-controls {
 .form-group select {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  background: rgba(0, 0, 0, 0.04);
-  color: var(--toolbar-text);
+  background: #ffffff;
+  color: #1a1a1a !important;
   cursor: pointer;
+}
+
+.form-group select option {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
 }
 
 .field-help {
   display: block;
   margin-top: 4px;
   font-size: 0.75rem;
-  color: var(--toolbar-text);
+  color: #555555 !important;
 }
 
 .dialog-footer-links {
