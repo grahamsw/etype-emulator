@@ -19,6 +19,7 @@ export class Typewriter {
     this.onTextChange = options.onTextChange || null;
     this.onFirstChar = options.onFirstChar || null;
     this.onTypingStart = options.onTypingStart || null;
+    this.onCopyRequest = options.onCopyRequest || null;
     
     this.text = '';           // canonical text buffer (append-only during typing)
     this.queue = [];          // characters waiting to be rendered
@@ -60,6 +61,15 @@ export class Typewriter {
   // ---- Key Blocking ----
   
   _onKeyDown(e) {
+    // Ctrl/Cmd + C (Copy draft to clipboard)
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'c') {
+      e.preventDefault();
+      if (this.onCopyRequest) {
+        this.onCopyRequest();
+      }
+      return;
+    }
+
     if (this.onTypingStart) {
       this.onTypingStart();
     }

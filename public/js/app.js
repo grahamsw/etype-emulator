@@ -27,6 +27,7 @@ function init() {
   const authBtnEl = document.getElementById('btn-auth');
   const gdriveBtnEl = document.getElementById('btn-gdrive');
   const newBtnEl = document.getElementById('btn-new');
+  const copyBtnEl = document.getElementById('btn-copy');
   const downloadBtnEl = document.getElementById('btn-download');
   const dialogEl = document.getElementById('new-draft-dialog');
   const confirmBtnEl = document.getElementById('btn-confirm-new');
@@ -62,6 +63,7 @@ function init() {
     authBtn: authBtnEl,
     gdriveBtn: gdriveBtnEl,
     newBtn: newBtnEl,
+    copyBtn: copyBtnEl,
     downloadBtn: downloadBtnEl,
     dialog: dialogEl,
     confirmBtn: confirmBtnEl,
@@ -131,6 +133,21 @@ function init() {
     });
   }, 1500);
   
+  // ---- Copy to Clipboard Handler ----
+  const handleCopy = async () => {
+    const text = typewriter.getText();
+    if (!text) {
+      ui.showToast('Draft is empty');
+      return;
+    }
+    const success = await Storage.copyToClipboard(text);
+    if (success) {
+      ui.showToast('Copied draft to clipboard!');
+    } else {
+      ui.showToast('Failed to copy to clipboard');
+    }
+  };
+
   // ---- Initialize Typewriter ----
   const typewriter = new Typewriter(displayEl, inputEl, cursorEl, {
     onTextChange: (text) => {
@@ -139,6 +156,9 @@ function init() {
     },
     onTypingStart: () => {
       hideControlsImmediately();
+    },
+    onCopyRequest: () => {
+      handleCopy();
     },
   });
   
@@ -255,6 +275,10 @@ function init() {
         Storage.clearStorage();
         typewriter.focus();
       }
+    },
+
+    onCopy: () => {
+      handleCopy();
     },
     
     onDownload: () => {

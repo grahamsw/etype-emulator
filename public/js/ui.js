@@ -17,6 +17,7 @@ export class UI {
     this.wordCount = elements.wordCount;
     this.titleInput = elements.titleInput;
     this.newBtn = elements.newBtn;
+    this.copyBtn = elements.copyBtn;
     this.downloadBtn = elements.downloadBtn;
     this.gdriveBtn = elements.gdriveBtn;
     this.authBtn = elements.authBtn;
@@ -301,6 +302,13 @@ export class UI {
       if (handlers.onNew) handlers.onNew();
     });
     
+    // Copy button
+    if (this.copyBtn) {
+      this.copyBtn.addEventListener('click', () => {
+        if (handlers.onCopy) handlers.onCopy();
+      });
+    }
+
     // Download button
     this.downloadBtn.addEventListener('click', () => {
       if (handlers.onDownload) handlers.onDownload();
