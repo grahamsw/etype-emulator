@@ -42,6 +42,12 @@ export class UI {
     this.settingsTimestampPositionSelect = elements.settingsTimestampPositionSelect;
     this.settingsFontSelect = elements.settingsFontSelect;
     this.settingsFontsizeSelect = elements.settingsFontsizeSelect;
+    this.settingsThemeSelect = elements.settingsThemeSelect;
+    this.customColorContainer = elements.customColorContainer;
+    this.colorSurfaceInput = elements.colorSurfaceInput;
+    this.colorBezelInput = elements.colorBezelInput;
+    this.colorPaperInput = elements.colorPaperInput;
+    this.colorInkInput = elements.colorInkInput;
     this.cancelSettingsBtn = elements.cancelSettingsBtn;
     this.saveSettingsBtn = elements.saveSettingsBtn;
     this.toast = elements.toast;
@@ -179,7 +185,7 @@ export class UI {
 
   /**
    * Show the Settings modal dialog.
-   * @param {Object} currentSettings - { driveFolder, showWordCount, enableTimestamp, timestampFormat, timestampPosition, font, fontSize }
+   * @param {Object} currentSettings - App settings
    * @param {Function} onSave - Called with (newSettings)
    */
   showSettingsDialog(currentSettings, onSave) {
@@ -206,7 +212,111 @@ export class UI {
     if (this.settingsFontsizeSelect) {
       this.settingsFontsizeSelect.value = currentSettings.fontSize || 'medium';
     }
+    if (this.settingsThemeSelect) {
+      this.settingsThemeSelect.value = currentSettings.theme || 'warm-cream';
+    }
+
+    const customColors = currentSettings.customColors || {};
+    if (this.colorSurfaceInput) this.colorSurfaceInput.value = customColors.surface || '#1a1a1a';
+    if (this.colorBezelInput) this.colorBezelInput.value = customColors.bezel || '#d4cfc7';
+    if (this.colorPaperInput) this.colorPaperInput.value = customColors.paper || '#f5f0e8';
+    if (this.colorInkInput) this.colorInkInput.value = customColors.ink || '#2a2a2a';
+
+    this._updateCustomColorVisibility(this.settingsThemeSelect ? this.settingsThemeSelect.value : 'warm-cream');
+
     this.settingsDialog.showModal();
+  }
+
+  /**
+   * Toggle visibility of custom color pickers based on theme selection.
+   * @param {string} themeKey
+   */
+  _updateCustomColorVisibility(themeKey) {
+    if (!this.customColorContainer) return;
+    if (themeKey === 'custom') {
+      this.customColorContainer.classList.remove('hidden');
+    } else {
+      this.customColorContainer.classList.add('hidden');
+    }
+  }
+
+  /**
+   * Calculates luminance of a hex color string and returns a contrasting text/icon color.
+   * @param {string} hex
+   * @returns {string} High-contrast color hex/rgba
+   */
+  _getContrastingColor(hex) {
+    if (!hex || typeof hex !== 'string') return 'rgba(0, 0, 0, 0.75)';
+    let c = hex.replace('#', '').trim();
+    if (c.length === 3) {
+      c = c.split('').map(x => x + x).join('');
+    }
+    if (c.length !== 6) return 'rgba(0, 0, 0, 0.75)';
+
+    const r = parseInt(c.substring(0, 2), 16);
+    const g = parseInt(c.substring(2, 4), 16);
+    const b = parseInt(c.substring(4, 6), 16);
+
+    const luminance = (r * 299 + g * 587 + b * 114) / 1000;
+    return luminance < 140 ? 'rgba(255, 255, 255, 0.88)' : 'rgba(0, 0, 0, 0.75)';
+  }
+
+  /**
+   * Apply preset theme or custom colors to the root document with contrast safety.
+   * @param {string} [themeKey='warm-cream']
+   * @param {Object} [customColors]
+   */
+  applyThemeSettings(themeKey = 'warm-cream', customColors = {}) {
+    const root = document.documentElement;
+
+    const presetPalettes = {
+      'warm-cream': {
+        surface: '#1a1a1a',
+        bezel: '#d4cfc7',
+        paper: '#f5f0e8',
+        ink: '#2a2a2a',
+      },
+      'dark-mode': {
+        surface: '#121212',
+        bezel: '#282b2e',
+        paper: '#1e2022',
+        ink: '#e2e2e2',
+      },
+      'sepia': {
+        surface: '#282019',
+        bezel: '#ded3c4',
+        paper: '#f4ecd8',
+        ink: '#3c2f23',
+      },
+      'high-contrast': {
+        surface: '#000000',
+        bezel: '#d0d0d0',
+        paper: '#ffffff',
+        ink: '#000000',
+      },
+    };
+
+    let palette = presetPalettes[themeKey];
+    if (themeKey === 'custom' || !palette) {
+      palette = {
+        surface: customColors.surface || '#1a1a1a',
+        bezel: customColors.bezel || '#d4cfc7',
+        paper: customColors.paper || '#f5f0e8',
+        ink: customColors.ink || '#2a2a2a',
+      };
+    }
+
+    const iconColor = this._getContrastingColor(palette.surface);
+    const toolbarTextColor = this._getContrastingColor(palette.bezel);
+
+    root.style.setProperty('--surface-bg', palette.surface);
+    root.style.setProperty('--device-bezel', palette.bezel);
+    root.style.setProperty('--device-bezel-dark', palette.bezel);
+    root.style.setProperty('--paper-bg', palette.paper);
+    root.style.setProperty('--ink-color', palette.ink);
+    root.style.setProperty('--cursor-color', palette.ink);
+    root.style.setProperty('--icon-color', iconColor);
+    root.style.setProperty('--toolbar-text', toolbarTextColor);
   }
 
   /**
@@ -309,6 +419,13 @@ export class UI {
       });
     }
 
+    // Toggle custom color pickers visibility when theme select changes
+    if (this.settingsThemeSelect) {
+      this.settingsThemeSelect.addEventListener('change', (e) => {
+        this._updateCustomColorVisibility(e.target.value);
+      });
+    }
+
     // Close Info dialog
     if (this.closeInfoBtn && this.infoDialog) {
       this.closeInfoBtn.addEventListener('click', () => {
@@ -329,6 +446,13 @@ export class UI {
         const timestampPosition = this.settingsTimestampPositionSelect ? this.settingsTimestampPositionSelect.value : 'after';
         const font = this.settingsFontSelect ? this.settingsFontSelect.value : 'courier';
         const fontSize = this.settingsFontsizeSelect ? this.settingsFontsizeSelect.value : 'medium';
+        const theme = this.settingsThemeSelect ? this.settingsThemeSelect.value : 'warm-cream';
+        const customColors = {
+          surface: this.colorSurfaceInput ? this.colorSurfaceInput.value : '#1a1a1a',
+          bezel: this.colorBezelInput ? this.colorBezelInput.value : '#d4cfc7',
+          paper: this.colorPaperInput ? this.colorPaperInput.value : '#f5f0e8',
+          ink: this.colorInkInput ? this.colorInkInput.value : '#2a2a2a',
+        };
 
         const cb = this._onSaveSettingsConfirm;
         this._onSaveSettingsConfirm = null;
@@ -342,6 +466,8 @@ export class UI {
             timestampPosition,
             font,
             fontSize,
+            theme,
+            customColors,
           });
         }
       });
