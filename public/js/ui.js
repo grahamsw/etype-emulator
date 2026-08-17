@@ -40,6 +40,8 @@ export class UI {
     this.settingsEnableTimestampInput = elements.settingsEnableTimestampInput;
     this.settingsTimestampFormatSelect = elements.settingsTimestampFormatSelect;
     this.settingsTimestampPositionSelect = elements.settingsTimestampPositionSelect;
+    this.settingsFontSelect = elements.settingsFontSelect;
+    this.settingsFontsizeSelect = elements.settingsFontsizeSelect;
     this.cancelSettingsBtn = elements.cancelSettingsBtn;
     this.saveSettingsBtn = elements.saveSettingsBtn;
     this.toast = elements.toast;
@@ -177,7 +179,7 @@ export class UI {
 
   /**
    * Show the Settings modal dialog.
-   * @param {Object} currentSettings - { driveFolder, showWordCount, enableTimestamp, timestampFormat, timestampPosition }
+   * @param {Object} currentSettings - { driveFolder, showWordCount, enableTimestamp, timestampFormat, timestampPosition, font, fontSize }
    * @param {Function} onSave - Called with (newSettings)
    */
   showSettingsDialog(currentSettings, onSave) {
@@ -198,7 +200,45 @@ export class UI {
     if (this.settingsTimestampPositionSelect) {
       this.settingsTimestampPositionSelect.value = currentSettings.timestampPosition || 'after';
     }
+    if (this.settingsFontSelect) {
+      this.settingsFontSelect.value = currentSettings.font || 'courier';
+    }
+    if (this.settingsFontsizeSelect) {
+      this.settingsFontsizeSelect.value = currentSettings.fontSize || 'medium';
+    }
     this.settingsDialog.showModal();
+  }
+
+  /**
+   * Apply font family and font size to text display.
+   * @param {string} [fontKey='courier']
+   * @param {string} [fontSizeKey='medium']
+   */
+  applyFontSettings(fontKey = 'courier', fontSizeKey = 'medium') {
+    const display = document.getElementById('text-display');
+    if (!display) return;
+
+    const fontFamilies = {
+      'courier': "'Courier Prime', 'Courier New', Courier, monospace",
+      'special-elite': "'Special Elite', 'Courier New', Courier, monospace",
+      'cutive-mono': "'Cutive Mono', 'Courier New', Courier, monospace",
+      'anonymous-pro': "'Anonymous Pro', monospace",
+      'space-mono': "'Space Mono', monospace",
+      'fira-code': "'Fira Code', monospace",
+    };
+
+    const fontSizes = {
+      'small': '0.9rem',
+      'medium': '1.05rem',
+      'large': '1.25rem',
+      'xlarge': '1.5rem',
+    };
+
+    const family = fontFamilies[fontKey] || fontFamilies['courier'];
+    const size = fontSizes[fontSizeKey] || fontSizes['medium'];
+
+    display.style.setProperty('--active-font', family);
+    display.style.setProperty('--active-font-size', size);
   }
 
   /**
@@ -287,6 +327,8 @@ export class UI {
         const enableTimestamp = this.settingsEnableTimestampInput ? this.settingsEnableTimestampInput.checked : true;
         const timestampFormat = this.settingsTimestampFormatSelect ? this.settingsTimestampFormatSelect.value : 'YYYY-MM-DD HH-mm';
         const timestampPosition = this.settingsTimestampPositionSelect ? this.settingsTimestampPositionSelect.value : 'after';
+        const font = this.settingsFontSelect ? this.settingsFontSelect.value : 'courier';
+        const fontSize = this.settingsFontsizeSelect ? this.settingsFontsizeSelect.value : 'medium';
 
         const cb = this._onSaveSettingsConfirm;
         this._onSaveSettingsConfirm = null;
@@ -298,6 +340,8 @@ export class UI {
             enableTimestamp,
             timestampFormat,
             timestampPosition,
+            font,
+            fontSize,
           });
         }
       });

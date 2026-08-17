@@ -226,8 +226,8 @@ body.show-controls #toolbar,
 
 #text-display {
   padding: 28px 32px;
-  font-family: var(--font-mono);
-  font-size: 1.05rem;
+  font-family: var(--active-font, var(--font-mono));
+  font-size: var(--active-font-size, 1.05rem);
   line-height: 1.75;
   color: var(--ink-color);
   white-space: pre-wrap;
