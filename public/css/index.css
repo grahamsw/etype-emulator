@@ -480,14 +480,14 @@ body.show-controls .floating-controls {
 
 .btn-icon {
   background: var(--surface-bg);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   width: 44px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--paper-bg);
+  color: var(--icon-color, var(--paper-bg));
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
@@ -495,9 +495,10 @@ body.show-controls .floating-controls {
 }
 
 .btn-icon:hover {
-  background: #2b2b2b;
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.35);
+  background: var(--surface-bg);
+  filter: brightness(1.2);
+  color: var(--icon-color, #ffffff);
+  border-color: rgba(255, 255, 255, 0.4);
   transform: scale(1.1);
 }
 
@@ -532,7 +533,7 @@ body.show-controls .floating-controls {
   font-size: 0.85rem;
   background: rgba(0, 0, 0, 0.04);
   color: var(--toolbar-text);
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .field-help {
@@ -592,6 +593,55 @@ body.show-controls .floating-controls {
 
 #word-count.hidden {
   display: none !important;
+}
+
+.custom-color-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0 16px 0;
+  padding: 12px;
+  background: rgba(0,0,0,0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.custom-color-grid.hidden {
+  display: none !important;
+}
+
+.form-group-color {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group-color label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--toolbar-text);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.form-group-color input[type="color"] {
+  -webkit-appearance: none;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 6px;
+  width: 100%;
+  height: 36px;
+  cursor: pointer;
+  background: transparent;
+  padding: 2px;
+}
+
+.form-group-color input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-group-color input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 4px;
 }
 
 @media (max-width: 640px) {

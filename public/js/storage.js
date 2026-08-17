@@ -54,39 +54,36 @@ export function saveSettings(settings) {
  * @returns {Object} Saved settings or defaults.
  */
 export function loadSettings() {
+  const defaults = {
+    driveFolder: 'etype_drafts',
+    showWordCount: true,
+    enableTimestamp: true,
+    timestampFormat: 'YYYY-MM-DD HH-mm',
+    timestampPosition: 'after',
+    font: 'courier',
+    fontSize: 'medium',
+    theme: 'warm-cream',
+    customColors: {
+      surface: '#1a1a1a',
+      bezel: '#d4cfc7',
+      paper: '#f5f0e8',
+      ink: '#2a2a2a',
+    },
+  };
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
-    if (!raw) {
-      return {
-        driveFolder: 'etype_drafts',
-        showWordCount: true,
-        enableTimestamp: true,
-        timestampFormat: 'YYYY-MM-DD HH-mm',
-        timestampPosition: 'after',
-        font: 'courier',
-        fontSize: 'medium',
-      };
-    }
+    if (!raw) return defaults;
     const parsed = JSON.parse(raw);
     return {
-      driveFolder: parsed.driveFolder || 'etype_drafts',
-      showWordCount: parsed.showWordCount !== false,
-      enableTimestamp: parsed.enableTimestamp !== false,
-      timestampFormat: parsed.timestampFormat || 'YYYY-MM-DD HH-mm',
-      timestampPosition: parsed.timestampPosition || 'after',
-      font: parsed.font || 'courier',
-      fontSize: parsed.fontSize || 'medium',
+      ...defaults,
+      ...parsed,
+      customColors: {
+        ...defaults.customColors,
+        ...(parsed.customColors || {}),
+      },
     };
   } catch (e) {
-    return {
-      driveFolder: 'etype_drafts',
-      showWordCount: true,
-      enableTimestamp: true,
-      timestampFormat: 'YYYY-MM-DD HH-mm',
-      timestampPosition: 'after',
-      font: 'courier',
-      fontSize: 'medium',
-    };
+    return defaults;
   }
 }
 

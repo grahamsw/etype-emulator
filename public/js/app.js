@@ -51,6 +51,12 @@ function init() {
   const settingsTimestampPositionSelectEl = document.getElementById('settings-timestamp-position');
   const settingsFontSelectEl = document.getElementById('settings-font-select');
   const settingsFontsizeSelectEl = document.getElementById('settings-fontsize-select');
+  const settingsThemeSelectEl = document.getElementById('settings-theme-select');
+  const customColorContainerEl = document.getElementById('custom-color-container');
+  const colorSurfaceInputEl = document.getElementById('settings-color-surface');
+  const colorBezelInputEl = document.getElementById('settings-color-bezel');
+  const colorPaperInputEl = document.getElementById('settings-color-paper');
+  const colorInkInputEl = document.getElementById('settings-color-ink');
   const cancelSettingsBtnEl = document.getElementById('btn-cancel-settings');
   const saveSettingsBtnEl = document.getElementById('btn-save-settings');
 
@@ -90,15 +96,22 @@ function init() {
     settingsTimestampPositionSelect: settingsTimestampPositionSelectEl,
     settingsFontSelect: settingsFontSelectEl,
     settingsFontsizeSelect: settingsFontsizeSelectEl,
+    settingsThemeSelect: settingsThemeSelectEl,
+    customColorContainer: customColorContainerEl,
+    colorSurfaceInput: colorSurfaceInputEl,
+    colorBezelInput: colorBezelInputEl,
+    colorPaperInput: colorPaperInputEl,
+    colorInkInput: colorInkInputEl,
     cancelSettingsBtn: cancelSettingsBtnEl,
     saveSettingsBtn: saveSettingsBtnEl,
     toast: toastEl,
     toastMessage: toastMessageEl,
   });
 
-  // Apply initial word count visibility and font settings
+  // Apply initial word count visibility, font, and theme settings
   ui.setWordCountVisibility(appSettings.showWordCount !== false);
   ui.applyFontSettings(appSettings.font, appSettings.fontSize);
+  ui.applyThemeSettings(appSettings.theme, appSettings.customColors);
   
   // ---- Distraction-Free Controls & Bottom Bar Visibility ----
   let mouseIdleTimer = null;
@@ -218,6 +231,7 @@ function init() {
         Storage.saveSettings(newSettings);
         ui.setWordCountVisibility(appSettings.showWordCount !== false);
         ui.applyFontSettings(appSettings.font, appSettings.fontSize);
+        ui.applyThemeSettings(appSettings.theme, appSettings.customColors);
         ui.showToast(`Settings saved.`);
       });
     },

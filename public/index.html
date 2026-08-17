@@ -162,10 +162,32 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Theme</label>
-        <select id="settings-theme-select" disabled>
+        <label for="settings-theme-select">Theme</label>
+        <select id="settings-theme-select">
           <option value="warm-cream">Warm Cream E-Paper (Default)</option>
+          <option value="dark-mode">Dark Mode E-Paper</option>
+          <option value="sepia">Sepia Nostalgia</option>
+          <option value="high-contrast">High Contrast E-Ink</option>
+          <option value="custom">Custom ("Choose Your Own")</option>
         </select>
+      </div>
+      <div id="custom-color-container" class="custom-color-grid hidden">
+        <div class="form-group-color">
+          <label for="settings-color-surface">Background</label>
+          <input type="color" id="settings-color-surface" value="#1a1a1a">
+        </div>
+        <div class="form-group-color">
+          <label for="settings-color-bezel">Frame / Bezel</label>
+          <input type="color" id="settings-color-bezel" value="#d4cfc7">
+        </div>
+        <div class="form-group-color">
+          <label for="settings-color-paper">Screen Paper</label>
+          <input type="color" id="settings-color-paper" value="#f5f0e8">
+        </div>
+        <div class="form-group-color">
+          <label for="settings-color-ink">Ink / Text</label>
+          <input type="color" id="settings-color-ink" value="#2a2a2a">
+        </div>
       </div>
       <div class="dialog-footer-links">
         <a href="mailto:graham.stalker@gmail.com?subject=E-Type%20Feedback" target="_blank" rel="noopener">Contact Developer / Send Feedback ✉</a>
