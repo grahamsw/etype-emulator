@@ -313,6 +313,18 @@ function init() {
     }
   });
 
+  // Global keydown listener for Copy shortcut (Ctrl+C / Cmd+C)
+  document.addEventListener('keydown', (e) => {
+    if (document.querySelector('dialog[open]')) return;
+    const activeEl = document.activeElement;
+    if (activeEl && activeEl.tagName === 'INPUT' && activeEl.id !== 'hidden-input') return;
+
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'c') {
+      e.preventDefault();
+      handleCopy();
+    }
+  });
+
   // Window focus listener (switching tabs or returning to app)
   window.addEventListener('focus', () => {
     focusTypewriter();
