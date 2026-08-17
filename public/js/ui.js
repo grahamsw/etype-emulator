@@ -37,6 +37,9 @@ export class UI {
     this.settingsDialog = elements.settingsDialog;
     this.settingsFolderInput = elements.settingsFolderInput;
     this.settingsWordCountInput = elements.settingsWordCountInput;
+    this.settingsEnableTimestampInput = elements.settingsEnableTimestampInput;
+    this.settingsTimestampFormatSelect = elements.settingsTimestampFormatSelect;
+    this.settingsTimestampPositionSelect = elements.settingsTimestampPositionSelect;
     this.cancelSettingsBtn = elements.cancelSettingsBtn;
     this.saveSettingsBtn = elements.saveSettingsBtn;
     this.toast = elements.toast;
@@ -174,7 +177,7 @@ export class UI {
 
   /**
    * Show the Settings modal dialog.
-   * @param {Object} currentSettings - { driveFolder, showWordCount }
+   * @param {Object} currentSettings - { driveFolder, showWordCount, enableTimestamp, timestampFormat, timestampPosition }
    * @param {Function} onSave - Called with (newSettings)
    */
   showSettingsDialog(currentSettings, onSave) {
@@ -185,6 +188,15 @@ export class UI {
     }
     if (this.settingsWordCountInput) {
       this.settingsWordCountInput.checked = currentSettings.showWordCount !== false;
+    }
+    if (this.settingsEnableTimestampInput) {
+      this.settingsEnableTimestampInput.checked = currentSettings.enableTimestamp !== false;
+    }
+    if (this.settingsTimestampFormatSelect) {
+      this.settingsTimestampFormatSelect.value = currentSettings.timestampFormat || 'YYYY-MM-DD HH-mm';
+    }
+    if (this.settingsTimestampPositionSelect) {
+      this.settingsTimestampPositionSelect.value = currentSettings.timestampPosition || 'after';
     }
     this.settingsDialog.showModal();
   }
@@ -272,11 +284,21 @@ export class UI {
       this.saveSettingsBtn.addEventListener('click', () => {
         const driveFolder = (this.settingsFolderInput ? this.settingsFolderInput.value : '').trim() || 'etype_drafts';
         const showWordCount = this.settingsWordCountInput ? this.settingsWordCountInput.checked : true;
+        const enableTimestamp = this.settingsEnableTimestampInput ? this.settingsEnableTimestampInput.checked : true;
+        const timestampFormat = this.settingsTimestampFormatSelect ? this.settingsTimestampFormatSelect.value : 'YYYY-MM-DD HH-mm';
+        const timestampPosition = this.settingsTimestampPositionSelect ? this.settingsTimestampPositionSelect.value : 'after';
+
         const cb = this._onSaveSettingsConfirm;
         this._onSaveSettingsConfirm = null;
         this.settingsDialog.close();
         if (cb) {
-          cb({ driveFolder, showWordCount });
+          cb({
+            driveFolder,
+            showWordCount,
+            enableTimestamp,
+            timestampFormat,
+            timestampPosition,
+          });
         }
       });
     }

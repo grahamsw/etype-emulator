@@ -46,6 +46,9 @@ function init() {
   const settingsDialogEl = document.getElementById('settings-dialog');
   const settingsFolderInputEl = document.getElementById('settings-drive-folder');
   const settingsWordCountInputEl = document.getElementById('settings-show-wordcount');
+  const settingsEnableTimestampInputEl = document.getElementById('settings-enable-timestamp');
+  const settingsTimestampFormatSelectEl = document.getElementById('settings-timestamp-format');
+  const settingsTimestampPositionSelectEl = document.getElementById('settings-timestamp-position');
   const cancelSettingsBtnEl = document.getElementById('btn-cancel-settings');
   const saveSettingsBtnEl = document.getElementById('btn-save-settings');
 
@@ -80,6 +83,9 @@ function init() {
     settingsDialog: settingsDialogEl,
     settingsFolderInput: settingsFolderInputEl,
     settingsWordCountInput: settingsWordCountInputEl,
+    settingsEnableTimestampInput: settingsEnableTimestampInputEl,
+    settingsTimestampFormatSelect: settingsTimestampFormatSelectEl,
+    settingsTimestampPositionSelect: settingsTimestampPositionSelectEl,
     cancelSettingsBtn: cancelSettingsBtnEl,
     saveSettingsBtn: saveSettingsBtnEl,
     toast: toastEl,
@@ -243,11 +249,11 @@ function init() {
       // Open Save to Google Drive modal dialog
       ui.showGDriveDialog(ui.getTitle(), folderName, async (customTitle) => {
         try {
-          ui.showToast(`Saving to ${folderName} folder in Google Drive...`);
+          ui.showToast(`Saving to Google Drive...`);
           const activeToken = getAccessToken() || token;
-          const file = await saveDraftToDrive(activeToken, customTitle, text, folderName);
+          const file = await saveDraftToDrive(activeToken, customTitle, text, folderName, appSettings);
           ui.setTitle(customTitle);
-          ui.showToast(`Saved "${file.name}" to ${folderName} in Google Drive!`);
+          ui.showToast(`Saved "${file.name}" to Google Drive!`);
         } catch (err) {
           console.error('Google Drive save error:', err);
           ui.showToast(`Drive Error: ${err.message || 'Failed to save'}`);
@@ -285,7 +291,7 @@ function init() {
       const text = typewriter.getText();
       const title = ui.getTitle();
       if (!text.trim()) return; // Nothing to download
-      Storage.downloadAsMarkdown(text, title);
+      Storage.downloadAsMarkdown(text, title, appSettings);
     },
     
     onTitleChange: () => {
