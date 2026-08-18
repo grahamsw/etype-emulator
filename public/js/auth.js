@@ -21,6 +21,7 @@ const firebaseConfig = {
   apiKey: "",
   authDomain: "etype-emulator-app.firebaseapp.com",
   messagingSenderId: "14967080007",
+  measurementId: "G-X61L1VGXH7",
 };
 
 // Fetch API key dynamically from runtime /config.json (gitignored for zero alerts)
