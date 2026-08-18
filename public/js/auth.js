@@ -8,6 +8,10 @@ import {
   GoogleAuthProvider, 
   onAuthStateChanged 
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { 
+  getAnalytics, 
+  isSupported 
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js';
 
 // Firebase Web Configuration
 const firebaseConfig = {
@@ -24,8 +28,9 @@ try {
   const configRes = await fetch('/config.json');
   if (configRes.ok) {
     const configData = await configRes.json();
-    if (configData && configData.apiKey) {
-      firebaseConfig.apiKey = configData.apiKey;
+    if (configData) {
+      if (configData.apiKey) firebaseConfig.apiKey = configData.apiKey;
+      if (configData.measurementId) firebaseConfig.measurementId = configData.measurementId;
     }
   }
 } catch (e) {
@@ -34,6 +39,16 @@ try {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+// Initialize Firebase Analytics if supported
+export let analytics = null;
+isSupported().then((supported) => {
+  if (supported) {
+    analytics = getAnalytics(app);
+  }
+}).catch((e) => {
+  console.warn('E-Type: Analytics initialization skipped', e);
+});
 
 const googleProvider = new GoogleAuthProvider();
 // Request Google Drive file scope for saving drafts to etype_drafts folder
