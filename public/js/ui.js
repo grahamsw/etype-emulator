@@ -48,6 +48,7 @@ export class UI {
     this.colorBezelInput = elements.colorBezelInput;
     this.colorPaperInput = elements.colorPaperInput;
     this.colorInkInput = elements.colorInkInput;
+    this.heightSlider = elements.heightSlider;
     this.cancelSettingsBtn = elements.cancelSettingsBtn;
     this.saveSettingsBtn = elements.saveSettingsBtn;
     this.toast = elements.toast;
@@ -352,6 +353,21 @@ export class UI {
   }
 
   /**
+   * Apply typing viewport height percentage (15% to 100%).
+   * @param {number} percentage - 15 to 100
+   */
+  applyViewportHeight(percentage = 100) {
+    const pct = Math.max(15, Math.min(100, Number(percentage) || 100));
+    if (this.screen) {
+      this.screen.style.setProperty('--active-screen-height', `calc(var(--screen-height) * ${pct / 100})`);
+      this.scrollToBottom();
+    }
+    if (this.heightSlider) {
+      this.heightSlider.value = String(pct);
+    }
+  }
+
+  /**
    * Toggle visibility of the word count in the status bar.
    * @param {boolean} visible
    */
@@ -423,6 +439,17 @@ export class UI {
     if (this.settingsThemeSelect) {
       this.settingsThemeSelect.addEventListener('change', (e) => {
         this._updateCustomColorVisibility(e.target.value);
+      });
+    }
+
+    // Bezel viewport height slider
+    if (this.heightSlider) {
+      this.heightSlider.addEventListener('input', (e) => {
+        const val = Number(e.target.value) || 100;
+        this.applyViewportHeight(val);
+        if (handlers.onViewportHeightChange) {
+          handlers.onViewportHeightChange(val);
+        }
       });
     }
 
