@@ -63,6 +63,7 @@ export function loadSettings() {
     font: 'courier',
     fontSize: 'medium',
     theme: 'warm-cream',
+    viewportHeight: 100,
     customColors: {
       surface: '#1a1a1a',
       bezel: '#d4cfc7',
