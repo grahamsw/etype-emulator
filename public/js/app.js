@@ -57,7 +57,6 @@ function init() {
   const colorBezelInputEl = document.getElementById('settings-color-bezel');
   const colorPaperInputEl = document.getElementById('settings-color-paper');
   const colorInkInputEl = document.getElementById('settings-color-ink');
-  const heightSliderEl = document.getElementById('height-slider');
   const cancelSettingsBtnEl = document.getElementById('btn-cancel-settings');
   const saveSettingsBtnEl = document.getElementById('btn-save-settings');
 
@@ -103,18 +102,16 @@ function init() {
     colorBezelInput: colorBezelInputEl,
     colorPaperInput: colorPaperInputEl,
     colorInkInput: colorInkInputEl,
-    heightSlider: heightSliderEl,
     cancelSettingsBtn: cancelSettingsBtnEl,
     saveSettingsBtn: saveSettingsBtnEl,
     toast: toastEl,
     toastMessage: toastMessageEl,
   });
 
-  // Apply initial word count visibility, font, theme, and viewport height settings
+  // Apply initial word count visibility, font, and theme settings
   ui.setWordCountVisibility(appSettings.showWordCount !== false);
   ui.applyFontSettings(appSettings.font, appSettings.fontSize);
   ui.applyThemeSettings(appSettings.theme, appSettings.customColors);
-  ui.applyViewportHeight(appSettings.viewportHeight || 100);
   
   // ---- Distraction-Free Controls & Bottom Bar Visibility ----
   let mouseIdleTimer = null;
@@ -237,11 +234,6 @@ function init() {
         ui.applyThemeSettings(appSettings.theme, appSettings.customColors);
         ui.showToast(`Settings saved.`);
       });
-    },
-
-    onViewportHeightChange: (val) => {
-      appSettings.viewportHeight = val;
-      Storage.saveSettings(appSettings);
     },
 
     onGDrive: async () => {
