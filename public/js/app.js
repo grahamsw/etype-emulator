@@ -104,6 +104,7 @@ function init() {
     colorPaperInput: colorPaperInputEl,
     colorInkInput: colorInkInputEl,
     heightSlider: heightSliderEl,
+    heightSliderContainer: document.querySelector('.bezel-slider-container'),
     cancelSettingsBtn: cancelSettingsBtnEl,
     saveSettingsBtn: saveSettingsBtnEl,
     toast: toastEl,

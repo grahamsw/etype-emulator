@@ -49,6 +49,7 @@ export class UI {
     this.colorPaperInput = elements.colorPaperInput;
     this.colorInkInput = elements.colorInkInput;
     this.heightSlider = elements.heightSlider;
+    this.heightSliderContainer = elements.heightSliderContainer;
     this.cancelSettingsBtn = elements.cancelSettingsBtn;
     this.saveSettingsBtn = elements.saveSettingsBtn;
     this.toast = elements.toast;
@@ -358,9 +359,13 @@ export class UI {
    */
   applyViewportHeight(percentage = 100) {
     const pct = Math.max(15, Math.min(100, Number(percentage) || 100));
+    const vhHeight = (0.72 * pct).toFixed(2);
     if (this.screen) {
-      this.screen.style.setProperty('--active-screen-height', `calc(var(--screen-height) * ${pct / 100})`);
+      this.screen.style.height = `${vhHeight}vh`;
       this.scrollToBottom();
+    }
+    if (this.heightSliderContainer) {
+      this.heightSliderContainer.style.height = `${vhHeight}vh`;
     }
     if (this.heightSlider) {
       this.heightSlider.value = String(pct);
