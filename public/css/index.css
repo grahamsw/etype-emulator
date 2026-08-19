@@ -105,8 +105,6 @@ body.show-controls .bezel-slider-container,
 #height-slider {
   writing-mode: vertical-lr;
   direction: rtl;
-  -webkit-appearance: slider-vertical;
-  appearance: slider-vertical;
   accent-color: var(--toolbar-text, #5a5550);
   width: 8px;
   height: calc(100% - 12px);
