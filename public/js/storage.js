@@ -57,6 +57,7 @@ export function loadSettings() {
   const defaults = {
     driveFolder: 'etype_drafts',
     showWordCount: true,
+    cursorBlink: true,
     enableTimestamp: true,
     timestampFormat: 'YYYY-MM-DD HH-mm',
     timestampPosition: 'after',
@@ -75,9 +76,21 @@ export function loadSettings() {
     const raw = localStorage.getItem(SETTINGS_KEY);
     if (!raw) return defaults;
     const parsed = JSON.parse(raw);
+
+    // Synchronize enableTimestamp & timestampPosition 'none'
+    let position = parsed.timestampPosition || defaults.timestampPosition;
+    let enabled = parsed.enableTimestamp !== undefined ? parsed.enableTimestamp : defaults.enableTimestamp;
+    if (!enabled) {
+      position = 'none';
+    } else if (position === 'none') {
+      enabled = false;
+    }
+
     return {
       ...defaults,
       ...parsed,
+      enableTimestamp: enabled,
+      timestampPosition: position,
       customColors: {
         ...defaults.customColors,
         ...(parsed.customColors || {}),
@@ -182,7 +195,7 @@ export function processFilename(rawPath, settings = {}, date = new Date(), overr
   const subfolderPath = subfolderParts.join('/');
 
   let nameWithoutExt = cleanTitle;
-  if (currentSettings.enableTimestamp) {
+  if (currentSettings.enableTimestamp && currentSettings.timestampPosition !== 'none') {
     let seqNum = overrideSeq;
     if (currentSettings.timestampFormat === 'YYYY-MM-DD.seq' && seqNum === null) {
       const pad = (n) => String(n).padStart(2, '0');

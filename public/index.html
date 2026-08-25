@@ -131,27 +131,30 @@
         </label>
       </div>
       <div class="form-group form-group-checkbox">
-        <label class="checkbox-label" for="settings-enable-timestamp">
-          <input type="checkbox" id="settings-enable-timestamp" checked>
-          <span>Add timestamp to saved filenames</span>
+        <label class="checkbox-label" for="settings-cursor-blink">
+          <input type="checkbox" id="settings-cursor-blink" checked>
+          <span>Blink cursor</span>
         </label>
       </div>
-      <div class="form-group">
-        <label for="settings-timestamp-format">Timestamp Format</label>
-        <select id="settings-timestamp-format">
-          <option value="YYYY-MM-DD HH-mm">2026-08-17 12-02 (Default)</option>
-          <option value="YYYY-MM-DD.seq">2026-08-17.1, .2 (Date + daily sequence)</option>
-          <option value="YYYY-MM-DD">2026-08-17 (Date only)</option>
-          <option value="YYYYMMDD-HHmm">20260817-1202 (Compact)</option>
-          <option value="ISO">2026-08-17T12-02 (ISO style)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="settings-timestamp-position">Timestamp Position</label>
-        <select id="settings-timestamp-position">
-          <option value="after">After Title (title-2026-08-17 12-02.md)</option>
-          <option value="before">Before Title (2026-08-17 12-02-title.md)</option>
-        </select>
+      <div class="form-group-row">
+        <div class="form-group">
+          <label for="settings-timestamp-position" id="label-timestamp-position">Timestamp Position</label>
+          <select id="settings-timestamp-position">
+            <option value="after">After Title (title-2026-08-17.md)</option>
+            <option value="before">Before Title (2026-08-17-title.md)</option>
+            <option value="none">None (No timestamp)</option>
+          </select>
+        </div>
+        <div class="form-group" id="group-timestamp-format">
+          <label for="settings-timestamp-format" id="label-timestamp-format">Timestamp Format</label>
+          <select id="settings-timestamp-format">
+            <option value="YYYY-MM-DD HH-mm">2026-08-17 12-02 (Default)</option>
+            <option value="YYYY-MM-DD.seq">2026-08-17.1, .2 (Date + daily sequence)</option>
+            <option value="YYYY-MM-DD">2026-08-17 (Date only)</option>
+            <option value="YYYYMMDD-HHmm">20260817-1202 (Compact)</option>
+            <option value="ISO">2026-08-17T12-02 (ISO style)</option>
+          </select>
+        </div>
       </div>
       <div class="form-group">
         <label for="settings-font-select">Font Family</label>

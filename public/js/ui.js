@@ -34,9 +34,11 @@ export class UI {
     this.settingsBtn = elements.settingsBtn;
     this.infoDialog = elements.infoDialog;
     this.closeInfoBtn = elements.closeInfoBtn;
+    this.cursorEl = elements.cursor || document.getElementById('cursor');
     this.settingsDialog = elements.settingsDialog;
     this.settingsFolderInput = elements.settingsFolderInput;
     this.settingsWordCountInput = elements.settingsWordCountInput;
+    this.settingsCursorBlinkInput = elements.settingsCursorBlinkInput;
     this.settingsEnableTimestampInput = elements.settingsEnableTimestampInput;
     this.settingsTimestampFormatSelect = elements.settingsTimestampFormatSelect;
     this.settingsTimestampPositionSelect = elements.settingsTimestampPositionSelect;
@@ -199,6 +201,9 @@ export class UI {
     if (this.settingsWordCountInput) {
       this.settingsWordCountInput.checked = currentSettings.showWordCount !== false;
     }
+    if (this.settingsCursorBlinkInput) {
+      this.settingsCursorBlinkInput.checked = currentSettings.cursorBlink !== false;
+    }
     if (this.settingsEnableTimestampInput) {
       this.settingsEnableTimestampInput.checked = currentSettings.enableTimestamp !== false;
     }
@@ -206,8 +211,13 @@ export class UI {
       this.settingsTimestampFormatSelect.value = currentSettings.timestampFormat || 'YYYY-MM-DD HH-mm';
     }
     if (this.settingsTimestampPositionSelect) {
-      this.settingsTimestampPositionSelect.value = currentSettings.timestampPosition || 'after';
+      const pos = (currentSettings.enableTimestamp === false || currentSettings.timestampPosition === 'none')
+        ? 'none'
+        : (currentSettings.timestampPosition || 'after');
+      this.settingsTimestampPositionSelect.value = pos;
     }
+    this._updateTimestampFormatState();
+
     if (this.settingsFontSelect) {
       this.settingsFontSelect.value = currentSettings.font || 'courier';
     }
@@ -227,6 +237,36 @@ export class UI {
     this._updateCustomColorVisibility(this.settingsThemeSelect ? this.settingsThemeSelect.value : 'warm-cream');
 
     this.settingsDialog.showModal();
+  }
+
+  /**
+   * Dynamically enables/disables timestamp format selection based on position choice.
+   */
+  _updateTimestampFormatState() {
+    if (!this.settingsTimestampPositionSelect || !this.settingsTimestampFormatSelect) return;
+    const isNone = this.settingsTimestampPositionSelect.value === 'none';
+    this.settingsTimestampFormatSelect.disabled = isNone;
+    const formatLabel = document.getElementById('label-timestamp-format');
+    if (formatLabel) {
+      if (isNone) {
+        formatLabel.classList.add('disabled');
+      } else {
+        formatLabel.classList.remove('disabled');
+      }
+    }
+  }
+
+  /**
+   * Apply cursor blinking setting to display cursor element.
+   * @param {boolean} enabled
+   */
+  applyCursorBlinkSetting(enabled = true) {
+    if (!this.cursorEl) return;
+    if (enabled === false) {
+      this.cursorEl.classList.add('no-blink');
+    } else {
+      this.cursorEl.classList.remove('no-blink');
+    }
   }
 
   /**
@@ -447,6 +487,13 @@ export class UI {
       });
     }
 
+    // Toggle timestamp format select disabled state when timestamp position changes
+    if (this.settingsTimestampPositionSelect) {
+      this.settingsTimestampPositionSelect.addEventListener('change', () => {
+        this._updateTimestampFormatState();
+      });
+    }
+
     // Bezel viewport height slider
     if (this.heightSlider) {
       this.heightSlider.addEventListener('input', (e) => {
@@ -473,9 +520,10 @@ export class UI {
       this.saveSettingsBtn.addEventListener('click', () => {
         const driveFolder = (this.settingsFolderInput ? this.settingsFolderInput.value : '').trim() || 'etype_drafts';
         const showWordCount = this.settingsWordCountInput ? this.settingsWordCountInput.checked : true;
-        const enableTimestamp = this.settingsEnableTimestampInput ? this.settingsEnableTimestampInput.checked : true;
-        const timestampFormat = this.settingsTimestampFormatSelect ? this.settingsTimestampFormatSelect.value : 'YYYY-MM-DD HH-mm';
+        const cursorBlink = this.settingsCursorBlinkInput ? this.settingsCursorBlinkInput.checked : true;
         const timestampPosition = this.settingsTimestampPositionSelect ? this.settingsTimestampPositionSelect.value : 'after';
+        const enableTimestamp = timestampPosition !== 'none';
+        const timestampFormat = this.settingsTimestampFormatSelect ? this.settingsTimestampFormatSelect.value : 'YYYY-MM-DD HH-mm';
         const font = this.settingsFontSelect ? this.settingsFontSelect.value : 'courier';
         const fontSize = this.settingsFontsizeSelect ? this.settingsFontsizeSelect.value : 'medium';
         const theme = this.settingsThemeSelect ? this.settingsThemeSelect.value : 'warm-cream';
@@ -493,6 +541,7 @@ export class UI {
           cb({
             driveFolder,
             showWordCount,
+            cursorBlink,
             enableTimestamp,
             timestampFormat,
             timestampPosition,

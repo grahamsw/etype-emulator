@@ -46,6 +46,7 @@ function init() {
   const settingsDialogEl = document.getElementById('settings-dialog');
   const settingsFolderInputEl = document.getElementById('settings-drive-folder');
   const settingsWordCountInputEl = document.getElementById('settings-show-wordcount');
+  const settingsCursorBlinkInputEl = document.getElementById('settings-cursor-blink');
   const settingsEnableTimestampInputEl = document.getElementById('settings-enable-timestamp');
   const settingsTimestampFormatSelectEl = document.getElementById('settings-timestamp-format');
   const settingsTimestampPositionSelectEl = document.getElementById('settings-timestamp-position');
@@ -70,6 +71,7 @@ function init() {
   // ---- Initialize UI ----
   const ui = new UI({
     screen: screenEl,
+    cursor: cursorEl,
     wordCount: wordCountEl,
     titleInput: titleInputEl,
     authBtn: authBtnEl,
@@ -92,6 +94,7 @@ function init() {
     settingsDialog: settingsDialogEl,
     settingsFolderInput: settingsFolderInputEl,
     settingsWordCountInput: settingsWordCountInputEl,
+    settingsCursorBlinkInput: settingsCursorBlinkInputEl,
     settingsEnableTimestampInput: settingsEnableTimestampInputEl,
     settingsTimestampFormatSelect: settingsTimestampFormatSelectEl,
     settingsTimestampPositionSelect: settingsTimestampPositionSelectEl,
@@ -111,8 +114,9 @@ function init() {
     toastMessage: toastMessageEl,
   });
 
-  // Apply initial word count visibility, font, theme, and viewport height settings
+  // Apply initial word count visibility, cursor blink, font, theme, and viewport height settings
   ui.setWordCountVisibility(appSettings.showWordCount !== false);
+  ui.applyCursorBlinkSetting(appSettings.cursorBlink !== false);
   ui.applyFontSettings(appSettings.font, appSettings.fontSize);
   ui.applyThemeSettings(appSettings.theme, appSettings.customColors);
   ui.applyViewportHeight(appSettings.viewportHeight || 100);
@@ -234,6 +238,7 @@ function init() {
         appSettings = newSettings;
         Storage.saveSettings(newSettings);
         ui.setWordCountVisibility(appSettings.showWordCount !== false);
+        ui.applyCursorBlinkSetting(appSettings.cursorBlink !== false);
         ui.applyFontSettings(appSettings.font, appSettings.fontSize);
         ui.applyThemeSettings(appSettings.theme, appSettings.customColors);
         ui.showToast(`Settings saved.`);

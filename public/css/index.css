@@ -315,6 +315,11 @@ body.show-controls #toolbar,
   font-weight: normal;
 }
 
+.cursor.no-blink {
+  animation: none;
+  opacity: 1;
+}
+
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -579,6 +584,39 @@ body.show-controls .floating-controls {
   background: #ffffff;
   color: #1a1a1a !important;
   cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.form-group select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #f0f0f0 !important;
+}
+
+.form-group label.disabled {
+  opacity: 0.45;
+}
+
+.form-group-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.form-group-row .form-group {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0;
+}
+
+@media (max-width: 480px) {
+  .form-group-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .form-group-row .form-group {
+    margin-top: 14px;
+  }
 }
 
 .form-group select option {
