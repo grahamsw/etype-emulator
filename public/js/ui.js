@@ -470,6 +470,7 @@ export class UI {
     if (this.infoBtn) {
       this.infoBtn.addEventListener('click', () => {
         this.showInfoDialog();
+        if (handlers.onRequestInfo) handlers.onRequestInfo();
       });
     }
 

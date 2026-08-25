@@ -15,6 +15,13 @@ function debounce(fn, ms) {
   };
 }
 
+// Google Analytics Event Tracking helper (safely logs feature actions without PII)
+function trackEvent(name, params = {}) {
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', name, params);
+  }
+}
+
 function init() {
   // ---- Grab DOM elements ----
   const displayEl = document.getElementById('text-display');
@@ -175,6 +182,7 @@ function init() {
     const success = await Storage.copyToClipboard(text);
     if (success) {
       ui.showToast('Copied draft to clipboard!');
+      trackEvent('draft_copy');
     } else {
       ui.showToast('Failed to copy to clipboard');
     }
@@ -221,19 +229,26 @@ function init() {
         try {
           await logout();
           resetDriveCache();
+          trackEvent('logout');
         } catch (err) {
           console.error('Logout failed:', err);
         }
       } else {
         try {
           await loginWithGoogle();
+          trackEvent('login', { method: 'Google' });
         } catch (err) {
           console.error('Login failed:', err);
         }
       }
     },
 
+    onRequestInfo: () => {
+      trackEvent('dialog_open', { dialog: 'info' });
+    },
+
     onRequestSettings: () => {
+      trackEvent('dialog_open', { dialog: 'settings' });
       ui.showSettingsDialog(appSettings, (newSettings) => {
         appSettings = newSettings;
         Storage.saveSettings(newSettings);
@@ -259,6 +274,7 @@ function init() {
           ui.showToast('Signing in with Google...');
           const authResult = await loginWithGoogle();
           token = authResult ? authResult.accessToken : getAccessToken();
+          if (authResult) trackEvent('login', { method: 'Google' });
         } catch (err) {
           if (err && err.code !== 'auth/popup-closed-by-user') {
             ui.showToast(`Auth Error: ${err.message || 'Sign in failed'}`);
@@ -288,9 +304,11 @@ function init() {
           const file = await saveDraftToDrive(activeToken, customTitle, text, folderName, appSettings);
           ui.setTitle(customTitle);
           ui.showToast(`Saved "${file.name}" to Google Drive!`);
+          trackEvent('draft_gdrive_save', { status: 'success' });
         } catch (err) {
           console.error('Google Drive save error:', err);
           ui.showToast(`Drive Error: ${err.message || 'Failed to save'}`);
+          trackEvent('draft_gdrive_save', { status: 'error' });
         }
       });
     },
@@ -306,6 +324,7 @@ function init() {
           createdAt = new Date().toISOString();
           Storage.clearStorage();
           typewriter.focus();
+          trackEvent('draft_new');
         });
       } else {
         // No text, just reset
@@ -314,6 +333,7 @@ function init() {
         createdAt = new Date().toISOString();
         Storage.clearStorage();
         typewriter.focus();
+        trackEvent('draft_new');
       }
     },
 
@@ -326,6 +346,7 @@ function init() {
       const title = ui.getTitle();
       if (!text.trim()) return; // Nothing to download
       Storage.downloadAsMarkdown(text, title, appSettings);
+      trackEvent('draft_download');
     },
     
     onTitleChange: () => {
