@@ -56,6 +56,9 @@ export function saveSettings(settings) {
 export function loadSettings() {
   const defaults = {
     driveFolder: 'etype_drafts',
+    flowFolder: 'flow_writings',
+    flowDuration: 5,
+    flowWpm: 30,
     showWordCount: true,
     cursorBlink: true,
     enableTimestamp: true,
@@ -216,6 +219,19 @@ export function processFilename(rawPath, settings = {}, date = new Date(), overr
     cleanTitle,
     filename: `${nameWithoutExt}.md`,
   };
+}
+
+/**
+ * Generate a flow document title using the active timestamp format.
+ * Format: "flow [formatted-date]"
+ * @param {Object} [settings]
+ * @param {Date} [date=new Date()]
+ * @returns {string}
+ */
+export function generateFlowTitle(settings = {}, date = new Date()) {
+  const tsFormat = settings.timestampFormat || 'YYYY-MM-DD HH-mm';
+  const ts = formatFormattedTimestamp(date, tsFormat);
+  return `flow ${ts}`;
 }
 
 /**

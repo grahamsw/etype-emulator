@@ -5,6 +5,7 @@ import { UI } from './ui.js';
 import * as Storage from './storage.js';
 import { loginWithGoogle, logout, onUserChanged, getAccessToken } from './auth.js';
 import { saveDraftToDrive, resetDriveCache } from './drive.js';
+import { FlowController } from './flow.js';
 
 // Debounce helper
 function debounce(fn, ms) {
@@ -68,6 +69,29 @@ function init() {
   const heightSliderEl = document.getElementById('height-slider');
   const cancelSettingsBtnEl = document.getElementById('btn-cancel-settings');
   const saveSettingsBtnEl = document.getElementById('btn-save-settings');
+  const settingsFlowFolderInputEl = document.getElementById('settings-flow-folder');
+
+  const flowBtnEl = document.getElementById('btn-flow');
+  const flowDialogEl = document.getElementById('flow-dialog');
+  const flowDurationSliderEl = document.getElementById('flow-duration-slider');
+  const flowDurationValEl = document.getElementById('flow-duration-val');
+  const flowPaceSliderEl = document.getElementById('flow-pace-slider');
+  const flowPaceValEl = document.getElementById('flow-pace-val');
+  const flowGraceHintEl = document.getElementById('flow-grace-hint');
+  const flowFolderInputEl = document.getElementById('flow-folder-input');
+  const cancelFlowBtnEl = document.getElementById('btn-cancel-flow');
+  const startFlowBtnEl = document.getElementById('btn-start-flow');
+  const flowHudEl = document.getElementById('flow-hud');
+  const flowHudTimerEl = document.getElementById('flow-hud-timer');
+  const flowHudPaceEl = document.getElementById('flow-hud-pace');
+  const flowHudProgressFillEl = document.getElementById('flow-hud-progress-fill');
+  const stopFlowBtnEl = document.getElementById('btn-stop-flow');
+  const flowCompleteDialogEl = document.getElementById('flow-complete-dialog');
+  const closeFlowCompleteBtnEl = document.getElementById('btn-close-flow-complete');
+  const flowStatDurationEl = document.getElementById('flow-stat-duration');
+  const flowStatWordsEl = document.getElementById('flow-stat-words');
+  const flowStatWpmEl = document.getElementById('flow-stat-wpm');
+  const flowSaveStatusEl = document.getElementById('flow-save-status');
 
   const toastEl = document.getElementById('toast');
   const toastMessageEl = document.getElementById('toast-message');
@@ -100,6 +124,7 @@ function init() {
     closeInfoBtn: closeInfoBtnEl,
     settingsDialog: settingsDialogEl,
     settingsFolderInput: settingsFolderInputEl,
+    settingsFlowFolderInput: settingsFlowFolderInputEl,
     settingsWordCountInput: settingsWordCountInputEl,
     settingsCursorBlinkInput: settingsCursorBlinkInputEl,
     settingsEnableTimestampInput: settingsEnableTimestampInputEl,
@@ -117,6 +142,27 @@ function init() {
     heightSliderContainer: document.querySelector('.bezel-slider-container'),
     cancelSettingsBtn: cancelSettingsBtnEl,
     saveSettingsBtn: saveSettingsBtnEl,
+    flowBtn: flowBtnEl,
+    flowDialog: flowDialogEl,
+    flowDurationSlider: flowDurationSliderEl,
+    flowDurationVal: flowDurationValEl,
+    flowPaceSlider: flowPaceSliderEl,
+    flowPaceVal: flowPaceValEl,
+    flowGraceHint: flowGraceHintEl,
+    flowFolderInput: flowFolderInputEl,
+    cancelFlowBtn: cancelFlowBtnEl,
+    startFlowBtn: startFlowBtnEl,
+    flowHud: flowHudEl,
+    flowHudTimer: flowHudTimerEl,
+    flowHudPace: flowHudPaceEl,
+    flowHudProgressFill: flowHudProgressFillEl,
+    stopFlowBtn: stopFlowBtnEl,
+    flowCompleteDialog: flowCompleteDialogEl,
+    closeFlowCompleteBtn: closeFlowCompleteBtnEl,
+    flowStatDuration: flowStatDurationEl,
+    flowStatWords: flowStatWordsEl,
+    flowStatWpm: flowStatWpmEl,
+    flowSaveStatus: flowSaveStatusEl,
     toast: toastEl,
     toastMessage: toastMessageEl,
   });
@@ -188,6 +234,84 @@ function init() {
     }
   };
 
+  // ---- Flow Mode State & Controller ----
+  let flowStartingWordCount = 0;
+
+  const flowController = new FlowController({
+    onTick: (state) => {
+      ui.updateFlowHUD(state);
+    },
+    onWarningChange: (isWarning) => {
+      ui.setFlowHUDWarning(isWarning);
+    },
+    onDecayChar: () => {
+      const hasMore = typewriter.decayLastCharacter();
+      return hasMore;
+    },
+    onComplete: async (summary) => {
+      ui.setFlowHUDVisible(false);
+      ui.setFlowHUDWarning(false);
+
+      const text = typewriter.getText();
+      const currentWords = (text.match(/\S+/g) || []).length;
+      const wordsWritten = Math.max(0, currentWords - flowStartingWordCount);
+      const durationMins = summary.durationMinutes || 5;
+      const avgWpm = Math.round(wordsWritten / durationMins);
+
+      // Auto-assign title: flow + date format in effect
+      const flowTitle = Storage.generateFlowTitle(appSettings);
+      ui.setTitle(flowTitle);
+
+      // Immediate local save
+      Storage.save({
+        text,
+        title: flowTitle,
+        createdAt,
+      });
+
+      let savedToDrive = false;
+      let driveFileName = '';
+      const targetFolder = summary.folderName || appSettings.flowFolder || 'flow_writings';
+
+      let token = getAccessToken();
+      if (currentUser && token && text.trim()) {
+        try {
+          ui.showToast(`Auto-saving Flow session to Google Drive...`);
+          const file = await saveDraftToDrive(token, flowTitle, text, targetFolder, appSettings);
+          savedToDrive = true;
+          driveFileName = file ? file.name : flowTitle;
+          trackEvent('flow_gdrive_save', { status: 'success' });
+        } catch (err) {
+          console.error('Flow Drive auto-save error:', err);
+          trackEvent('flow_gdrive_save', { status: 'error' });
+        }
+      }
+
+      trackEvent('flow_completed', {
+        duration: durationMins,
+        wpm: summary.targetWpm,
+        words: wordsWritten,
+        avg_wpm: avgWpm,
+      });
+
+      ui.showFlowCompleteDialog({
+        durationMinutes: durationMins,
+        wordsWritten,
+        avgWpm,
+        savedToDrive,
+        folderName: targetFolder,
+        fileName: driveFileName || flowTitle,
+      });
+    },
+    onAbort: () => {
+      ui.setFlowHUDVisible(false);
+      ui.setFlowHUDWarning(false);
+      ui.showToast('Flow session ended.');
+      focusTypewriter();
+      trackEvent('flow_aborted');
+    },
+  });
+
   // ---- Initialize Typewriter ----
   const typewriter = new Typewriter(displayEl, inputEl, cursorEl, {
     onTextChange: (text) => {
@@ -196,6 +320,9 @@ function init() {
     },
     onTypingStart: () => {
       hideControlsImmediately();
+    },
+    onKeystroke: () => {
+      flowController.recordKeystroke();
     },
     onCopyRequest: () => {
       handleCopy();
@@ -263,6 +390,29 @@ function init() {
     onViewportHeightChange: (val) => {
       appSettings.viewportHeight = val;
       Storage.saveSettings(appSettings);
+    },
+
+    onRequestFlow: () => {
+      trackEvent('dialog_open', { dialog: 'flow' });
+      ui.showFlowDialog(appSettings, (config) => {
+        appSettings.flowDuration = config.durationMinutes;
+        appSettings.flowWpm = config.targetWpm;
+        appSettings.flowFolder = config.folderName;
+        Storage.saveSettings(appSettings);
+
+        const currentText = typewriter.getText();
+        flowStartingWordCount = (currentText.match(/\S+/g) || []).length;
+
+        flowController.start(config);
+        ui.setFlowHUDVisible(true);
+        ui.showToast(`⚡ Flow started (${config.durationMinutes}m @ ${config.targetWpm} WPM)! Keep typing.`);
+        focusTypewriter();
+        trackEvent('flow_started', { duration: config.durationMinutes, wpm: config.targetWpm });
+      });
+    },
+
+    onStopFlow: () => {
+      flowController.stop(false);
     },
 
     onGDrive: async () => {

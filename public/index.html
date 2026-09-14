@@ -24,6 +24,22 @@
 <body>
   <div id="app">
     <div id="screen-container">
+      <div id="top-bezel-bar" class="top-bezel-bar">
+        <div id="flow-hud" class="flow-hud hidden" aria-live="polite">
+          <div class="flow-hud-content">
+            <span class="flow-hud-badge">⚡ FLOW</span>
+            <span id="flow-hud-timer" class="flow-hud-timer">05:00</span>
+            <span class="flow-hud-divider">·</span>
+            <span id="flow-hud-pace" class="flow-hud-pace">30 WPM</span>
+            <button id="btn-stop-flow" type="button" class="btn-stop-flow" title="Exit Flow Mode" aria-label="Exit Flow Mode">✕</button>
+          </div>
+          <div class="flow-hud-progress"><div id="flow-hud-progress-fill" class="flow-hud-progress-fill"></div></div>
+        </div>
+        <button id="btn-flow" type="button" class="btn-flow-trigger" title="Flow Mode (Sprint Typing)" aria-label="Flow Mode">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span class="flow-trigger-label">Flow</span>
+        </button>
+      </div>
       <div id="etype-screen">
         <div id="text-display"><span id="cursor" class="cursor">█</span></div>
       </div>
@@ -98,6 +114,98 @@
     </div>
   </dialog>
 
+  <dialog id="flow-dialog">
+    <div class="dialog-content">
+      <h2>⚡ Flow Mode</h2>
+      <p>Sprint drafting with stakes. Keep writing at your minimum pace — if you pause too long, the ink evaporates backwards!</p>
+      
+      <div class="form-group">
+        <div class="slider-header">
+          <label for="flow-duration-slider">Session Duration</label>
+          <span id="flow-duration-val" class="slider-value-badge">5 min</span>
+        </div>
+        <input type="range" id="flow-duration-slider" min="1" max="10" step="1" value="5" list="flow-duration-ticks" aria-label="Session Duration">
+        <datalist id="flow-duration-ticks">
+          <option value="1" label="1m"></option>
+          <option value="2"></option>
+          <option value="3"></option>
+          <option value="4"></option>
+          <option value="5" label="5m"></option>
+          <option value="6"></option>
+          <option value="7"></option>
+          <option value="8"></option>
+          <option value="9"></option>
+          <option value="10" label="10m"></option>
+        </datalist>
+        <div class="slider-labels">
+          <span>1 min</span>
+          <span>5 min</span>
+          <span>10 min</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="slider-header">
+          <label for="flow-pace-slider">Minimum Pace</label>
+          <span id="flow-pace-val" class="slider-value-badge">30 WPM</span>
+        </div>
+        <input type="range" id="flow-pace-slider" min="10" max="80" step="5" value="30" list="flow-pace-ticks" aria-label="Minimum Pace">
+        <datalist id="flow-pace-ticks">
+          <option value="10" label="10"></option>
+          <option value="20"></option>
+          <option value="30" label="30"></option>
+          <option value="40"></option>
+          <option value="50" label="50"></option>
+          <option value="60"></option>
+          <option value="70"></option>
+          <option value="80" label="80"></option>
+        </datalist>
+        <div class="slider-labels">
+          <span>10 WPM</span>
+          <span>45 WPM</span>
+          <span>80 WPM</span>
+        </div>
+        <small id="flow-grace-hint" class="field-help">~3.0s pause before ink begins evaporating</small>
+      </div>
+
+      <div class="form-group">
+        <label for="flow-folder-input">Google Drive Save Folder</label>
+        <input type="text" id="flow-folder-input" value="flow_writings" autocomplete="off" spellcheck="false">
+        <small class="field-help">Drafts will auto-save here upon session completion when signed in.</small>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="btn-cancel-flow" type="button" class="btn-secondary">Cancel</button>
+        <button id="btn-start-flow" type="button" class="btn-primary">Enter Flow ⚡</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="flow-complete-dialog">
+    <div class="dialog-content">
+      <h2>⚡ Flow Complete!</h2>
+      <p id="flow-complete-summary">You completed your session and preserved your draft.</p>
+      <div class="flow-stats-box">
+        <div class="flow-stat">
+          <span class="flow-stat-label">Duration</span>
+          <span id="flow-stat-duration" class="flow-stat-val">5 min</span>
+        </div>
+        <div class="flow-stat">
+          <span class="flow-stat-label">Words</span>
+          <span id="flow-stat-words" class="flow-stat-val">0</span>
+        </div>
+        <div class="flow-stat">
+          <span class="flow-stat-label">Avg Pace</span>
+          <span id="flow-stat-wpm" class="flow-stat-val">0 WPM</span>
+        </div>
+      </div>
+      <p id="flow-save-status" class="flow-save-status">Draft saved locally and to Google Drive.</p>
+      <div class="dialog-actions">
+        <button id="btn-close-flow-complete" type="button" class="btn-primary">Keep Writing</button>
+      </div>
+    </div>
+  </dialog>
+
   <dialog id="info-dialog">
     <div class="dialog-content">
       <h2>About E-Type</h2>
@@ -126,6 +234,11 @@
         <label for="settings-drive-folder">Google Drive Folder Name</label>
         <input type="text" id="settings-drive-folder" value="etype_drafts" autocomplete="off" spellcheck="false">
         <small class="field-help">Drafts will be saved to this folder in your Google Drive.</small>
+      </div>
+      <div class="form-group">
+        <label for="settings-flow-folder">Flow Mode Save Folder</label>
+        <input type="text" id="settings-flow-folder" value="flow_writings" autocomplete="off" spellcheck="false">
+        <small class="field-help">Flow mode drafts will auto-save to this folder in Google Drive.</small>
       </div>
       <div class="form-group form-group-checkbox">
         <label class="checkbox-label" for="settings-show-wordcount">
