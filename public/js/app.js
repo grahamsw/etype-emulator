@@ -173,6 +173,7 @@ function init() {
   ui.applyFontSettings(appSettings.font, appSettings.fontSize);
   ui.applyThemeSettings(appSettings.theme, appSettings.customColors);
   ui.applyViewportHeight(appSettings.viewportHeight || 100);
+  ui.setFlowHUDVisible(false);
   
   // ---- Distraction-Free Controls & Bottom Bar Visibility ----
   let mouseIdleTimer = null;
@@ -183,7 +184,7 @@ function init() {
     // Controls hang around for 3 seconds after mouse stops moving
     mouseIdleTimer = setTimeout(() => {
       const focusedElement = document.activeElement;
-      const isFocusedInControls = focusedElement && focusedElement.closest('#toolbar, .floating-controls, dialog');
+      const isFocusedInControls = focusedElement && focusedElement.closest('#toolbar, .floating-controls, dialog, .top-bezel-bar');
       if (!isFocusedInControls) {
         document.body.classList.remove('show-controls');
       }
@@ -193,7 +194,7 @@ function init() {
   const hideControlsImmediately = () => {
     if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
     const focusedElement = document.activeElement;
-    const isFocusedInControls = focusedElement && focusedElement.closest('#toolbar, .floating-controls, dialog');
+    const isFocusedInControls = focusedElement && focusedElement.closest('#toolbar, .floating-controls, dialog, .top-bezel-bar');
     if (!isFocusedInControls) {
       document.body.classList.remove('show-controls');
     }

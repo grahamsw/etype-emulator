@@ -759,14 +759,24 @@ body.show-controls .floating-controls {
   display: flex;
   align-items: center;
   gap: 6px;
-  opacity: 0.22;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s, background-color 0.2s, transform 0.15s;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease, border-color 0.2s, background-color 0.2s, transform 0.15s;
 }
 
-.top-bezel-bar:hover .btn-flow-trigger,
+.btn-flow-trigger.hidden {
+  display: none !important;
+}
+
 body.show-controls .btn-flow-trigger,
+#screen-container:hover .btn-flow-trigger,
+.top-bezel-bar:hover .btn-flow-trigger,
+.btn-flow-trigger:focus-within,
 .btn-flow-trigger:focus-visible {
   opacity: 0.85;
+  pointer-events: auto;
+  visibility: visible;
 }
 
 .btn-flow-trigger:hover {
@@ -787,6 +797,10 @@ body.show-controls .btn-flow-trigger,
   justify-content: center;
   width: 100%;
   animation: flow-hud-appear 0.3s ease-out;
+}
+
+.flow-hud.hidden {
+  display: none !important;
 }
 
 @keyframes flow-hud-appear {
