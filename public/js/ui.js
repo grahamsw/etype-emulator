@@ -54,12 +54,37 @@ export class UI {
     this.heightSliderContainer = elements.heightSliderContainer;
     this.cancelSettingsBtn = elements.cancelSettingsBtn;
     this.saveSettingsBtn = elements.saveSettingsBtn;
+    this.settingsFlowFolderInput = elements.settingsFlowFolderInput;
     this.toast = elements.toast;
     this.toastMessage = elements.toastMessage;
+
+    // Flow Mode elements
+    this.flowBtn = elements.flowBtn;
+    this.flowDialog = elements.flowDialog;
+    this.flowDurationSlider = elements.flowDurationSlider;
+    this.flowDurationVal = elements.flowDurationVal;
+    this.flowPaceSlider = elements.flowPaceSlider;
+    this.flowPaceVal = elements.flowPaceVal;
+    this.flowGraceHint = elements.flowGraceHint;
+    this.flowFolderInput = elements.flowFolderInput;
+    this.cancelFlowBtn = elements.cancelFlowBtn;
+    this.startFlowBtn = elements.startFlowBtn;
+    this.flowHud = elements.flowHud;
+    this.flowHudTimer = elements.flowHudTimer;
+    this.flowHudPace = elements.flowHudPace;
+    this.flowHudProgressFill = elements.flowHudProgressFill;
+    this.stopFlowBtn = elements.stopFlowBtn;
+    this.flowCompleteDialog = elements.flowCompleteDialog;
+    this.closeFlowCompleteBtn = elements.closeFlowCompleteBtn;
+    this.flowStatDuration = elements.flowStatDuration;
+    this.flowStatWords = elements.flowStatWords;
+    this.flowStatWpm = elements.flowStatWpm;
+    this.flowSaveStatus = elements.flowSaveStatus;
     
     this._onNewDraftConfirm = null;
     this._onGDriveConfirm = null;
     this._onSaveSettingsConfirm = null;
+    this._onStartFlowConfirm = null;
     this._toastTimer = null;
   }
   
@@ -188,6 +213,138 @@ export class UI {
   }
 
   /**
+   * Update dynamic grace period text based on WPM.
+   */
+  _updateFlowGraceHint(wpm) {
+    if (!this.flowGraceHint) return;
+    const sec = Math.max(1.5, (60 / wpm) * 1.5).toFixed(1);
+    this.flowGraceHint.textContent = `~${sec}s pause before ink begins evaporating`;
+  }
+
+  /**
+   * Show the Flow configuration modal dialog.
+   * @param {Object} currentSettings
+   * @param {Function} onStart - Called with ({ durationMinutes, targetWpm, folderName })
+   */
+  showFlowDialog(currentSettings = {}, onStart) {
+    if (!this.flowDialog) return;
+    this._onStartFlowConfirm = onStart;
+
+    const duration = currentSettings.flowDuration || 5;
+    const wpm = currentSettings.flowWpm || 30;
+    const folder = currentSettings.flowFolder || 'flow_writings';
+
+    if (this.flowDurationSlider) {
+      this.flowDurationSlider.value = String(duration);
+    }
+    if (this.flowDurationVal) {
+      this.flowDurationVal.textContent = `${duration} min`;
+    }
+    if (this.flowPaceSlider) {
+      this.flowPaceSlider.value = String(wpm);
+    }
+    if (this.flowPaceVal) {
+      this.flowPaceVal.textContent = `${wpm} WPM`;
+    }
+    if (this.flowFolderInput) {
+      this.flowFolderInput.value = folder;
+    }
+    this._updateFlowGraceHint(wpm);
+
+    this.flowDialog.showModal();
+  }
+
+  /**
+   * Update active Flow HUD display.
+   * @param {Object} state - { remainingSeconds, totalSeconds, progress, targetWpm }
+   */
+  updateFlowHUD({ remainingSeconds, progress, targetWpm }) {
+    if (this.flowHudTimer) {
+      const mins = Math.floor(remainingSeconds / 60);
+      const secs = remainingSeconds % 60;
+      const pad = (n) => String(n).padStart(2, '0');
+      this.flowHudTimer.textContent = `${pad(mins)}:${pad(secs)}`;
+    }
+    if (this.flowHudPace && targetWpm) {
+      this.flowHudPace.textContent = `${targetWpm} WPM`;
+    }
+    if (this.flowHudProgressFill) {
+      const pct = Math.max(0, Math.min(100, (progress || 0) * 100));
+      this.flowHudProgressFill.style.width = `${pct}%`;
+    }
+  }
+
+  /**
+   * Set Flow HUD warning state (pulsing timer and border cue).
+   * @param {boolean} isWarning
+   */
+  setFlowHUDWarning(isWarning) {
+    if (this.flowHud) {
+      if (isWarning) {
+        this.flowHud.classList.add('flow-hud--warning');
+      } else {
+        this.flowHud.classList.remove('flow-hud--warning');
+      }
+    }
+    if (this.screen) {
+      if (isWarning) {
+        this.screen.classList.add('flow-screen--warning');
+      } else {
+        this.screen.classList.remove('flow-screen--warning');
+      }
+    }
+  }
+
+  /**
+   * Toggle visibility of Flow HUD vs trigger button.
+   * @param {boolean} active
+   */
+  setFlowHUDVisible(active) {
+    if (this.flowHud) {
+      if (active) {
+        this.flowHud.classList.remove('hidden');
+      } else {
+        this.flowHud.classList.add('hidden');
+        this.setFlowHUDWarning(false);
+      }
+    }
+    if (this.flowBtn) {
+      if (active) {
+        this.flowBtn.classList.add('hidden');
+      } else {
+        this.flowBtn.classList.remove('hidden');
+      }
+    }
+  }
+
+  /**
+   * Show the Flow Complete summary dialog.
+   * @param {Object} stats
+   */
+  showFlowCompleteDialog(stats = {}) {
+    if (!this.flowCompleteDialog) return;
+    if (this.flowStatDuration) {
+      this.flowStatDuration.textContent = `${stats.durationMinutes || 0} min`;
+    }
+    if (this.flowStatWords) {
+      this.flowStatWords.textContent = (stats.wordsWritten || 0).toLocaleString();
+    }
+    if (this.flowStatWpm) {
+      this.flowStatWpm.textContent = `${stats.avgWpm || 0} WPM`;
+    }
+    if (this.flowSaveStatus) {
+      if (stats.savedToDrive) {
+        this.flowSaveStatus.textContent = `✓ Auto-saved to Google Drive (${stats.folderName || 'flow_writings'}/${stats.fileName || 'draft'}) and local storage.`;
+        this.flowSaveStatus.style.color = '#2e7d32';
+      } else {
+        this.flowSaveStatus.textContent = `✓ Saved to local storage. (Sign in with Google to auto-sync to Drive)`;
+        this.flowSaveStatus.style.color = 'var(--toolbar-text)';
+      }
+    }
+    this.flowCompleteDialog.showModal();
+  }
+
+  /**
    * Show the Settings modal dialog.
    * @param {Object} currentSettings - App settings
    * @param {Function} onSave - Called with (newSettings)
@@ -197,6 +354,9 @@ export class UI {
     this._onSaveSettingsConfirm = onSave;
     if (this.settingsFolderInput) {
       this.settingsFolderInput.value = currentSettings.driveFolder || 'etype_drafts';
+    }
+    if (this.settingsFlowFolderInput) {
+      this.settingsFlowFolderInput.value = currentSettings.flowFolder || 'flow_writings';
     }
     if (this.settingsWordCountInput) {
       this.settingsWordCountInput.checked = currentSettings.showWordCount !== false;
@@ -520,6 +680,7 @@ export class UI {
     if (this.saveSettingsBtn && this.settingsDialog) {
       this.saveSettingsBtn.addEventListener('click', () => {
         const driveFolder = (this.settingsFolderInput ? this.settingsFolderInput.value : '').trim() || 'etype_drafts';
+        const flowFolder = (this.settingsFlowFolderInput ? this.settingsFlowFolderInput.value : '').trim() || 'flow_writings';
         const showWordCount = this.settingsWordCountInput ? this.settingsWordCountInput.checked : true;
         const cursorBlink = this.settingsCursorBlinkInput ? this.settingsCursorBlinkInput.checked : true;
         const timestampPosition = this.settingsTimestampPositionSelect ? this.settingsTimestampPositionSelect.value : 'after';
@@ -541,6 +702,7 @@ export class UI {
         if (cb) {
           cb({
             driveFolder,
+            flowFolder,
             showWordCount,
             cursorBlink,
             enableTimestamp,
@@ -568,6 +730,84 @@ export class UI {
       });
       this.settingsDialog.addEventListener('close', () => {
         this._onSaveSettingsConfirm = null;
+      });
+    }
+
+    // Flow button (open Flow configuration dialog)
+    if (this.flowBtn) {
+      this.flowBtn.addEventListener('click', () => {
+        if (handlers.onRequestFlow) handlers.onRequestFlow();
+      });
+    }
+
+    // Stop Flow button (exit active session)
+    if (this.stopFlowBtn) {
+      this.stopFlowBtn.addEventListener('click', () => {
+        if (handlers.onStopFlow) handlers.onStopFlow();
+      });
+    }
+
+    // Flow Duration Slider
+    if (this.flowDurationSlider) {
+      this.flowDurationSlider.addEventListener('input', (e) => {
+        if (this.flowDurationVal) {
+          this.flowDurationVal.textContent = `${e.target.value} min`;
+        }
+      });
+    }
+
+    // Flow Pace Slider
+    if (this.flowPaceSlider) {
+      this.flowPaceSlider.addEventListener('input', (e) => {
+        const val = Number(e.target.value) || 30;
+        if (this.flowPaceVal) {
+          this.flowPaceVal.textContent = `${val} WPM`;
+        }
+        this._updateFlowGraceHint(val);
+      });
+    }
+
+    // Flow Dialog Start & Cancel
+    if (this.startFlowBtn && this.flowDialog) {
+      this.startFlowBtn.addEventListener('click', () => {
+        const durationMinutes = Number(this.flowDurationSlider ? this.flowDurationSlider.value : 5) || 5;
+        const targetWpm = Number(this.flowPaceSlider ? this.flowPaceSlider.value : 30) || 30;
+        const folderName = (this.flowFolderInput ? this.flowFolderInput.value : '').trim() || 'flow_writings';
+
+        const cb = this._onStartFlowConfirm;
+        this._onStartFlowConfirm = null;
+        this.flowDialog.close();
+        if (cb) {
+          cb({ durationMinutes, targetWpm, folderName });
+        }
+      });
+    }
+
+    if (this.cancelFlowBtn && this.flowDialog) {
+      this.cancelFlowBtn.addEventListener('click', () => {
+        this._onStartFlowConfirm = null;
+        this.flowDialog.close();
+      });
+      this.flowDialog.addEventListener('click', (e) => {
+        if (e.target === this.flowDialog) {
+          this._onStartFlowConfirm = null;
+          this.flowDialog.close();
+        }
+      });
+      this.flowDialog.addEventListener('close', () => {
+        this._onStartFlowConfirm = null;
+      });
+    }
+
+    // Flow Complete Dialog Close
+    if (this.closeFlowCompleteBtn && this.flowCompleteDialog) {
+      this.closeFlowCompleteBtn.addEventListener('click', () => {
+        this.flowCompleteDialog.close();
+      });
+      this.flowCompleteDialog.addEventListener('click', (e) => {
+        if (e.target === this.flowCompleteDialog) {
+          this.flowCompleteDialog.close();
+        }
       });
     }
 
@@ -653,7 +893,7 @@ export class UI {
     }
 
     // Bind close events on all dialogs to refocus typewriter
-    const allDialogs = [this.dialog, this.gdriveDialog, this.infoDialog, this.settingsDialog];
+    const allDialogs = [this.dialog, this.gdriveDialog, this.infoDialog, this.settingsDialog, this.flowDialog, this.flowCompleteDialog];
     allDialogs.forEach((d) => {
       if (d) {
         d.addEventListener('close', () => {

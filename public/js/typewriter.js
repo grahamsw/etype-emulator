@@ -20,6 +20,7 @@ export class Typewriter {
     this.onFirstChar = options.onFirstChar || null;
     this.onTypingStart = options.onTypingStart || null;
     this.onCopyRequest = options.onCopyRequest || null;
+    this.onKeystroke = options.onKeystroke || null;
     
     this.text = '';           // canonical text buffer (append-only during typing)
     this.queue = [];          // characters waiting to be rendered
@@ -72,6 +73,10 @@ export class Typewriter {
 
     if (this.onTypingStart) {
       this.onTypingStart();
+    }
+
+    if (this.onKeystroke) {
+      this.onKeystroke(e);
     }
 
     // Block destructive / backward-movement keys
@@ -140,6 +145,9 @@ export class Typewriter {
     
     // Detect added characters (our text is append-only)
     if (currentValue.length > this.text.length) {
+      if (this.onKeystroke) {
+        this.onKeystroke();
+      }
       const added = currentValue.slice(this.text.length);
       this.text = currentValue;
       
@@ -240,6 +248,45 @@ export class Typewriter {
     this._notifyChange();
   }
   
+  /**
+   * Remove the last character from the buffer and display (for Flow mode decay).
+   * @returns {boolean} True if there is still remaining text, false if empty.
+   */
+  decayLastCharacter() {
+    if (!this.text || this.text.length === 0) {
+      return false;
+    }
+
+    if (this.queue.length > 0) {
+      this.queue.pop();
+    } else {
+      const prevNode = this.cursorEl.previousSibling;
+      if (prevNode) {
+        if (prevNode.nodeType === Node.TEXT_NODE) {
+          if (prevNode.nodeValue.length > 1) {
+            prevNode.nodeValue = prevNode.nodeValue.slice(0, -1);
+          } else {
+            this.displayEl.removeChild(prevNode);
+          }
+        } else {
+          this.displayEl.removeChild(prevNode);
+        }
+      }
+    }
+
+    this.text = this.text.slice(0, -1);
+    this.inputEl.value = this.text;
+
+    if (this.text.length === 0) {
+      this.hasTyped = false;
+    }
+
+    this._forceCursorToEnd();
+    this._notifyChange();
+
+    return this.text.length > 0;
+  }
+
   clear() {
     this.text = '';
     this.queue = [];
