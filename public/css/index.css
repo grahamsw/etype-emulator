@@ -770,8 +770,6 @@ body.show-controls .floating-controls {
 }
 
 body.show-controls .btn-flow-trigger,
-#screen-container:hover .btn-flow-trigger,
-.top-bezel-bar:hover .btn-flow-trigger,
 .btn-flow-trigger:focus-within,
 .btn-flow-trigger:focus-visible {
   opacity: 0.85;
