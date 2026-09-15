@@ -59,6 +59,7 @@ export function loadSettings() {
     flowFolder: 'flow_writings',
     flowDuration: 5,
     flowWpm: 30,
+    flowEraseSpeed: 3,
     showWordCount: true,
     cursorBlink: true,
     enableTimestamp: true,

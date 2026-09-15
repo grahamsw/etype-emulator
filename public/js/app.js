@@ -77,6 +77,9 @@ function init() {
   const flowDurationValEl = document.getElementById('flow-duration-val');
   const flowPaceSliderEl = document.getElementById('flow-pace-slider');
   const flowPaceValEl = document.getElementById('flow-pace-val');
+  const flowEraseSpeedSliderEl = document.getElementById('flow-erase-speed-slider');
+  const flowEraseSpeedValEl = document.getElementById('flow-erase-speed-val');
+  const flowEraseSpeedHintEl = document.getElementById('flow-erase-speed-hint');
   const flowGraceHintEl = document.getElementById('flow-grace-hint');
   const flowFolderInputEl = document.getElementById('flow-folder-input');
   const cancelFlowBtnEl = document.getElementById('btn-cancel-flow');
@@ -95,7 +98,7 @@ function init() {
 
   const toastEl = document.getElementById('toast');
   const toastMessageEl = document.getElementById('toast-message');
-  
+
   let currentUser = null;
   let appSettings = Storage.loadSettings();
 
@@ -148,6 +151,9 @@ function init() {
     flowDurationVal: flowDurationValEl,
     flowPaceSlider: flowPaceSliderEl,
     flowPaceVal: flowPaceValEl,
+    flowEraseSpeedSlider: flowEraseSpeedSliderEl,
+    flowEraseSpeedVal: flowEraseSpeedValEl,
+    flowEraseSpeedHint: flowEraseSpeedHintEl,
     flowGraceHint: flowGraceHintEl,
     flowFolderInput: flowFolderInputEl,
     cancelFlowBtn: cancelFlowBtnEl,
@@ -398,6 +404,7 @@ function init() {
       ui.showFlowDialog(appSettings, (config) => {
         appSettings.flowDuration = config.durationMinutes;
         appSettings.flowWpm = config.targetWpm;
+        appSettings.flowEraseSpeed = config.eraseSpeed;
         appSettings.flowFolder = config.folderName;
         Storage.saveSettings(appSettings);
 
@@ -408,7 +415,7 @@ function init() {
         ui.setFlowHUDVisible(true);
         ui.showToast(`⚡ Flow started (${config.durationMinutes}m @ ${config.targetWpm} WPM)! Keep typing.`);
         focusTypewriter();
-        trackEvent('flow_started', { duration: config.durationMinutes, wpm: config.targetWpm });
+        trackEvent('flow_started', { duration: config.durationMinutes, wpm: config.targetWpm, erase_speed: config.eraseSpeed });
       });
     },
 

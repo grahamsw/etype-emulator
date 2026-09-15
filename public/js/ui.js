@@ -65,6 +65,9 @@ export class UI {
     this.flowDurationVal = elements.flowDurationVal;
     this.flowPaceSlider = elements.flowPaceSlider;
     this.flowPaceVal = elements.flowPaceVal;
+    this.flowEraseSpeedSlider = elements.flowEraseSpeedSlider;
+    this.flowEraseSpeedVal = elements.flowEraseSpeedVal;
+    this.flowEraseSpeedHint = elements.flowEraseSpeedHint;
     this.flowGraceHint = elements.flowGraceHint;
     this.flowFolderInput = elements.flowFolderInput;
     this.cancelFlowBtn = elements.cancelFlowBtn;
@@ -222,9 +225,31 @@ export class UI {
   }
 
   /**
+   * Update badge and hint text for Flow Erase Speed slider.
+   * @param {number} speed - Level 1 to 5
+   */
+  _updateFlowEraseSpeedDisplay(speed) {
+    const safeSpeed = Math.max(1, Math.min(5, Number(speed) || 3));
+    const speedInfo = {
+      1: { badge: 'Slow (1 ch/s)', hint: 'Deletes ~1 character per second when idle' },
+      2: { badge: 'Relaxed (2 ch/s)', hint: 'Deletes ~2 characters per second when idle' },
+      3: { badge: 'Normal (4 ch/s)', hint: 'Deletes ~4 characters per second when idle' },
+      4: { badge: 'Fast (6 ch/s)', hint: 'Deletes ~6 characters per second when idle' },
+      5: { badge: 'Rapid (8 ch/s)', hint: 'Deletes ~8 characters per second when idle' },
+    };
+    const info = speedInfo[safeSpeed] || speedInfo[3];
+    if (this.flowEraseSpeedVal) {
+      this.flowEraseSpeedVal.textContent = info.badge;
+    }
+    if (this.flowEraseSpeedHint) {
+      this.flowEraseSpeedHint.textContent = info.hint;
+    }
+  }
+
+  /**
    * Show the Flow configuration modal dialog.
    * @param {Object} currentSettings
-   * @param {Function} onStart - Called with ({ durationMinutes, targetWpm, folderName })
+   * @param {Function} onStart - Called with ({ durationMinutes, targetWpm, eraseSpeed, folderName })
    */
   showFlowDialog(currentSettings = {}, onStart) {
     if (!this.flowDialog) return;
@@ -232,6 +257,7 @@ export class UI {
 
     const duration = currentSettings.flowDuration || 5;
     const wpm = currentSettings.flowWpm || 30;
+    const eraseSpeed = currentSettings.flowEraseSpeed || 3;
     const folder = currentSettings.flowFolder || 'flow_writings';
 
     if (this.flowDurationSlider) {
@@ -246,10 +272,14 @@ export class UI {
     if (this.flowPaceVal) {
       this.flowPaceVal.textContent = `${wpm} WPM`;
     }
+    if (this.flowEraseSpeedSlider) {
+      this.flowEraseSpeedSlider.value = String(eraseSpeed);
+    }
     if (this.flowFolderInput) {
       this.flowFolderInput.value = folder;
     }
     this._updateFlowGraceHint(wpm);
+    this._updateFlowEraseSpeedDisplay(eraseSpeed);
 
     this.flowDialog.showModal();
   }
@@ -767,18 +797,27 @@ export class UI {
       });
     }
 
+    // Flow Erase Speed Slider
+    if (this.flowEraseSpeedSlider) {
+      this.flowEraseSpeedSlider.addEventListener('input', (e) => {
+        const val = Number(e.target.value) || 3;
+        this._updateFlowEraseSpeedDisplay(val);
+      });
+    }
+
     // Flow Dialog Start & Cancel
     if (this.startFlowBtn && this.flowDialog) {
       this.startFlowBtn.addEventListener('click', () => {
         const durationMinutes = Number(this.flowDurationSlider ? this.flowDurationSlider.value : 5) || 5;
         const targetWpm = Number(this.flowPaceSlider ? this.flowPaceSlider.value : 30) || 30;
+        const eraseSpeed = Number(this.flowEraseSpeedSlider ? this.flowEraseSpeedSlider.value : 3) || 3;
         const folderName = (this.flowFolderInput ? this.flowFolderInput.value : '').trim() || 'flow_writings';
 
         const cb = this._onStartFlowConfirm;
         this._onStartFlowConfirm = null;
         this.flowDialog.close();
         if (cb) {
-          cb({ durationMinutes, targetWpm, folderName });
+          cb({ durationMinutes, targetWpm, eraseSpeed, folderName });
         }
       });
     }

@@ -19,6 +19,7 @@ export class FlowController {
     this.isActive = false;
     this.durationMinutes = 5;
     this.targetWpm = 30;
+    this.eraseSpeed = 3;
     this.folderName = 'flow_writings';
 
     this.totalSeconds = 0;
@@ -29,6 +30,7 @@ export class FlowController {
 
     this.lastKeystrokeTime = 0;
     this.gracePeriodMs = 3000;
+    this.decayIntervalMs = 250;
     this.isWarning = false;
     this.isDecaying = false;
 
@@ -52,10 +54,27 @@ export class FlowController {
   }
 
   /**
+   * Calculate character decay interval in milliseconds based on Erase Speed level (1 to 5).
+   * Level 1 (Slow): 1000ms (~1 char/sec)
+   * Level 2 (Relaxed): 500ms (~2 chars/sec)
+   * Level 3 (Normal): 250ms (~4 chars/sec)
+   * Level 4 (Fast): 166ms (~6 chars/sec)
+   * Level 5 (Rapid): 125ms (~8 chars/sec)
+   * @param {number} speed - 1 to 5
+   * @returns {number} Milliseconds per character deletion
+   */
+  static calculateDecayIntervalMs(speed) {
+    const safeSpeed = Math.max(1, Math.min(5, Number(speed) || 3));
+    const rates = { 1: 1000, 2: 500, 3: 250, 4: 166, 5: 125 };
+    return rates[safeSpeed] || 250;
+  }
+
+  /**
    * Start a new Flow session.
    * @param {Object} config
    * @param {number} config.durationMinutes - 1 to 10
    * @param {number} config.targetWpm - 10 to 80
+   * @param {number} [config.eraseSpeed=3] - 1 to 5
    * @param {string} [config.folderName='flow_writings']
    */
   start(config = {}) {
@@ -63,11 +82,13 @@ export class FlowController {
 
     this.durationMinutes = Math.max(1, Math.min(10, Number(config.durationMinutes) || 5));
     this.targetWpm = Math.max(10, Math.min(80, Number(config.targetWpm) || 30));
+    this.eraseSpeed = Math.max(1, Math.min(5, Number(config.eraseSpeed) || 3));
     this.folderName = (config.folderName || 'flow_writings').trim() || 'flow_writings';
 
     this.totalSeconds = this.durationMinutes * 60;
     this.remainingSeconds = this.totalSeconds;
     this.gracePeriodMs = FlowController.calculateGracePeriod(this.targetWpm);
+    this.decayIntervalMs = FlowController.calculateDecayIntervalMs(this.eraseSpeed);
 
     this.isActive = true;
     this.lastKeystrokeTime = Date.now();
@@ -184,7 +205,7 @@ export class FlowController {
     this.isDecaying = true;
     if (this.onWarningChange) this.onWarningChange(true);
 
-    // Decay rate: ~125ms per char (~8 characters/second)
+    // Decay rate based on configured erase speed
     if (this.decayInterval) clearInterval(this.decayInterval);
     this.decayInterval = setInterval(() => {
       if (!this.isActive || !this.isDecaying) {
@@ -198,7 +219,7 @@ export class FlowController {
           this._stopDecaying();
         }
       }
-    }, 125);
+    }, this.decayIntervalMs);
   }
 
   _stopDecaying() {

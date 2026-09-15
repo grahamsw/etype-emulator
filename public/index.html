@@ -169,6 +169,27 @@
       </div>
 
       <div class="form-group">
+        <div class="slider-header">
+          <label for="flow-erase-speed-slider">Erase Speed</label>
+          <span id="flow-erase-speed-val" class="slider-value-badge">Normal (4 ch/s)</span>
+        </div>
+        <input type="range" id="flow-erase-speed-slider" min="1" max="5" step="1" value="3" list="flow-erase-ticks" aria-label="Erase Speed">
+        <datalist id="flow-erase-ticks">
+          <option value="1" label="Slow"></option>
+          <option value="2"></option>
+          <option value="3" label="Normal"></option>
+          <option value="4"></option>
+          <option value="5" label="Rapid"></option>
+        </datalist>
+        <div class="slider-labels">
+          <span>Slow (1 ch/s)</span>
+          <span>Normal (4 ch/s)</span>
+          <span>Rapid (8 ch/s)</span>
+        </div>
+        <small id="flow-erase-speed-hint" class="field-help">Deletes ~4 characters per second when idle</small>
+      </div>
+
+      <div class="form-group">
         <label for="flow-folder-input">Google Drive Save Folder</label>
         <input type="text" id="flow-folder-input" value="flow_writings" autocomplete="off" spellcheck="false">
         <small class="field-help">Drafts will auto-save here upon session completion when signed in.</small>
