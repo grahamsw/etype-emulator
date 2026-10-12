@@ -23,7 +23,7 @@ A dedicated, distraction-free, instant-on hardware typewriter for first drafts, 
 | **Display (Phase 1)** | **Waveshare 4.2" Black & White E-Paper** (400×300 resolution, SPI) | Fast prototype screen (~300ms partial refresh, 15KB RAM buffer). |
 | **Display (Phase 2 Upgrade)** | **6" E-Paper with IT8951 Controller** (1024×758 or 1448×1072, SPI/USB) | Production screen: A2 1-bit fast mode (~30–50ms / 15–20 FPS real-time typing). |
 | **Keyboard** | USB-C Wired Keyboard (Standard USB 2.0 HID) | Native USB Host input via the S3's hardware D+/D- lines. |
-| **Power Supply** | 5V DC via Terminal Base Screw Terminals (Spliced USB cable / 5V power bank / LiPo + Boost) | Powers ESP32, e-paper, and delivers 5V VBUS to the keyboard. |
+| **Power Management** | **Adafruit PowerBoost 1000C** (Product ID: 2465) + 3.7V 2500–3400mAh LiPo / 18650 cell | Seamless power-path load sharing (MCP73871): type while charging, 0ms glitchless unplug, regulated 5.2V output for USB keyboard. |
 
 ---
 
@@ -45,9 +45,18 @@ A dedicated, distraction-free, instant-on hardware typewriter for first drafts, 
 | **RST** | Hardware Reset | **GPIO 8** | Active Low |
 | **BUSY** | Busy Status | **GPIO 7** | High/Low depending on panel rev |
 
-### Keyboard & Power Wiring
-* **USB-C Keyboard**: Plugs directly into the ESP32-S3 USB-C port (connected internally to **GPIO 19 = USB D-** and **GPIO 20 = USB D+**).
-* **Power**: 5V source connects to the terminal block **`5V` (or `VIN`)** and **`GND`**.
+### PowerBoost 1000C to ESP32-S3 Wiring Table
+
+| PowerBoost 1000C Pin | Connected To | Function / Notes |
+| :--- | :--- | :--- |
+| **+5V** | Terminal Base **`5V` (or `VIN`)** | Clean 5.2V rail powering ESP32 and USB keyboard |
+| **GND** | Terminal Base **`GND`** | Common system ground |
+| **LBO** (Low Battery Out) | ESP32-S3 **`GPIO 6`** | Logic LOW when battery < 3.2V (triggers safe draft save & low-battery screen icon) |
+| **EN** (Enable) | Power Switch to **GND** | Grounding `EN` cuts 5V power output completely (Hardware On/Off switch) |
+| **JST Port** | 3.7V LiPo or 18650 Holder | Battery input (2-pin JST-PH, standard polarity) |
+
+### Keyboard Wiring
+* **USB-C Keyboard**: Plugs directly into the ESP32-S3 native USB-C port (internally connected to **GPIO 19 = USB D-** and **GPIO 20 = USB D+**).
 
 ---
 
