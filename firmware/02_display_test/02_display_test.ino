@@ -24,18 +24,16 @@
 #include <Fonts/FreeMono9pt7b.h>
 
 // -------------------------------------------------------------------------
-// Screen Model Selection
-// (Uncomment the one matching your 4.2" panel revision. GxEPD2_420 is most common)
+// Screen Model Selection: Waveshare 4.2" V2 (GDEY042T81 / SSD1683)
 // -------------------------------------------------------------------------
-// Option A: Standard Waveshare 4.2" B&W (400x300, GDEW042T2 / UC8176)
-GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(
-    GxEPD2_420(/*CS=*/ 10, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)
+// Active: Waveshare 4.2" V2 B&W (GDEY042T81 / SSD1683)
+GxEPD2_BW<GxEPD2_420_GDEY042T81, GxEPD2_420_GDEY042T81::HEIGHT> display(
+    GxEPD2_420_GDEY042T81(/*CS=*/ 10, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)
 );
 
-// Option B: Waveshare 4.2" V2 B&W (GDEY042T81 / SSD1683)
-// If Option A shows distorted graphics, comment Option A and uncomment Option B:
-// GxEPD2_BW<GxEPD2_420_GDEY042T81, GxEPD2_420_GDEY042T81::HEIGHT> display(
-//     GxEPD2_420_GDEY042T81(/*CS=*/ 10, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)
+// Fallback: Legacy Waveshare 4.2" V1 (UC8176 / GDEW042T2)
+// GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(
+//     GxEPD2_420(/*CS=*/ 10, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)
 // );
 
 const int PIN_SPI_SCK  = 12;
