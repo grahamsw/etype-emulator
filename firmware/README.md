@@ -70,8 +70,8 @@ This setup uses your **Screw Terminal Breakout Board**, **MH-CD42 3.7V→5V Conv
 ```mermaid
 flowchart TD
     subgraph BatteryPower["Power Subsystem"]
-        BATT["Flat Li-ion Battery (3.7V)"] -->|BAT+ / BAT-| MHCD42["MH-CD42 Boost & Charger"]
-        CHG["USB 5V Charger (Wall/PC)"] -.->|Recharges Battery| MHCD42
+        BATT["Flat Li-ion Battery 3.7V"] -->|"BAT+ / BAT-"| MHCD42["MH-CD42 Boost and Charger"]
+        CHG["USB 5V Charger"] -.->|"Recharges Battery"| MHCD42
     end
 
     subgraph TerminalBase["ESP32-S3 Screw Terminal Base"]
@@ -80,25 +80,25 @@ flowchart TD
         GND1["GND Terminal"]
         V33["3.3V Rail"]
         
-        SPI_PINS["GPIO 7: BUSY\nGPIO 8: RST\nGPIO 9: DC\nGPIO 10: CS\nGPIO 11: MOSI (DIN)\nGPIO 12: SCK (CLK)"]
-        USB_PINS["GPIO 19: USB D-\nGPIO 20: USB D+"]
+        SPI_PINS["GPIO 7 to 12: SPI Display Bus"]
+        USB_PINS["GPIO 19 and 20: Native USB Host"]
     end
 
     subgraph Peripherals["External Hardware"]
-        EPAPER["Waveshare 4.2' E-Paper\n(400x300 B&W)"]
-        KEYBOARD["Wired USB Keyboard\n(Standard HID)"]
+        EPAPER["Waveshare 4.2 inch E-Paper Display"]
+        KEYBOARD["Wired USB Keyboard"]
     end
 
-    MHCD42 -->|Clean 5V Output| V5
-    MHCD42 -->|Common Ground| GND1
+    MHCD42 -->|"Clean 5V Output"| V5
+    MHCD42 -->|"Common Ground"| GND1
     
-    V5 -->|VBUS (Red)| KEYBOARD
-    GND1 -->|GND (Black)| KEYBOARD
-    USB_PINS -->|D- (White) & D+ (Green)| KEYBOARD
+    V5 -->|"VBUS (Red Wire)"| KEYBOARD
+    GND1 -->|"GND (Black Wire)"| KEYBOARD
+    USB_PINS -->|"D- (White) and D+ (Green)"| KEYBOARD
 
-    V33 -->|VCC (Red)| EPAPER
-    GND1 -->|GND (Black)| EPAPER
-    SPI_PINS -->|SPI Control & Data| EPAPER
+    V33 -->|"VCC 3.3V (Red Wire)"| EPAPER
+    GND1 -->|"GND (Black Wire)"| EPAPER
+    SPI_PINS -->|"SPI Control and Data"| EPAPER
 ```
 
 ---
