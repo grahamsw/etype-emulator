@@ -15,9 +15,9 @@ This directory contains the firmware and hardware verification suite for the sta
 
 ---
 
-## 🔌 Complete Circuit Diagram (Screw Terminal Base + MH-CD42)
+## 🔌 Complete Circuit Diagram (TP4056 + MH-CD42 + Screw Terminal Base)
 
-This setup uses your **Screw Terminal Breakout Board**, **MH-CD42 3.7V→5V Converter/Charger**, **Flat Li-ion Battery**, **Wired USB Keyboard**, and **Waveshare 4.2" E-Paper**.
+This setup uses your **TP4056 USB Charger**, **Flat Li-ion Battery**, **MH-CD42 3.7V→5V Step-Up Boost**, **Screw Terminal Breakout Board**, **Wired USB Keyboard**, and **Waveshare 4.2" E-Paper**.
 
 ### 🖼️ Visual Circuit Diagram
 ![E-Type Circuit Wiring Diagram](./circuit_diagram.png)
@@ -28,20 +28,32 @@ This setup uses your **Screw Terminal Breakout Board**, **MH-CD42 3.7V→5V Conv
 
 ```
                       +-----------------------------+
-                      |   Flat Li-ion Pouch (3.7V)  |
-                      |   (+) Red           (-) Blk |
-                      +------+----------------+-----+
-                             |                |
-                             v                v
+   USB Charging In    |        TP4056 Module        |
+   [Micro-USB/Type-C] |                             |
+   ==================>|  [B+]                 [B-]  |
+                      +---+---------------------+---+
+                          |                     |
+                          |   +-------------+   |
+                          +-->| Flat Li-ion |<--+
+                          |   |   Battery   |   |
+                          |   +-------------+   |
+                          |                     |
+                      +---+---------------------+---+
+                      | [OUT+]               [OUT-] |
+                      |        TP4056 Module        |
+                      +---+---------------------+---+
+                          |                     |
+                          | (3.7V Protected)    | (GND)
+                          v                     v
                       +-----------------------------+
-   USB Charging In    |      MH-CD42 Module         |
-   [Micro-USB/Type-C] | [BAT+]              [BAT-]  |
-   ==================>|                             |
-                      | [5V/VOUT]             [GND] |
+                      |        MH-CD42 Board        |
+                      | [BAT / VIN]           [GND] |
+                      |                             |
+                      | [5V / VOUT]           [GND] |
                       +------+----------------+-----+
                              |                |
              +---------------+                +----------------+
-             | (+5V Clean Rail)                                | (Common GND)
+             | (+5V Boosted Rail)                              | (Common GND)
              |                                                 |
              v                                                 v
   ================================================================================
@@ -70,8 +82,9 @@ This setup uses your **Screw Terminal Breakout Board**, **MH-CD42 3.7V→5V Conv
 ```mermaid
 flowchart TD
     subgraph BatteryPower["Power Subsystem"]
-        BATT["Flat Li-ion Battery 3.7V"] -->|"BAT+ / BAT-"| MHCD42["MH-CD42 Boost and Charger"]
-        CHG["USB 5V Charger"] -.->|"Recharges Battery"| MHCD42
+        CHG["USB 5V Charger (Wall/PC)"] -->|"Charges via USB"| TP4056["TP4056 Charger and Protection"]
+        BATT["Flat Li-ion Battery 3.7V"] <-->|"B+ and B- Leads"| TP4056
+        TP4056 -->|"OUT+ (3.7V) and OUT- (GND)"| MHCD42["MH-CD42 Boost Converter"]
     end
 
     subgraph TerminalBase["ESP32-S3 Screw Terminal Base"]
@@ -105,19 +118,21 @@ flowchart TD
 
 ## 📌 Screw Terminal Pin-by-Pin Wiring Tables
 
-### 1. Power Supply (MH-CD42 to Terminal Base)
-The **MH-CD42** acts as both your 1S Li-ion charger and your 5V step-up boost converter.
+### 1. Power Subsystem (TP4056 + MH-CD42 to Terminal Base)
+The **TP4056** charges the battery via its USB port and protects against over-discharge. The **MH-CD42** steps up the 3.7V battery voltage to a rock-solid 5.0V rail.
 
-| MH-CD42 Pin | Wire Destination | Role |
+| From Device / Pin | To Device / Pin | Role |
 | :--- | :--- | :--- |
-| **BAT +** | Battery Red Wire (+) | Raw 3.7V Li-ion positive |
-| **BAT -** | Battery Black Wire (-) | Raw Li-ion ground |
-| **5V / VOUT** | Screw Terminal **`5V` (or `VIN`)** | Regulated 5V rail for ESP32 and USB keyboard |
-| **GND** | Screw Terminal **`GND`** | Common system ground |
-| **KEY** *(Pad)* | Pushbutton to **`GND`** *(Optional)* | Wake/Power button if module enters low-load auto-sleep |
+| **Battery Red (+)** | TP4056 **`B+`** | Battery charge / discharge positive |
+| **Battery Black (-)** | TP4056 **`B-`** | Battery ground with DW01 protection |
+| TP4056 **`OUT+`** | MH-CD42 **`BAT`** (or `BAT+` / `VIN`) | Protected 3.0V–4.2V input to boost converter |
+| TP4056 **`OUT-`** | MH-CD42 **`GND`** | Ground return to boost converter |
+| MH-CD42 **`5V / VOUT`** | Screw Terminal **`5V` (or `VIN`)** | Regulated 5.0V rail for ESP32 and USB keyboard |
+| MH-CD42 **`GND`** | Screw Terminal **`GND`** | Common system ground |
+| MH-CD42 **`KEY`** *(Pad)* | Pushbutton to **`GND`** *(Optional)* | Wake/Power button if module enters low-load auto-sleep |
 
 > [!TIP]
-> **MH-CD42 Auto-Sleep Note**: If total current draw drops below ~45mA for 30s, the MH-CD42 may enter power-save mode. During typing, current draw (~60–90mA) keeps it active. If it powers off while idle, briefly grounding the **`KEY`** pad wakes it immediately.
+> **Recharging**: Plug any standard phone charger or USB cable directly into the **TP4056's USB port** to recharge the flat Li-ion cell safely. The red LED indicates charging; blue/green indicates fully charged.
 
 ---
 
