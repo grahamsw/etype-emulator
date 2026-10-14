@@ -169,7 +169,7 @@ void setup() {
   redrawEntirePage();
 
   // Initialize USB Host keyboard driver
-  usb.setKeyboardLayout(ESP_USB_HOST_KEYBOARD_LAYOUT_US);
+  usb.setKeyboardLayout(ESP_USB_HOST_KEYBOARD_LAYOUT_EN_US);
 
   usb.onDeviceConnected([](const EspUsbHostDeviceInfo &device) {
     Serial.println("[USB] Keyboard connected!");
