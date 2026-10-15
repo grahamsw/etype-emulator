@@ -685,10 +685,14 @@ void startWiFiExport() {
   WiFi.mode(WIFI_AP);
   WiFi.softAP("EType-Drafts");
 
-  server.on("/", handleWebRoot);
-  server.on("/download", handleWebDownload);
-  server.on("/view", handleWebView);
-  server.on("/delete", handleWebDelete);
+  static bool routesConfigured = false;
+  if (!routesConfigured) {
+    server.on("/", handleWebRoot);
+    server.on("/download", handleWebDownload);
+    server.on("/view", handleWebView);
+    server.on("/delete", handleWebDelete);
+    routesConfigured = true;
+  }
   server.begin();
   wifiActive = true;
   Serial.println("[WiFi] Web server active at http://192.168.4.1");
@@ -788,8 +792,9 @@ void loop() {
 
   KeyMessage key;
 
-  // Poll for keystroke with short timeout
-  if (xQueueReceive(keyQueue, &key, pdMS_TO_TICKS(20)) == pdTRUE) {
+  // Poll for keystroke: fast 1ms timeout in WiFi Export mode for immediate HTTP servicing, 20ms in Typing mode
+  TickType_t waitTicks = (currentMode == MODE_WIFI_EXPORT) ? pdMS_TO_TICKS(1) : pdMS_TO_TICKS(20);
+  if (xQueueReceive(keyQueue, &key, waitTicks) == pdTRUE) {
     // -----------------------------------------------------------------------
     // Connect / Disconnect Hardware Events
     // -----------------------------------------------------------------------
