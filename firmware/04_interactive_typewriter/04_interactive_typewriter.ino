@@ -1,5 +1,5 @@
 /*
- * E-Type Hardware: Step 4 - Live Interactive E-Ink Typewriter with Control Mode & Storage
+ * E-Type Hardware: Step 4 - Live Interactive E-Ink Typewriter
  * Hardware: ESP32-S3 (N16R8) + Waveshare 4.2" E-Paper (400x300) + USB Keyboard
  * 
  * Features:
@@ -8,16 +8,20 @@
  *   - Intelligent word wrap: words are never split across lines.
  *   - 2/3 Screen Scrolling: When line 11 fills, scrolls 7 lines up, keeping 4 lines of
  *     context at top so the writer never loses orientation.
+ *   - Typewriter Strikethrough: Typing 'xxxxx' draws a physical strike line through
+ *     the preceding word on the e-ink screen and exports it as Markdown '~~word~~'.
+ *   - Three Writing Modes:
+ *       1. Forward-Only (Default): Backspace locked, pure momentum drafting.
+ *       2. Flow Mode: Status bar hidden, 100% full blank canvas.
+ *       3. Edit Mode: Backspace, Delete, and Arrow keys enabled for revisions.
  *   - LittleFS Flash Storage: Auto-saves drafts under /draft_001.txt, etc.
  *   - Control Mode ([ESC] key):
  *       [N] New Draft
  *       [O] Open Draft
- *       [E] Export / Sync (On-Demand WiFi Web Portal at http://192.168.4.1)
- *       [D] Dump Draft to Serial (USB)
- *       [C] Clear Screen Ghosting
+ *       [E] Export Files (On-Demand WiFi Web Portal at http://192.168.4.1)
+ *       [M] Toggle Writing Mode (Forward / Flow / Edit)
  *       [ESC] Return to Writing
- *   - Web Portal: Download .md / .txt files, view drafts, or "Delete from ESP" once offloaded.
- *   - Forward-only writing: Backspace blocked during drafting momentum.
+ *   - Web Portal: Download .md / .txt files, view drafts, or "Delete from ESP".
  */
 
 #include <Arduino.h>
@@ -56,8 +60,22 @@ const int PIN_SPI_CS   = 10;
 #define STATUS_TEXT_Y       290  // Baseline of bottom status text
 
 // -------------------------------------------------------------------------
-// Application States & Buffers
+// Writing Modes & Sprint System
 // -------------------------------------------------------------------------
+enum WritingMode {
+  MODE_FORWARD_ONLY = 0,
+  MODE_FLOW_15      = 1,
+  MODE_FLOW_25      = 2,
+  MODE_EDIT         = 3
+};
+
+WritingMode currentWritingMode = MODE_FORWARD_ONLY;
+
+bool flowSprintActive = false;
+unsigned long flowSprintStartTime = 0;
+unsigned long flowSprintDurationMs = 15 * 60 * 1000;
+int flowSprintStartWords = 0;
+
 enum AppMode {
   MODE_TYPING,
   MODE_CONTROL_MENU,
@@ -127,20 +145,76 @@ void drawControlMenu();
 void drawFileSelectMenu();
 void drawWiFiExportScreen();
 void scrollTwoThirds(const char* wrappedWord = nullptr);
+String convertToMarkdown(const String &raw);
+int countWords(const String &text);
 
 // -------------------------------------------------------------------------
-// Word Count Utility
+// Markdown Conversion & Word Count Utilities
 // -------------------------------------------------------------------------
-int countWords(const String &text) {
+String convertToMarkdown(const String &raw) {
+  String result = "";
+  result.reserve(raw.length() + 256);
+
+  int start = 0;
+  while (start < (int)raw.length()) {
+    int end = raw.indexOf('\n', start);
+    if (end == -1) end = raw.length();
+
+    String line = raw.substring(start, end);
+
+    // Replace occurrences of "xxxxx" or "XXXXX" with Markdown strikethrough (~~word~~)
+    int xPos;
+    while ((xPos = line.indexOf("xxxxx")) != -1 || (xPos = line.indexOf("XXXXX")) != -1) {
+      // Find preceding word before xxxxx, skipping spaces
+      int wEnd = xPos;
+      while (wEnd > 0 && (line[wEnd - 1] == ' ' || line[wEnd - 1] == '\t')) wEnd--;
+
+      int wStart = wEnd;
+      while (wStart > 0 && line[wStart - 1] != ' ' && line[wStart - 1] != '\t') wStart--;
+
+      if (wEnd > wStart) {
+        String before = line.substring(0, wStart);
+        String word = line.substring(wStart, wEnd);
+        String after = line.substring(xPos + 5);
+        if (after.startsWith(" ")) after = after.substring(1);
+
+        if (!word.startsWith("~~")) {
+          word = "~~" + word + "~~";
+        }
+        line = before + word + (after.length() > 0 ? (" " + after) : "");
+      } else {
+        // No preceding word on this line; strip xxxxx
+        line = line.substring(0, xPos) + line.substring(xPos + 5);
+      }
+    }
+
+    result += line;
+    if (end < (int)raw.length()) result += "\n";
+    start = end + 1;
+  }
+  return result;
+}
+
+int countWords(const String &raw) {
+  String md = convertToMarkdown(raw);
   int count = 0;
   bool inWord = false;
-  for (unsigned int i = 0; i < text.length(); i++) {
-    char ch = text[i];
+  bool inStrike = false;
+
+  for (unsigned int i = 0; i < md.length(); i++) {
+    if (i + 1 < md.length() && md[i] == '~' && md[i + 1] == '~') {
+      inStrike = !inStrike;
+      i++; // Skip second ~
+      continue;
+    }
+    char ch = md[i];
     if (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r') {
       inWord = false;
     } else if (!inWord) {
       inWord = true;
-      count++;
+      if (!inStrike) {
+        count++; // Only count words that are NOT struck out!
+      }
     }
   }
   return count;
@@ -159,10 +233,8 @@ void initStorage() {
   scanDraftFiles();
 
   if (draftCount == 0) {
-    // Brand new typewriter setup: create draft_001.txt
     createNewDraft();
   } else {
-    // Open the most recent draft
     loadDraft(draftList[0].name);
   }
 }
@@ -184,7 +256,6 @@ void scanDraftFiles() {
       strncpy(draftList[draftCount].name, fname.c_str(), sizeof(draftList[draftCount].name));
       draftList[draftCount].size = file.size();
 
-      // Read content to count words
       String content = file.readString();
       draftList[draftCount].words = countWords(content);
       draftCount++;
@@ -193,7 +264,7 @@ void scanDraftFiles() {
   }
   root.close();
 
-  // Sort drafts alphabetically by name (draft_001, draft_002...)
+  // Sort drafts alphabetically
   for (int i = 0; i < draftCount - 1; i++) {
     for (int j = i + 1; j < draftCount; j++) {
       if (strcmp(draftList[i].name, draftList[j].name) > 0) {
@@ -228,12 +299,10 @@ void populatePageBufferFromText(const String &text) {
 
   if (text.length() == 0) return;
 
-  // Split text into lines matching MAX_COLS with word-wrap
   char tempLine[MAX_COLS + 1];
   int tempLen = 0;
   memset(tempLine, 0, sizeof(tempLine));
 
-  // Temporary sliding window of lines
   char allLines[512][MAX_COLS + 1];
   int totalLines = 0;
 
@@ -250,7 +319,6 @@ void populatePageBufferFromText(const String &text) {
     }
 
     if (tempLen >= MAX_COLS) {
-      // Find last space to wrap
       int lastSpace = -1;
       for (int c = tempLen - 1; c >= 0; c--) {
         if (tempLine[c] == ' ') { lastSpace = c; break; }
@@ -276,7 +344,6 @@ void populatePageBufferFromText(const String &text) {
   tempLine[tempLen] = '\0';
   strncpy(allLines[totalLines++], tempLine, MAX_COLS + 1);
 
-  // Take the last MAX_ROWS lines to display
   int startLine = (totalLines > MAX_ROWS) ? (totalLines - MAX_ROWS) : 0;
   cursorRow = 0;
   for (int i = startLine; i < totalLines; i++) {
@@ -309,7 +376,6 @@ void loadDraft(const char* filename) {
 void createNewDraft() {
   saveCurrentDraft();
 
-  // Find next draft filename
   scanDraftFiles();
   int nextNum = 1;
   while (true) {
@@ -349,7 +415,6 @@ void createNewDraft() {
 void scrollTwoThirds(const char* wrappedWord) {
   Serial.println("[Typewriter] Scrolling 2/3 screen (retaining 4 lines)...");
 
-  // Save progress to flash
   saveCurrentDraft();
 
   // Shift rows 7..10 into rows 0..3 (4 lines of context kept at top)
@@ -372,29 +437,96 @@ void scrollTwoThirds(const char* wrappedWord) {
 }
 
 // -------------------------------------------------------------------------
-// Screen Rendering Functions (Typing Mode)
+// Screen Rendering & Visual Strikethrough Engine
 // -------------------------------------------------------------------------
+void drawPageLine(int row, int y) {
+  display.setFont(&FreeMono9pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  display.setCursor(MARGIN_X, y);
+  display.print(pageBuffer[row]);
+
+  if (row == cursorRow && keyboardConnected) {
+    display.print("_");
+  }
+
+  // Detect any 'xxxxx' or 'XXXXX' tokens on this line and draw physical strikeout lines!
+  const char* lineStr = pageBuffer[row];
+  int len = strlen(lineStr);
+
+  for (int i = 0; i <= len - 5; i++) {
+    if ((strncmp(&lineStr[i], "xxxxx", 5) == 0) || (strncmp(&lineStr[i], "XXXXX", 5) == 0)) {
+      int wEnd = i;
+      while (wEnd > 0) {
+        while (wEnd > 0 && (lineStr[wEnd - 1] == ' ' || lineStr[wEnd - 1] == '\t')) wEnd--;
+        int wStart = wEnd;
+        while (wStart > 0 && lineStr[wStart - 1] != ' ' && lineStr[wStart - 1] != '\t') wStart--;
+
+        if (wEnd > wStart) {
+          // If token before is another xxxxx, skip it to strike the preceding real word
+          if ((wEnd - wStart == 5) && 
+              (strncmp(&lineStr[wStart], "xxxxx", 5) == 0 || strncmp(&lineStr[wStart], "XXXXX", 5) == 0)) {
+            wEnd = wStart;
+            continue;
+          }
+
+          int x1 = MARGIN_X + (wStart * 11);
+          int x2 = MARGIN_X + (wEnd * 11) - 2;
+          int yStrike = y - 5;
+          display.drawLine(x1, yStrike, x2, yStrike, GxEPD_BLACK);
+          display.drawLine(x1, yStrike + 1, x2, yStrike + 1, GxEPD_BLACK);
+          break;
+        } else {
+          break;
+        }
+      }
+    }
+  }
+}
+
 void drawStatusBar() {
   display.drawLine(MARGIN_X, STATUS_LINE_Y, display.width() - MARGIN_X, STATUS_LINE_Y, GxEPD_BLACK);
 
   display.setFont(&FreeMono9pt7b);
   display.setTextColor(GxEPD_BLACK);
 
-  // Left: Active file name or status notice
+  // Left: Status notice, connection status, Flow sprint timer, or draft title
   display.setCursor(MARGIN_X, STATUS_TEXT_Y);
   if (statusNotice != nullptr) {
     display.print(statusNotice);
   } else if (!keyboardConnected) {
     display.print("[Connecting keyboard...]");
+  } else if (currentWritingMode == MODE_FLOW_15 || currentWritingMode == MODE_FLOW_25) {
+    char flowBuf[48];
+    long elapsedMs = millis() - flowSprintStartTime;
+    long remainingMs = flowSprintDurationMs - elapsedMs;
+    if (remainingMs > 0) {
+      int minsLeft = (remainingMs + 59999) / 60000;
+      snprintf(flowBuf, sizeof(flowBuf), "Flow: %dm left", minsLeft);
+    } else {
+      snprintf(flowBuf, sizeof(flowBuf), "Sprint Complete!");
+    }
+    display.print(flowBuf);
   } else {
-    // Show active draft name (omit leading '/')
-    const char* displayName = (activeDraft[0] == '/') ? activeDraft + 1 : activeDraft;
-    display.print(displayName);
+    char titleBuf[48];
+    const char* dName = (activeDraft[0] == '/') ? activeDraft + 1 : activeDraft;
+    if (currentWritingMode == MODE_EDIT) {
+      snprintf(titleBuf, sizeof(titleBuf), "[EDIT] %s", dName);
+    } else {
+      snprintf(titleBuf, sizeof(titleBuf), "%s", dName);
+    }
+    display.print(titleBuf);
   }
 
-  // Right: Word count
-  char countStr[24];
-  snprintf(countStr, sizeof(countStr), "%d words", totalDraftWords);
+  // Right: Word count (includes sprint gain if in Flow Mode)
+  char countStr[32];
+  if (currentWritingMode == MODE_FLOW_15 || currentWritingMode == MODE_FLOW_25) {
+    int sprintWords = totalDraftWords - flowSprintStartWords;
+    if (sprintWords < 0) sprintWords = 0;
+    snprintf(countStr, sizeof(countStr), "%d w (+%d)", totalDraftWords, sprintWords);
+  } else {
+    snprintf(countStr, sizeof(countStr), "%d words", totalDraftWords);
+  }
+
   int16_t x1, y1;
   uint16_t w, h;
   display.getTextBounds(countStr, 0, 0, &x1, &y1, &w, &h);
@@ -408,16 +540,9 @@ void redrawEntirePage() {
   do {
     display.fillScreen(GxEPD_WHITE);
 
-    display.setFont(&FreeMono9pt7b);
-    display.setTextColor(GxEPD_BLACK);
-
     for (int r = 0; r <= cursorRow && r < MAX_ROWS; r++) {
       int y = TEXT_START_Y + (r * LINE_HEIGHT);
-      display.setCursor(MARGIN_X, y);
-      display.print(pageBuffer[r]);
-      if (r == cursorRow && keyboardConnected) {
-        display.print("_");
-      }
+      drawPageLine(r, y);
     }
 
     drawStatusBar();
@@ -434,13 +559,7 @@ void renderLinePartial(int row) {
   display.firstPage();
   do {
     display.fillRect(MARGIN_X, windowY, windowW, windowH, GxEPD_WHITE);
-    display.setFont(&FreeMono9pt7b);
-    display.setTextColor(GxEPD_BLACK);
-    display.setCursor(MARGIN_X, y);
-    display.print(pageBuffer[row]);
-    if (row == cursorRow) {
-      display.print("_");
-    }
+    drawPageLine(row, y);
   } while (display.nextPage());
 }
 
@@ -473,15 +592,27 @@ void drawControlMenu() {
     display.drawLine(MARGIN_X, 42, display.width() - MARGIN_X, 42, GxEPD_BLACK);
 
     display.setFont(&FreeMono9pt7b);
-    int y = 72;
-    int dy = 26;
+    int y = 78;
+    int dy = 32;
 
     display.setCursor(MARGIN_X, y);          display.print("[N]   New Draft");
     display.setCursor(MARGIN_X, y + dy);     display.print("[O]   Open / Switch Draft");
     display.setCursor(MARGIN_X, y + 2 * dy); display.print("[E]   Export Files (WiFi Web)");
-    display.setCursor(MARGIN_X, y + 3 * dy); display.print("[D]   Dump Draft to Serial");
-    display.setCursor(MARGIN_X, y + 4 * dy); display.print("[C]   Clear Ghosting");
-    display.setCursor(MARGIN_X, y + 5 * dy); display.print("[ESC] Return to Writing");
+
+    // Mode Toggle line with current mode description
+    display.setCursor(MARGIN_X, y + 3 * dy);
+    display.print("[M]   Mode: ");
+    if (currentWritingMode == MODE_FORWARD_ONLY) {
+      display.print("Forward-Only");
+    } else if (currentWritingMode == MODE_FLOW_15) {
+      display.print("Flow (15m Sprint)");
+    } else if (currentWritingMode == MODE_FLOW_25) {
+      display.print("Flow (25m Pomodoro)");
+    } else {
+      display.print("Edit (Revisions)");
+    }
+
+    display.setCursor(MARGIN_X, y + 4 * dy); display.print("[ESC] Return to Writing");
 
     display.drawLine(MARGIN_X, STATUS_LINE_Y, display.width() - MARGIN_X, STATUS_LINE_Y, GxEPD_BLACK);
     display.setCursor(MARGIN_X, STATUS_TEXT_Y);
@@ -567,7 +698,7 @@ void drawWiFiExportScreen() {
 }
 
 // -------------------------------------------------------------------------
-// WiFi Web Server Handlers (with Delete from ESP)
+// WiFi Web Server Handlers (Markdown Output & Delete from ESP)
 // -------------------------------------------------------------------------
 void handleWebRoot() {
   scanDraftFiles();
@@ -633,14 +764,19 @@ void handleWebDownload() {
   }
 
   File f = LittleFS.open(filename, "r");
+  String raw = f.readString();
+  f.close();
+
+  // Convert 'xxxxx' strikethroughs to clean Markdown format '~~word~~'
+  String md = convertToMarkdown(raw);
+
   String baseName = filename.substring(1);
   if (baseName.endsWith(".txt")) {
     baseName = baseName.substring(0, baseName.length() - 4) + ".md";
   }
 
   server.sendHeader("Content-Disposition", "attachment; filename=\"" + baseName + "\"");
-  server.streamFile(f, "text/markdown");
-  f.close();
+  server.send(200, "text/markdown", md);
 }
 
 void handleWebView() {
@@ -657,8 +793,11 @@ void handleWebView() {
   }
 
   File f = LittleFS.open(filename, "r");
-  server.streamFile(f, "text/plain; charset=utf-8");
+  String raw = f.readString();
   f.close();
+
+  String md = convertToMarkdown(raw);
+  server.send(200, "text/plain; charset=utf-8", md);
 }
 
 void handleWebDelete() {
@@ -670,7 +809,6 @@ void handleWebDelete() {
       LittleFS.remove(filename);
       Serial.printf("[LittleFS] Deleted file: %s\n", filename.c_str());
 
-      // If active draft was deleted, create a fresh one
       if (filename == activeDraft) {
         createNewDraft();
       }
@@ -708,13 +846,6 @@ void stopWiFiExport() {
   }
 }
 
-void dumpActiveDraftSerial() {
-  Serial.println("\n--- BEGIN E-TYPE DRAFT DUMP ---");
-  Serial.printf("File: %s | Words: %d\n\n", activeDraft + 1, totalDraftWords);
-  Serial.println(currentDraftText);
-  Serial.println("--- END E-TYPE DRAFT DUMP ---\n");
-}
-
 // -------------------------------------------------------------------------
 // Setup
 // -------------------------------------------------------------------------
@@ -725,23 +856,17 @@ void setup() {
 
   currentDraftText.reserve(32768);
 
-  // Initialize LittleFS Flash Storage
   initStorage();
 
-  // Create keystroke queue
   keyQueue = xQueueCreate(64, sizeof(KeyMessage));
 
-  // Initialize SPI bus for E-Paper
   SPI.begin(PIN_SPI_SCK, PIN_SPI_MISO, PIN_SPI_MOSI, PIN_SPI_CS);
 
-  // Initialize E-Paper Display
   display.init(115200, true, 2, false);
   display.setRotation(0);
 
-  // Render initial document canvas
   redrawEntirePage();
 
-  // Initialize USB Host keyboard driver
   usb.setKeyboardLayout(ESP_USB_HOST_KEYBOARD_LAYOUT_EN_US);
 
   usb.onDeviceConnected([](const EspUsbHostDeviceInfo &device) {
@@ -759,7 +884,7 @@ void setup() {
   });
 
   usb.onKeyboard([](const EspUsbHostKeyboardEvent &event) {
-    if (!event.pressed) return; // Trigger on key down only
+    if (!event.pressed) return;
 
     KeyMessage msg;
     msg.ascii = event.ascii;
@@ -780,20 +905,18 @@ void setup() {
 // Main Loop: Keystrokes, Auto-Save & Web Server
 // -------------------------------------------------------------------------
 void loop() {
-  // Handle web server requests while in WiFi Export Mode
   if (currentMode == MODE_WIFI_EXPORT && wifiActive) {
     server.handleClient();
   }
 
-  // Periodic Auto-save in Typing Mode (after 2 seconds of typing pause)
+  // Periodic Auto-save in Typing Mode (after 2s of typing pause)
   if (currentMode == MODE_TYPING && draftDirty && (millis() - lastTypeTime > 2000)) {
     saveCurrentDraft();
   }
 
   KeyMessage key;
-
-  // Poll for keystroke: fast 1ms timeout in WiFi Export mode for immediate HTTP servicing, 20ms in Typing mode
   TickType_t waitTicks = (currentMode == MODE_WIFI_EXPORT) ? pdMS_TO_TICKS(1) : pdMS_TO_TICKS(20);
+
   if (xQueueReceive(keyQueue, &key, waitTicks) == pdTRUE) {
     // -----------------------------------------------------------------------
     // Connect / Disconnect Hardware Events
@@ -857,17 +980,22 @@ void loop() {
         return;
       }
 
-      // [D] Dump Draft to Serial
-      if (key.ascii == 'd' || key.ascii == 'D') {
-        dumpActiveDraftSerial();
-        statusNotice = "[Dumped to Serial]";
-        statusNoticeTime = millis();
-        drawControlMenu();
-        return;
-      }
-
-      // [C] Clear Screen Ghosting
-      if (key.ascii == 'c' || key.ascii == 'C') {
+      // [M] Toggle Writing Mode: Forward-Only -> Flow 15m -> Flow 25m -> Edit
+      if (key.ascii == 'm' || key.ascii == 'M') {
+        currentWritingMode = (WritingMode)((currentWritingMode + 1) % 4);
+        if (currentWritingMode == MODE_FLOW_15) {
+          flowSprintDurationMs = 15 * 60 * 1000;
+          flowSprintStartTime = millis();
+          flowSprintStartWords = totalDraftWords;
+          flowSprintActive = true;
+        } else if (currentWritingMode == MODE_FLOW_25) {
+          flowSprintDurationMs = 25 * 60 * 1000;
+          flowSprintStartTime = millis();
+          flowSprintStartWords = totalDraftWords;
+          flowSprintActive = true;
+        } else {
+          flowSprintActive = false;
+        }
         drawControlMenu();
         return;
       }
@@ -896,12 +1024,11 @@ void loop() {
     // MODE_WIFI_EXPORT Handling
     // -----------------------------------------------------------------------
     if (currentMode == MODE_WIFI_EXPORT) {
-      // In WiFi export mode, only ESC exits (handled above)
       return;
     }
 
     // -----------------------------------------------------------------------
-    // MODE_TYPING (Core Forward-Only Typewriter Engine)
+    // MODE_TYPING
     // -----------------------------------------------------------------------
     bool needFullRedraw = false;
     bool lineChanged = false;
@@ -916,6 +1043,74 @@ void loop() {
         statusNoticeTime = millis();
         needFullRedraw = true;
         break;
+      }
+
+      // ---------------------------------------------------------------------
+      // EDIT MODE: Backspace, Delete, and Arrow Key Navigation
+      // ---------------------------------------------------------------------
+      if (currentWritingMode == MODE_EDIT) {
+        // Backspace
+        if (key.ascii == 0x08 || key.keycode == 0x2A) {
+          if (cursorCol > 0) {
+            cursorCol--;
+            pageBuffer[cursorRow][cursorCol] = '\0';
+            if (currentDraftText.length() > 0) {
+              currentDraftText.remove(currentDraftText.length() - 1);
+            }
+            draftDirty = true;
+            lastTypeTime = millis();
+            lineChanged = true;
+            totalDraftWords = countWords(currentDraftText);
+          }
+          continue;
+        }
+
+        // Delete key
+        if (key.ascii == 0x7F || key.keycode == 0x4C) {
+          int len = strlen(pageBuffer[cursorRow]);
+          if (cursorCol < len) {
+            for (int c = cursorCol; c < len; c++) {
+              pageBuffer[cursorRow][c] = pageBuffer[cursorRow][c + 1];
+            }
+            draftDirty = true;
+            lastTypeTime = millis();
+            lineChanged = true;
+            totalDraftWords = countWords(currentDraftText);
+          }
+          continue;
+        }
+
+        // Arrow Left (0x50)
+        if (key.keycode == 0x50 && cursorCol > 0) {
+          cursorCol--;
+          lineChanged = true;
+          continue;
+        }
+
+        // Arrow Right (0x4F)
+        if (key.keycode == 0x4F && cursorCol < (int)strlen(pageBuffer[cursorRow])) {
+          cursorCol++;
+          lineChanged = true;
+          continue;
+        }
+
+        // Arrow Up (0x52)
+        if (key.keycode == 0x52 && cursorRow > 0) {
+          renderLinePartial(cursorRow);
+          cursorRow--;
+          if (cursorCol > (int)strlen(pageBuffer[cursorRow])) cursorCol = strlen(pageBuffer[cursorRow]);
+          lineChanged = true;
+          continue;
+        }
+
+        // Arrow Down (0x51)
+        if (key.keycode == 0x51 && cursorRow < MAX_ROWS - 1 && strlen(pageBuffer[cursorRow + 1]) > 0) {
+          renderLinePartial(cursorRow);
+          cursorRow++;
+          if (cursorCol > (int)strlen(pageBuffer[cursorRow])) cursorCol = strlen(pageBuffer[cursorRow]);
+          lineChanged = true;
+          continue;
+        }
       }
 
       // Handle Enter / Return
@@ -939,9 +1134,9 @@ void loop() {
         continue;
       }
 
-      // Forward-only writing: Backspace does not delete
+      // Forward-Only & Flow Modes: Backspace is locked!
       if (key.ascii == 0x08 || key.keycode == 0x2A) {
-        statusNotice = "[Write forward!]";
+        statusNotice = "[Write forward! Type xxxxx to strike]";
         statusNoticeTime = millis();
         statusChanged = true;
         continue;
@@ -964,7 +1159,7 @@ void loop() {
       if (key.ascii >= 0x20 && key.ascii <= 0x7E) {
         char ch = (char)key.ascii;
 
-        // TRUE WORD WRAP: Don't split words across lines
+        // Word Wrap: Don't break words across lines
         if (cursorCol >= MAX_COLS) {
           int lastSpace = -1;
           for (int c = cursorCol - 1; c >= 0; c--) {
@@ -1011,6 +1206,17 @@ void loop() {
         lastTypeTime = millis();
         lineChanged = true;
 
+        // Check if user just completed typing 'xxxxx' or 'XXXXX'
+        if ((ch == 'x' || ch == 'X') && cursorCol >= 5) {
+          if (strncmp(&pageBuffer[cursorRow][cursorCol - 5], "xxxxx", 5) == 0 ||
+              strncmp(&pageBuffer[cursorRow][cursorCol - 5], "XXXXX", 5) == 0) {
+            statusNotice = "[Struck out]";
+            statusNoticeTime = millis();
+            statusChanged = true;
+            totalDraftWords = countWords(currentDraftText);
+          }
+        }
+
         if (ch == ' ') {
           totalDraftWords = countWords(currentDraftText);
         }
@@ -1026,6 +1232,22 @@ void loop() {
       }
       if (totalDraftWords != prevWordCount || statusChanged) {
         renderStatusBarPartial();
+      }
+    }
+  }
+
+  // Flow Mode Sprint periodic countdown check (updates every 60s without keystrokes)
+  static unsigned long lastSprintCheck = 0;
+  if ((currentWritingMode == MODE_FLOW_15 || currentWritingMode == MODE_FLOW_25) && flowSprintActive) {
+    if (millis() - lastSprintCheck > 60000) {
+      lastSprintCheck = millis();
+      renderStatusBarPartial();
+
+      if (millis() - flowSprintStartTime >= flowSprintDurationMs) {
+        statusNotice = "[Sprint Complete!]";
+        statusNoticeTime = millis();
+        flowSprintActive = false;
+        redrawEntirePage();
       }
     }
   }
