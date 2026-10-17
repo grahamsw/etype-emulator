@@ -8,20 +8,24 @@
  *   - Intelligent word wrap: words are never split across lines.
  *   - 2/3 Screen Scrolling: When line 11 fills, scrolls 7 lines up, keeping 4 lines of
  *     context at top so the writer never loses orientation.
- *   - Typewriter Strikethrough: Typing 'xxxxx' draws a physical strike line through
- *     the preceding word on the e-ink screen and exports it as Markdown '~~word~~'.
+ *   - Invisible Strikethrough: Striking [Ctrl+Backspace] or [Alt+Backspace] draws a
+ *     physical strike line through the preceding word on the e-ink screen (s̶o̶t̶r̶m̶y̶)
+ *     without typing any clutter characters, and exports as Markdown '~~word~~'.
  *   - Three Writing Modes:
  *       1. Forward-Only (Default): Backspace locked, pure momentum drafting.
- *       2. Flow Mode: Status bar hidden, 100% full blank canvas.
+ *       2. Flow (15m Sprint / 25m Pomodoro): Timed writing sprints with live status bar countdown.
  *       3. Edit Mode: Backspace, Delete, and Arrow keys enabled for revisions.
  *   - LittleFS Flash Storage: Auto-saves drafts under /draft_001.txt, etc.
  *   - Control Mode ([ESC] key):
  *       [N] New Draft
  *       [O] Open Draft
- *       [E] Export Files (On-Demand WiFi Web Portal at http://192.168.4.1)
- *       [M] Toggle Writing Mode (Forward / Flow / Edit)
+ *       [R] Rename Active Draft
+ *       [E] Export Files & Web OTA Firmware Flasher (http://192.168.4.1)
+ *       [G] Sync Active Draft to Google Drive
+ *       [M] Toggle Writing Mode (Forward / Flow 15m / Flow 25m / Edit)
  *       [ESC] Return to Writing
- *   - Web Portal: Download .md / .txt files, view drafts, or "Delete from ESP".
+ *   - Web OTA: Wirelessly update firmware (.bin) via browser—never unscrew keyboard wires again!
+ *   - Google Drive Sync: Direct wireless upload to Google Drive folder 'E-Type Drafts'.
  */
 
 #include <Arduino.h>
@@ -33,6 +37,9 @@
 #include <LittleFS.h>
 #include <WiFi.h>
 #include <WebServer.h>
+#include <Update.h>
+#include <WiFiClientSecure.h>
+#include <HTTPClient.h>
 
 // -------------------------------------------------------------------------
 // Display Driver: Waveshare 4.2" V2 B&W (SSD1683 / GDEY042T81)
@@ -80,12 +87,14 @@ enum AppMode {
   MODE_TYPING,
   MODE_CONTROL_MENU,
   MODE_FILE_SELECT,
+  MODE_RENAME,
   MODE_WIFI_EXPORT
 };
 
 AppMode currentMode = MODE_TYPING;
 
 char pageBuffer[MAX_ROWS][MAX_COLS + 1];
+bool struckChar[MAX_ROWS][MAX_COLS + 1];
 int cursorRow = 0;
 int cursorCol = 0;
 bool keyboardConnected = false;
@@ -100,6 +109,15 @@ unsigned long lastTypeTime = 0;
 const char* statusNotice = nullptr;
 unsigned long statusNoticeTime = 0;
 
+// Rename input buffer
+char renameBuffer[32];
+int renameCursor = 0;
+
+// Home Wi-Fi & Google Sync Config
+String wifiSSID = "";
+String wifiPass = "";
+String googleScriptUrl = "";
+
 // Draft file info structure for File Picker & Web Server
 struct DraftInfo {
   char name[32];
@@ -112,7 +130,7 @@ DraftInfo draftList[MAX_DRAFTS];
 int draftCount = 0;
 
 // -------------------------------------------------------------------------
-// Web Server (On-Demand WiFi Export)
+// Web Server (On-Demand WiFi Export & Web OTA)
 // -------------------------------------------------------------------------
 WebServer server(80);
 bool wifiActive = false;
@@ -136,6 +154,9 @@ void saveCurrentDraft();
 void createNewDraft();
 void loadDraft(const char* filename);
 void scanDraftFiles();
+void loadConfig();
+void saveConfig(const String &ssid, const String &pass, const String &url);
+void syncToGoogleDrive();
 void startWiFiExport();
 void stopWiFiExport();
 void redrawEntirePage();
@@ -143,6 +164,7 @@ void renderLinePartial(int row);
 void renderStatusBarPartial();
 void drawControlMenu();
 void drawFileSelectMenu();
+void drawRenameScreen();
 void drawWiFiExportScreen();
 void scrollTwoThirds(const char* wrappedWord = nullptr);
 String convertToMarkdown(const String &raw);
@@ -162,10 +184,9 @@ String convertToMarkdown(const String &raw) {
 
     String line = raw.substring(start, end);
 
-    // Replace occurrences of "xxxxx" or "XXXXX" with Markdown strikethrough (~~word~~)
+    // Replace any legacy 'xxxxx' or 'XXXXX' tokens with strikethrough if present
     int xPos;
     while ((xPos = line.indexOf("xxxxx")) != -1 || (xPos = line.indexOf("XXXXX")) != -1) {
-      // Find preceding word before xxxxx, skipping spaces
       int wEnd = xPos;
       while (wEnd > 0 && (line[wEnd - 1] == ' ' || line[wEnd - 1] == '\t')) wEnd--;
 
@@ -183,7 +204,6 @@ String convertToMarkdown(const String &raw) {
         }
         line = before + word + (after.length() > 0 ? (" " + after) : "");
       } else {
-        // No preceding word on this line; strip xxxxx
         line = line.substring(0, xPos) + line.substring(xPos + 5);
       }
     }
@@ -221,6 +241,39 @@ int countWords(const String &raw) {
 }
 
 // -------------------------------------------------------------------------
+// Configuration Storage (Home Wi-Fi & Google Sync)
+// -------------------------------------------------------------------------
+void loadConfig() {
+  if (LittleFS.exists("/config.txt")) {
+    File f = LittleFS.open("/config.txt", "r");
+    if (f) {
+      wifiSSID = f.readStringUntil('\n');
+      wifiSSID.trim();
+      wifiPass = f.readStringUntil('\n');
+      wifiPass.trim();
+      googleScriptUrl = f.readStringUntil('\n');
+      googleScriptUrl.trim();
+      f.close();
+      Serial.println("[Config] Loaded Home Wi-Fi & Google Script URL.");
+    }
+  }
+}
+
+void saveConfig(const String &ssid, const String &pass, const String &url) {
+  File f = LittleFS.open("/config.txt", "w");
+  if (f) {
+    f.println(ssid);
+    f.println(pass);
+    f.println(url);
+    f.close();
+    wifiSSID = ssid;
+    wifiPass = pass;
+    googleScriptUrl = url;
+    Serial.println("[Config] Saved Wi-Fi & Google Sync settings.");
+  }
+}
+
+// -------------------------------------------------------------------------
 // LittleFS Storage Subsystem
 // -------------------------------------------------------------------------
 void initStorage() {
@@ -230,6 +283,7 @@ void initStorage() {
     Serial.println("[LittleFS] Mounted successfully.");
   }
 
+  loadConfig();
   scanDraftFiles();
 
   if (draftCount == 0) {
@@ -252,13 +306,15 @@ void scanDraftFiles() {
     String fname = file.name();
     if (!fname.startsWith("/")) fname = "/" + fname;
 
-    if (fname.startsWith("/draft_") && fname.endsWith(".txt")) {
-      strncpy(draftList[draftCount].name, fname.c_str(), sizeof(draftList[draftCount].name));
-      draftList[draftCount].size = file.size();
+    if (fname.endsWith(".txt") || fname.endsWith(".md")) {
+      if (fname != "/config.txt") {
+        strncpy(draftList[draftCount].name, fname.c_str(), sizeof(draftList[draftCount].name));
+        draftList[draftCount].size = file.size();
 
-      String content = file.readString();
-      draftList[draftCount].words = countWords(content);
-      draftCount++;
+        String content = file.readString();
+        draftList[draftCount].words = countWords(content);
+        draftCount++;
+      }
     }
     file = root.openNextFile();
   }
@@ -293,6 +349,7 @@ void saveCurrentDraft() {
 void populatePageBufferFromText(const String &text) {
   for (int r = 0; r < MAX_ROWS; r++) {
     memset(pageBuffer[r], 0, sizeof(pageBuffer[r]));
+    memset(struckChar[r], 0, sizeof(struckChar[r]));
   }
   cursorRow = 0;
   cursorCol = 0;
@@ -401,6 +458,7 @@ void createNewDraft() {
 
   for (int r = 0; r < MAX_ROWS; r++) {
     memset(pageBuffer[r], 0, sizeof(pageBuffer[r]));
+    memset(struckChar[r], 0, sizeof(struckChar[r]));
   }
   cursorRow = 0;
   cursorCol = 0;
@@ -420,11 +478,13 @@ void scrollTwoThirds(const char* wrappedWord) {
   // Shift rows 7..10 into rows 0..3 (4 lines of context kept at top)
   for (int r = 0; r < SCROLL_KEEP_LINES; r++) {
     strncpy(pageBuffer[r], pageBuffer[r + SCROLL_LINES], MAX_COLS + 1);
+    memcpy(struckChar[r], struckChar[r + SCROLL_LINES], MAX_COLS + 1);
   }
 
   // Clear rows 4..10
   for (int r = SCROLL_KEEP_LINES; r < MAX_ROWS; r++) {
     memset(pageBuffer[r], 0, sizeof(pageBuffer[r]));
+    memset(struckChar[r], 0, sizeof(struckChar[r]));
   }
 
   cursorRow = SCROLL_KEEP_LINES; // line 4
@@ -449,36 +509,23 @@ void drawPageLine(int row, int y) {
     display.print("_");
   }
 
-  // Detect any 'xxxxx' or 'XXXXX' tokens on this line and draw physical strikeout lines!
-  const char* lineStr = pageBuffer[row];
-  int len = strlen(lineStr);
-
-  for (int i = 0; i <= len - 5; i++) {
-    if ((strncmp(&lineStr[i], "xxxxx", 5) == 0) || (strncmp(&lineStr[i], "XXXXX", 5) == 0)) {
-      int wEnd = i;
-      while (wEnd > 0) {
-        while (wEnd > 0 && (lineStr[wEnd - 1] == ' ' || lineStr[wEnd - 1] == '\t')) wEnd--;
-        int wStart = wEnd;
-        while (wStart > 0 && lineStr[wStart - 1] != ' ' && lineStr[wStart - 1] != '\t') wStart--;
-
-        if (wEnd > wStart) {
-          // If token before is another xxxxx, skip it to strike the preceding real word
-          if ((wEnd - wStart == 5) && 
-              (strncmp(&lineStr[wStart], "xxxxx", 5) == 0 || strncmp(&lineStr[wStart], "XXXXX", 5) == 0)) {
-            wEnd = wStart;
-            continue;
-          }
-
-          int x1 = MARGIN_X + (wStart * 11);
-          int x2 = MARGIN_X + (wEnd * 11) - 2;
-          int yStrike = y - 5;
-          display.drawLine(x1, yStrike, x2, yStrike, GxEPD_BLACK);
-          display.drawLine(x1, yStrike + 1, x2, yStrike + 1, GxEPD_BLACK);
-          break;
-        } else {
-          break;
-        }
+  // Draw 2-pixel black strikeout lines for any characters marked in struckChar
+  int col = 0;
+  int lineLen = strlen(pageBuffer[row]);
+  while (col < lineLen) {
+    if (struckChar[row][col]) {
+      int startCol = col;
+      while (col < lineLen && struckChar[row][col]) {
+        col++;
       }
+      int endCol = col;
+      int x1 = MARGIN_X + (startCol * 11);
+      int x2 = MARGIN_X + (endCol * 11) - 2;
+      int yStrike = y - 5;
+      display.drawLine(x1, yStrike, x2, yStrike, GxEPD_BLACK);
+      display.drawLine(x1, yStrike + 1, x2, yStrike + 1, GxEPD_BLACK);
+    } else {
+      col++;
     }
   }
 }
@@ -592,15 +639,16 @@ void drawControlMenu() {
     display.drawLine(MARGIN_X, 42, display.width() - MARGIN_X, 42, GxEPD_BLACK);
 
     display.setFont(&FreeMono9pt7b);
-    int y = 78;
-    int dy = 32;
+    int y = 74;
+    int dy = 28;
 
     display.setCursor(MARGIN_X, y);          display.print("[N]   New Draft");
     display.setCursor(MARGIN_X, y + dy);     display.print("[O]   Open / Switch Draft");
-    display.setCursor(MARGIN_X, y + 2 * dy); display.print("[E]   Export Files (WiFi Web)");
+    display.setCursor(MARGIN_X, y + 2 * dy); display.print("[R]   Rename Active Draft");
+    display.setCursor(MARGIN_X, y + 3 * dy); display.print("[E]   Export & Web OTA (WiFi)");
+    display.setCursor(MARGIN_X, y + 4 * dy); display.print("[G]   Sync to Google Drive");
 
-    // Mode Toggle line with current mode description
-    display.setCursor(MARGIN_X, y + 3 * dy);
+    display.setCursor(MARGIN_X, y + 5 * dy);
     display.print("[M]   Mode: ");
     if (currentWritingMode == MODE_FORWARD_ONLY) {
       display.print("Forward-Only");
@@ -612,7 +660,7 @@ void drawControlMenu() {
       display.print("Edit (Revisions)");
     }
 
-    display.setCursor(MARGIN_X, y + 4 * dy); display.print("[ESC] Return to Writing");
+    display.setCursor(MARGIN_X, y + 6 * dy); display.print("[ESC] Return to Writing");
 
     display.drawLine(MARGIN_X, STATUS_LINE_Y, display.width() - MARGIN_X, STATUS_LINE_Y, GxEPD_BLACK);
     display.setCursor(MARGIN_X, STATUS_TEXT_Y);
@@ -660,6 +708,41 @@ void drawFileSelectMenu() {
   } while (display.nextPage());
 }
 
+void drawRenameScreen() {
+  display.setFullWindow();
+  display.firstPage();
+  do {
+    display.fillScreen(GxEPD_WHITE);
+
+    display.setFont(&FreeMonoBold9pt7b);
+    display.setTextColor(GxEPD_BLACK);
+    display.setCursor(MARGIN_X, 32);
+    display.print("RENAME ACTIVE DRAFT");
+    display.drawLine(MARGIN_X, 42, display.width() - MARGIN_X, 42, GxEPD_BLACK);
+
+    display.setFont(&FreeMono9pt7b);
+    int y = 74;
+
+    display.setCursor(MARGIN_X, y);
+    const char* dName = (activeDraft[0] == '/') ? activeDraft + 1 : activeDraft;
+    display.printf("Current: %s", dName);
+
+    display.setCursor(MARGIN_X, y + 36);
+    display.print("Enter new title (.md / .txt):");
+
+    display.setFont(&FreeMonoBold9pt7b);
+    display.setCursor(MARGIN_X, y + 72);
+    display.print("> ");
+    display.print(renameBuffer);
+    display.print("_");
+
+    display.setFont(&FreeMono9pt7b);
+    display.drawLine(MARGIN_X, STATUS_LINE_Y, display.width() - MARGIN_X, STATUS_LINE_Y, GxEPD_BLACK);
+    display.setCursor(MARGIN_X, STATUS_TEXT_Y);
+    display.print("[Enter] Save  |  [ESC] Cancel");
+  } while (display.nextPage());
+}
+
 void drawWiFiExportScreen() {
   display.setFullWindow();
   display.firstPage();
@@ -669,7 +752,7 @@ void drawWiFiExportScreen() {
     display.setFont(&FreeMonoBold9pt7b);
     display.setTextColor(GxEPD_BLACK);
     display.setCursor(MARGIN_X, 32);
-    display.print("DRAFT EXPORT (WIFI)");
+    display.print("DRAFT EXPORT & WEB OTA");
     display.drawLine(MARGIN_X, 42, display.width() - MARGIN_X, 42, GxEPD_BLACK);
 
     display.setFont(&FreeMono9pt7b);
@@ -689,7 +772,7 @@ void drawWiFiExportScreen() {
     display.print("http://192.168.4.1");
 
     display.setCursor(MARGIN_X, y + 5 * dy + 12);
-    display.print("Download .md or Delete files.");
+    display.print("Download, OTA Flash, Google Sync.");
 
     display.drawLine(MARGIN_X, STATUS_LINE_Y, display.width() - MARGIN_X, STATUS_LINE_Y, GxEPD_BLACK);
     display.setCursor(MARGIN_X, STATUS_TEXT_Y);
@@ -698,20 +781,105 @@ void drawWiFiExportScreen() {
 }
 
 // -------------------------------------------------------------------------
-// WiFi Web Server Handlers (Markdown Output & Delete from ESP)
+// Google Drive Sync Engine
+// -------------------------------------------------------------------------
+void syncToGoogleDrive() {
+  loadConfig();
+  if (wifiSSID.length() == 0 || googleScriptUrl.length() == 0) {
+    statusNotice = "[Configure Google in Web Portal]";
+    statusNoticeTime = millis();
+    drawControlMenu();
+    return;
+  }
+
+  statusNotice = "[Connecting Wi-Fi...]";
+  drawControlMenu();
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(wifiSSID.c_str(), wifiPass.c_str());
+
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED && attempts < 25) {
+    delay(400);
+    attempts++;
+  }
+
+  if (WiFi.status() != WL_CONNECTED) {
+    statusNotice = "[Wi-Fi Connect Failed]";
+    statusNoticeTime = millis();
+    WiFi.disconnect(true);
+    WiFi.mode(WIFI_OFF);
+    drawControlMenu();
+    return;
+  }
+
+  statusNotice = "[Syncing to Drive...]";
+  drawControlMenu();
+
+  WiFiClientSecure client;
+  client.setInsecure();
+
+  HTTPClient http;
+  if (http.begin(client, googleScriptUrl)) {
+    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
+    http.addHeader("Content-Type", "application/json");
+
+    String mdContent = convertToMarkdown(currentDraftText);
+    String escaped = "";
+    escaped.reserve(mdContent.length() + 128);
+    for (unsigned int i = 0; i < mdContent.length(); i++) {
+      char c = mdContent[i];
+      if (c == '"') escaped += "\\\"";
+      else if (c == '\\') escaped += "\\\\";
+      else if (c == '\n') escaped += "\\n";
+      else if (c == '\r') continue;
+      else if (c == '\t') escaped += "\\t";
+      else escaped += c;
+    }
+
+    String baseName = (activeDraft[0] == '/') ? String(activeDraft + 1) : String(activeDraft);
+    if (baseName.endsWith(".txt")) {
+      baseName = baseName.substring(0, baseName.length() - 4) + ".md";
+    }
+
+    String postData = "{\"filename\":\"" + baseName + "\",\"content\":\"" + escaped + "\"}";
+    int httpCode = http.POST(postData);
+
+    if (httpCode > 0) {
+      Serial.printf("[Google Sync] HTTP %d\n", httpCode);
+      statusNotice = "[Synced to Google Drive!]";
+    } else {
+      Serial.printf("[Google Sync] Error: %s\n", http.errorToString(httpCode).c_str());
+      statusNotice = "[Sync Failed]";
+    }
+    http.end();
+  } else {
+    statusNotice = "[HTTP Init Failed]";
+  }
+
+  statusNoticeTime = millis();
+  WiFi.disconnect(true);
+  WiFi.mode(WIFI_OFF);
+  drawControlMenu();
+}
+
+// -------------------------------------------------------------------------
+// WiFi Web Server Handlers (Markdown, OTA Flasher, Google Sync)
 // -------------------------------------------------------------------------
 void handleWebRoot() {
   scanDraftFiles();
+  loadConfig();
 
   String html = "<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'>";
-  html += "<title>E-Type Drafts</title><style>";
+  html += "<title>E-Type Typewriter Portal</title><style>";
   html += ":root { --paper: #f5f0e8; --ink: #2a2a2a; --card: #ece6dc; --border: #d4cfc7; --accent: #5a5550; --danger: #b33939; }";
   html += "* { box-sizing: border-box; margin: 0; padding: 0; }";
   html += "body { background: var(--paper); color: var(--ink); font-family: 'Courier Prime', monospace, monospace; padding: 24px 16px; line-height: 1.5; }";
   html += ".container { max-width: 680px; margin: 0 auto; }";
   html += "header { border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: baseline; }";
   html += "h1 { font-size: 1.4rem; letter-spacing: 0.05em; }";
-  html += ".card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; margin-bottom: 12px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }";
+  html += ".card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; margin-bottom: 14px; }";
+  html += ".card-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }";
   html += ".card-info { flex: 1; min-width: 180px; }";
   html += ".card-title { font-weight: bold; font-size: 1.05rem; }";
   html += ".card-meta { font-size: 0.85rem; color: var(--accent); margin-top: 4px; }";
@@ -722,27 +890,55 @@ void handleWebRoot() {
   html += ".btn-primary:hover { background: #404040; }";
   html += ".btn-danger { border-color: var(--danger); color: var(--danger); }";
   html += ".btn-danger:hover { background: #fbeae8; }";
+  html += "input[type='text'], input[type='password'] { width: 100%; padding: 6px 10px; font-family: inherit; font-size: 0.85rem; border: 1px solid var(--border); border-radius: 4px; background: var(--paper); color: var(--ink); margin-top: 4px; }";
+  html += ".form-group { margin-bottom: 10px; }";
+  html += "label { font-size: 0.8rem; color: var(--accent); display: block; }";
   html += ".footer { margin-top: 28px; text-align: center; font-size: 0.8rem; color: var(--accent); border-top: 1px solid var(--border); padding-top: 14px; }";
   html += "</style></head><body><div class='container'>";
-  html += "<header><h1>E - T Y P E</h1><span>Draft Offloader</span></header>";
+  html += "<header><h1>E - T Y P E</h1><span>Control Portal</span></header>";
+
+  html += "<h2 style='font-size:1.1rem;margin-bottom:12px;'>Saved Drafts</h2>";
 
   if (draftCount == 0) {
-    html += "<p style='padding: 24px 0; text-align: center; color: var(--accent);'>No drafts found on typewriter.</p>";
+    html += "<p style='padding: 16px 0; color: var(--accent);'>No drafts found on typewriter.</p>";
   } else {
     for (int i = 0; i < draftCount; i++) {
       const char* dName = (draftList[i].name[0] == '/') ? draftList[i].name + 1 : draftList[i].name;
       bool isActive = (strcmp(draftList[i].name, activeDraft) == 0);
 
-      html += "<div class='card'>";
+      html += "<div class='card'><div class='card-row'>";
       html += "<div class='card-info'><div class='card-title'>" + String(dName) + (isActive ? " (Active)" : "") + "</div>";
       html += "<div class='card-meta'>" + String(draftList[i].words) + " words &bull; " + String(draftList[i].size) + " bytes</div></div>";
       html += "<div class='actions'>";
       html += "<a href='/view?file=" + String(dName) + "' class='btn' target='_blank'>View</a>";
       html += "<a href='/download?file=" + String(dName) + "' class='btn btn-primary' download>Download .md</a>";
-      html += "<a href='/delete?file=" + String(dName) + "' class='btn btn-danger' onclick=\"return confirm('Permanently delete " + String(dName) + " from typewriter?');\">Delete from ESP</a>";
-      html += "</div></div>";
+      html += "<a href='/delete?file=" + String(dName) + "' class='btn btn-danger' onclick=\"return confirm('Permanently delete " + String(dName) + " from typewriter?');\">Delete</a>";
+      html += "</div></div></div>";
     }
   }
+
+  // Google Drive & Home Wi-Fi Card
+  html += "<h2 style='font-size:1.1rem;margin:24px 0 12px 0;'>Google Drive & Home Wi-Fi</h2>";
+  html += "<div class='card'><form method='POST' action='/save_config'>";
+  html += "<div class='form-group'><label>Home Wi-Fi Network Name (SSID):</label>";
+  html += "<input type='text' name='ssid' value='" + wifiSSID + "' placeholder='MyHomeWiFi'></div>";
+  html += "<div class='form-group'><label>Home Wi-Fi Password:</label>";
+  html += "<input type='password' name='pass' value='" + wifiPass + "'></div>";
+  html += "<div class='form-group'><label>Google Apps Script Webhook URL:</label>";
+  html += "<input type='text' name='url' value='" + googleScriptUrl + "' placeholder='https://script.google.com/macros/s/.../exec'></div>";
+  html += "<div style='display:flex;gap:10px;margin-top:14px;'>";
+  html += "<button type='submit' class='btn btn-primary'>Save Wi-Fi & Google Settings</button>";
+  html += "<a href='/sync_web' class='btn' onclick=\"alert('Syncing active draft to Google Drive...');\">Sync Active Draft Now</a>";
+  html += "</div></form></div>";
+
+  // Wireless Web OTA Firmware Flasher Card
+  html += "<h2 style='font-size:1.1rem;margin:24px 0 12px 0;'>Wireless Firmware Update (OTA)</h2>";
+  html += "<div class='card'>";
+  html += "<p style='font-size:0.85rem;color:var(--accent);margin-bottom:12px;'>Upload compiled .bin to update typewriter wirelessly (never unscrew keyboard wires again!).</p>";
+  html += "<form method='POST' action='/update' enctype='multipart/form-data'>";
+  html += "<input type='file' name='update' accept='.bin' required style='display:block;margin-bottom:12px;font-size:0.85rem;'>";
+  html += "<button type='submit' class='btn btn-primary' onclick=\"this.innerText='Uploading & Flashing...';\">Flash Firmware (.bin)</button>";
+  html += "</form></div>";
 
   html += "<div class='footer'>E-Type Distraction-Free Typewriter &bull; Press [ESC] on keyboard to exit WiFi</div>";
   html += "</div></body></html>";
@@ -767,7 +963,6 @@ void handleWebDownload() {
   String raw = f.readString();
   f.close();
 
-  // Convert 'xxxxx' strikethroughs to clean Markdown format '~~word~~'
   String md = convertToMarkdown(raw);
 
   String baseName = filename.substring(1);
@@ -818,6 +1013,22 @@ void handleWebDelete() {
   server.send(303);
 }
 
+void handleSaveConfig() {
+  String ssid = server.arg("ssid");
+  String pass = server.arg("pass");
+  String url  = server.arg("url");
+
+  saveConfig(ssid, pass, url);
+  server.sendHeader("Location", "/");
+  server.send(303);
+}
+
+void handleSyncWeb() {
+  syncToGoogleDrive();
+  server.sendHeader("Location", "/");
+  server.send(303);
+}
+
 void startWiFiExport() {
   Serial.println("[WiFi] Starting Access Point 'EType-Drafts'...");
   WiFi.mode(WIFI_AP);
@@ -829,11 +1040,40 @@ void startWiFiExport() {
     server.on("/download", handleWebDownload);
     server.on("/view", handleWebView);
     server.on("/delete", handleWebDelete);
+    server.on("/save_config", HTTP_POST, handleSaveConfig);
+    server.on("/sync_web", handleSyncWeb);
+
+    // Wireless Web OTA Firmware Flasher Route
+    server.on("/update", HTTP_POST, []() {
+      server.sendHeader("Connection", "close");
+      server.send(200, "text/html", "<body style='font-family:monospace;text-align:center;padding:50px;'><h2>Firmware Flashed Successfully!</h2><p>Rebooting typewriter...</p></body>");
+      delay(800);
+      ESP.restart();
+    }, []() {
+      HTTPUpload& upload = server.upload();
+      if (upload.status == UPLOAD_FILE_START) {
+        Serial.printf("[OTA] Flashing: %s\n", upload.filename.c_str());
+        if (!Update.begin(UPDATE_SIZE_UNKNOWN)) {
+          Update.printError(Serial);
+        }
+      } else if (upload.status == UPLOAD_FILE_WRITE) {
+        if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+          Update.printError(Serial);
+        }
+      } else if (upload.status == UPLOAD_FILE_END) {
+        if (Update.end(true)) {
+          Serial.printf("[OTA] Success: %u bytes\n", upload.totalSize);
+        } else {
+          Update.printError(Serial);
+        }
+      }
+    });
+
     routesConfigured = true;
   }
   server.begin();
   wifiActive = true;
-  Serial.println("[WiFi] Web server active at http://192.168.4.1");
+  Serial.println("[WiFi] Web server & OTA active at http://192.168.4.1");
 }
 
 void stopWiFiExport() {
@@ -941,7 +1181,7 @@ void loop() {
         currentMode = MODE_TYPING;
         redrawEntirePage();
         return;
-      } else if (currentMode == MODE_FILE_SELECT) {
+      } else if (currentMode == MODE_FILE_SELECT || currentMode == MODE_RENAME) {
         currentMode = MODE_CONTROL_MENU;
         drawControlMenu();
         return;
@@ -972,11 +1212,27 @@ void loop() {
         return;
       }
 
-      // [E] Export / Sync (WiFi Web)
+      // [R] Rename Active Draft
+      if (key.ascii == 'r' || key.ascii == 'R') {
+        currentMode = MODE_RENAME;
+        const char* dName = (activeDraft[0] == '/') ? activeDraft + 1 : activeDraft;
+        strncpy(renameBuffer, dName, sizeof(renameBuffer));
+        renameCursor = strlen(renameBuffer);
+        drawRenameScreen();
+        return;
+      }
+
+      // [E] Export / Sync & OTA (WiFi Web)
       if (key.ascii == 'e' || key.ascii == 'E') {
         currentMode = MODE_WIFI_EXPORT;
         startWiFiExport();
         drawWiFiExportScreen();
+        return;
+      }
+
+      // [G] Sync Active Draft to Google Drive
+      if (key.ascii == 'g' || key.ascii == 'G') {
+        syncToGoogleDrive();
         return;
       }
 
@@ -1000,6 +1256,57 @@ void loop() {
         return;
       }
 
+      return;
+    }
+
+    // -----------------------------------------------------------------------
+    // MODE_RENAME Handling
+    // -----------------------------------------------------------------------
+    if (currentMode == MODE_RENAME) {
+      // Backspace in rename
+      if (key.ascii == 0x08 || key.keycode == 0x2A) {
+        if (renameCursor > 0) {
+          renameCursor--;
+          renameBuffer[renameCursor] = '\0';
+          drawRenameScreen();
+        }
+        return;
+      }
+
+      // Enter in rename: commit new name
+      if (key.ascii == '\r' || key.ascii == '\n') {
+        if (renameCursor > 0) {
+          String newName = String(renameBuffer);
+          if (!newName.endsWith(".txt") && !newName.endsWith(".md")) {
+            newName += ".txt";
+          }
+          if (!newName.startsWith("/")) {
+            newName = "/" + newName;
+          }
+
+          if (LittleFS.rename(activeDraft, newName.c_str())) {
+            strncpy(activeDraft, newName.c_str(), sizeof(activeDraft));
+            statusNotice = "[Draft Renamed]";
+          } else {
+            statusNotice = "[Rename Failed]";
+          }
+        }
+        currentMode = MODE_CONTROL_MENU;
+        statusNoticeTime = millis();
+        drawControlMenu();
+        return;
+      }
+
+      // Printable characters for filename
+      if (key.ascii >= 0x20 && key.ascii <= 0x7E && renameCursor < 26) {
+        char ch = (char)key.ascii;
+        // Safe characters for filenames
+        if (isalnum(ch) || ch == '_' || ch == '-' || ch == '.') {
+          renameBuffer[renameCursor++] = ch;
+          renameBuffer[renameCursor] = '\0';
+          drawRenameScreen();
+        }
+      }
       return;
     }
 
@@ -1054,6 +1361,7 @@ void loop() {
           if (cursorCol > 0) {
             cursorCol--;
             pageBuffer[cursorRow][cursorCol] = '\0';
+            struckChar[cursorRow][cursorCol] = false;
             if (currentDraftText.length() > 0) {
               currentDraftText.remove(currentDraftText.length() - 1);
             }
@@ -1071,6 +1379,7 @@ void loop() {
           if (cursorCol < len) {
             for (int c = cursorCol; c < len; c++) {
               pageBuffer[cursorRow][c] = pageBuffer[cursorRow][c + 1];
+              struckChar[cursorRow][c] = struckChar[cursorRow][c + 1];
             }
             draftDirty = true;
             lastTypeTime = millis();
@@ -1119,6 +1428,10 @@ void loop() {
 
         cursorRow++;
         cursorCol = 0;
+        if (cursorRow < MAX_ROWS) {
+          memset(pageBuffer[cursorRow], 0, sizeof(pageBuffer[cursorRow]));
+          memset(struckChar[cursorRow], 0, sizeof(struckChar[cursorRow]));
+        }
         currentDraftText += "\n";
         draftDirty = true;
         lastTypeTime = millis();
@@ -1134,9 +1447,71 @@ void loop() {
         continue;
       }
 
+      // ---------------------------------------------------------------------
+      // CTRL+BACKSPACE or ALT+BACKSPACE: Strikethrough Preceding Word
+      // ---------------------------------------------------------------------
+      bool isCtrlOrAlt = ((key.modifiers & 0x11) != 0) || ((key.modifiers & 0x44) != 0);
+      bool isStrikeKey = (key.keycode == 0x2A && isCtrlOrAlt) || (key.ascii == 0x17); // 0x17 = Ctrl+W
+
+      if (isStrikeKey) {
+        int targetRow = cursorRow;
+        int wEnd = cursorCol;
+
+        // If at beginning of line and not first line, check end of previous line
+        if (wEnd == 0 && targetRow > 0) {
+          targetRow = cursorRow - 1;
+          wEnd = strlen(pageBuffer[targetRow]);
+        }
+
+        // Skip any trailing spaces
+        while (wEnd > 0 && (pageBuffer[targetRow][wEnd - 1] == ' ' || pageBuffer[targetRow][wEnd - 1] == '\t')) {
+          wEnd--;
+        }
+
+        int wStart = wEnd;
+        // Find start of previous unstruck word
+        while (wStart > 0 && pageBuffer[targetRow][wStart - 1] != ' ' && 
+               pageBuffer[targetRow][wStart - 1] != '\t' && 
+               !struckChar[targetRow][wStart - 1]) {
+          wStart--;
+        }
+
+        if (wEnd > wStart) {
+          // Mark characters as struck out
+          for (int c = wStart; c < wEnd; c++) {
+            struckChar[targetRow][c] = true;
+          }
+
+          // Extract word
+          char struckWordBuf[MAX_COLS + 1];
+          int wordLen = wEnd - wStart;
+          strncpy(struckWordBuf, &pageBuffer[targetRow][wStart], wordLen);
+          struckWordBuf[wordLen] = '\0';
+
+          // Wrap the word in ~~...~~ in currentDraftText
+          int lastOccur = currentDraftText.lastIndexOf(struckWordBuf);
+          if (lastOccur != -1) {
+            if (lastOccur < 2 || currentDraftText.substring(lastOccur - 2, lastOccur) != "~~") {
+              currentDraftText = currentDraftText.substring(0, lastOccur) + "~~" + String(struckWordBuf) + "~~" + currentDraftText.substring(lastOccur + wordLen);
+            }
+          }
+
+          totalDraftWords = countWords(currentDraftText);
+          draftDirty = true;
+          lastTypeTime = millis();
+
+          statusNotice = "[Struck out]";
+          statusNoticeTime = millis();
+          statusChanged = true;
+
+          renderLinePartial(targetRow);
+        }
+        continue;
+      }
+
       // Forward-Only & Flow Modes: Backspace is locked!
       if (key.ascii == 0x08 || key.keycode == 0x2A) {
-        statusNotice = "[Write forward! Type xxxxx to strike]";
+        statusNotice = "[Write forward! Ctrl+Backspace to strike]";
         statusNoticeTime = millis();
         statusChanged = true;
         continue;
@@ -1145,6 +1520,7 @@ void loop() {
       // Tab key -> 2 spaces
       if (key.ascii == '\t') {
         for (int i = 0; i < 2 && cursorCol < MAX_COLS; i++) {
+          struckChar[cursorRow][cursorCol] = false;
           pageBuffer[cursorRow][cursorCol++] = ' ';
           currentDraftText += ' ';
         }
@@ -1173,6 +1549,15 @@ void loop() {
             char wrappedWord[MAX_COLS + 1];
             strcpy(wrappedWord, &pageBuffer[cursorRow][lastSpace + 1]);
 
+            bool wrappedStruck[MAX_COLS + 1];
+            int wrapLen = strlen(wrappedWord);
+            for (int i = 0; i < wrapLen; i++) {
+              wrappedStruck[i] = struckChar[cursorRow][lastSpace + 1 + i];
+            }
+            for (int i = lastSpace; i < MAX_COLS; i++) {
+              struckChar[cursorRow][i] = false;
+            }
+
             pageBuffer[cursorRow][lastSpace] = '\0';
             renderLinePartial(cursorRow);
 
@@ -1184,8 +1569,12 @@ void loop() {
               break;
             }
 
+            memset(struckChar[cursorRow], 0, sizeof(struckChar[cursorRow]));
             strcpy(pageBuffer[cursorRow], wrappedWord);
-            cursorCol = strlen(wrappedWord);
+            for (int i = 0; i < wrapLen; i++) {
+              struckChar[cursorRow][i] = wrappedStruck[i];
+            }
+            cursorCol = wrapLen;
           } else {
             // Long word fallback
             renderLinePartial(cursorRow);
@@ -1196,26 +1585,18 @@ void loop() {
               needFullRedraw = true;
               break;
             }
+            memset(struckChar[cursorRow], 0, sizeof(struckChar[cursorRow]));
           }
         }
 
-        pageBuffer[cursorRow][cursorCol++] = ch;
+        pageBuffer[cursorRow][cursorCol] = ch;
+        struckChar[cursorRow][cursorCol] = false;
+        cursorCol++;
         pageBuffer[cursorRow][cursorCol] = '\0';
         currentDraftText += ch;
         draftDirty = true;
         lastTypeTime = millis();
         lineChanged = true;
-
-        // Check if user just completed typing 'xxxxx' or 'XXXXX'
-        if ((ch == 'x' || ch == 'X') && cursorCol >= 5) {
-          if (strncmp(&pageBuffer[cursorRow][cursorCol - 5], "xxxxx", 5) == 0 ||
-              strncmp(&pageBuffer[cursorRow][cursorCol - 5], "XXXXX", 5) == 0) {
-            statusNotice = "[Struck out]";
-            statusNoticeTime = millis();
-            statusChanged = true;
-            totalDraftWords = countWords(currentDraftText);
-          }
-        }
 
         if (ch == ' ') {
           totalDraftWords = countWords(currentDraftText);
