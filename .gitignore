@@ -17,4 +17,8 @@ Thumbs.db
 
 # Local App Credentials
 public/config.json
-
+# Firmware build artifacts
+firmware/**/build/
+*.bin
+*.elf
+*.map
