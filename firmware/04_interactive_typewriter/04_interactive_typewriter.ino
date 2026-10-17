@@ -635,7 +635,7 @@ void drawControlMenu() {
     display.setFont(&FreeMonoBold9pt7b);
     display.setTextColor(GxEPD_BLACK);
     display.setCursor(MARGIN_X, 32);
-    display.print("E-TYPE MENU [OTA v1.2]");
+    display.print("E-TYPE MENU [OTA v1.3]");
     display.drawLine(MARGIN_X, 42, display.width() - MARGIN_X, 42, GxEPD_BLACK);
 
     display.setFont(&FreeMono9pt7b);
@@ -836,7 +836,7 @@ void syncToGoogleDrive() {
 
   HTTPClient http;
   if (http.begin(client, googleScriptUrl)) {
-    http.setFollowRedirects(HTTPC_FORCE_FOLLOW_REDIRECTS);
+    http.setFollowRedirects(HTTPC_DISABLE_FOLLOW_REDIRECTS);
     http.addHeader("Content-Type", "application/json");
 
     String mdContent = convertToMarkdown(currentDraftText);
@@ -920,7 +920,7 @@ void handleWebRoot() {
   html += "label { font-size: 0.8rem; color: var(--accent); display: block; }";
   html += ".footer { margin-top: 28px; text-align: center; font-size: 0.8rem; color: var(--accent); border-top: 1px solid var(--border); padding-top: 14px; }";
   html += "</style></head><body><div class='container'>";
-  html += "<header><h1>E - T Y P E v1.2</h1><span>Control Portal</span></header>";
+  html += "<header><h1>E - T Y P E v1.3</h1><span>Control Portal</span></header>";
 
   html += "<h2 style='font-size:1.1rem;margin-bottom:12px;'>Saved Drafts</h2>";
 
