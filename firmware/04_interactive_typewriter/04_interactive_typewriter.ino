@@ -635,7 +635,7 @@ void drawControlMenu() {
     display.setFont(&FreeMonoBold9pt7b);
     display.setTextColor(GxEPD_BLACK);
     display.setCursor(MARGIN_X, 32);
-    display.print("E-TYPE MENU [OTA v1.1]");
+    display.print("E-TYPE MENU [OTA v1.2]");
     display.drawLine(MARGIN_X, 42, display.width() - MARGIN_X, 42, GxEPD_BLACK);
 
     display.setFont(&FreeMono9pt7b);
@@ -664,10 +664,15 @@ void drawControlMenu() {
 
     display.drawLine(MARGIN_X, STATUS_LINE_Y, display.width() - MARGIN_X, STATUS_LINE_Y, GxEPD_BLACK);
     display.setCursor(MARGIN_X, STATUS_TEXT_Y);
-    char statusBuf[64];
-    const char* dName = (activeDraft[0] == '/') ? activeDraft + 1 : activeDraft;
-    snprintf(statusBuf, sizeof(statusBuf), "Active: %s (%d words)", dName, totalDraftWords);
-    display.print(statusBuf);
+    if (statusNotice != nullptr) {
+      display.setFont(&FreeMonoBold9pt7b);
+      display.print(statusNotice);
+    } else {
+      char statusBuf[64];
+      const char* dName = (activeDraft[0] == '/') ? activeDraft + 1 : activeDraft;
+      snprintf(statusBuf, sizeof(statusBuf), "Active: %s (%d words)", dName, totalDraftWords);
+      display.print(statusBuf);
+    }
   } while (display.nextPage());
 }
 
@@ -784,36 +789,46 @@ void drawWiFiExportScreen() {
 // Google Drive Sync Engine
 // -------------------------------------------------------------------------
 void syncToGoogleDrive() {
+  bool wasAP = wifiActive;
   loadConfig();
   if (wifiSSID.length() == 0 || googleScriptUrl.length() == 0) {
-    statusNotice = "[Configure Google in Web Portal]";
+    statusNotice = "[No Wi-Fi/URL Saved - Press E]";
     statusNoticeTime = millis();
     drawControlMenu();
     return;
   }
 
   statusNotice = "[Connecting Wi-Fi...]";
+  statusNoticeTime = millis();
   drawControlMenu();
 
+  WiFi.disconnect(true);
+  delay(100);
   WiFi.mode(WIFI_STA);
   WiFi.begin(wifiSSID.c_str(), wifiPass.c_str());
 
   int attempts = 0;
-  while (WiFi.status() != WL_CONNECTED && attempts < 25) {
-    delay(400);
+  while (WiFi.status() != WL_CONNECTED && attempts < 30) {
+    delay(300);
     attempts++;
   }
 
   if (WiFi.status() != WL_CONNECTED) {
-    statusNotice = "[Wi-Fi Connect Failed]";
+    statusNotice = "[Wi-Fi Failed: Check SSID/Pass]";
     statusNoticeTime = millis();
     WiFi.disconnect(true);
-    WiFi.mode(WIFI_OFF);
+    if (wasAP) {
+      WiFi.mode(WIFI_AP);
+      WiFi.softAP("EType-Drafts");
+    } else {
+      WiFi.mode(WIFI_OFF);
+    }
     drawControlMenu();
     return;
   }
 
-  statusNotice = "[Syncing to Drive...]";
+  statusNotice = "[Connected! Syncing to Drive...]";
+  statusNoticeTime = millis();
   drawControlMenu();
 
   WiFiClientSecure client;
@@ -821,7 +836,7 @@ void syncToGoogleDrive() {
 
   HTTPClient http;
   if (http.begin(client, googleScriptUrl)) {
-    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
+    http.setFollowRedirects(HTTPC_FORCE_FOLLOW_REDIRECTS);
     http.addHeader("Content-Type", "application/json");
 
     String mdContent = convertToMarkdown(currentDraftText);
@@ -845,12 +860,17 @@ void syncToGoogleDrive() {
     String postData = "{\"filename\":\"" + baseName + "\",\"content\":\"" + escaped + "\"}";
     int httpCode = http.POST(postData);
 
-    if (httpCode > 0) {
-      Serial.printf("[Google Sync] HTTP %d\n", httpCode);
+    if (httpCode == 200 || httpCode == 302) {
+      Serial.printf("[Google Sync] Success! HTTP %d\n", httpCode);
       statusNotice = "[Synced to Google Drive!]";
+    } else if (httpCode > 0) {
+      Serial.printf("[Google Sync] HTTP %d\n", httpCode);
+      static char errBuf[32];
+      snprintf(errBuf, sizeof(errBuf), "[Google HTTP %d Error]", httpCode);
+      statusNotice = errBuf;
     } else {
       Serial.printf("[Google Sync] Error: %s\n", http.errorToString(httpCode).c_str());
-      statusNotice = "[Sync Failed]";
+      statusNotice = "[Sync Request Failed]";
     }
     http.end();
   } else {
@@ -859,7 +879,12 @@ void syncToGoogleDrive() {
 
   statusNoticeTime = millis();
   WiFi.disconnect(true);
-  WiFi.mode(WIFI_OFF);
+  if (wasAP) {
+    WiFi.mode(WIFI_AP);
+    WiFi.softAP("EType-Drafts");
+  } else {
+    WiFi.mode(WIFI_OFF);
+  }
   drawControlMenu();
 }
 
@@ -895,7 +920,7 @@ void handleWebRoot() {
   html += "label { font-size: 0.8rem; color: var(--accent); display: block; }";
   html += ".footer { margin-top: 28px; text-align: center; font-size: 0.8rem; color: var(--accent); border-top: 1px solid var(--border); padding-top: 14px; }";
   html += "</style></head><body><div class='container'>";
-  html += "<header><h1>E - T Y P E v1.1</h1><span>Control Portal</span></header>";
+  html += "<header><h1>E - T Y P E v1.2</h1><span>Control Portal</span></header>";
 
   html += "<h2 style='font-size:1.1rem;margin-bottom:12px;'>Saved Drafts</h2>";
 
@@ -919,6 +944,9 @@ void handleWebRoot() {
 
   // Google Drive & Home Wi-Fi Card
   html += "<h2 style='font-size:1.1rem;margin:24px 0 12px 0;'>Google Drive & Home Wi-Fi</h2>";
+  if (server.hasArg("saved")) {
+    html += "<div style='background:#d4edda;color:#155724;border:1px solid #c3e6cb;padding:10px 14px;border-radius:4px;margin-bottom:14px;font-size:0.85rem;'><b>✓ Settings saved to typewriter flash!</b></div>";
+  }
   html += "<div class='card'><form method='POST' action='/save_config'>";
   html += "<div class='form-group'><label>Home Wi-Fi Network Name (SSID):</label>";
   html += "<input type='text' name='ssid' value='" + wifiSSID + "' placeholder='MyHomeWiFi'></div>";
@@ -1019,14 +1047,18 @@ void handleSaveConfig() {
   String url  = server.arg("url");
 
   saveConfig(ssid, pass, url);
-  server.sendHeader("Location", "/");
+  server.sendHeader("Location", "/?saved=1");
   server.send(303);
 }
 
 void handleSyncWeb() {
+  loadConfig();
+  if (wifiSSID.length() == 0 || googleScriptUrl.length() == 0) {
+    server.send(200, "text/html", "<body style='font-family:monospace;padding:30px;line-height:1.6;'><h3>Configuration Missing</h3><p>Please enter your Home Wi-Fi name, password, and Google Webhook URL, then click <b>Save Wi-Fi & Google Settings</b> first!</p><p><a href='/'>&larr; Return to Portal</a></p></body>");
+    return;
+  }
   syncToGoogleDrive();
-  server.sendHeader("Location", "/");
-  server.send(303);
+  server.send(200, "text/html", "<body style='font-family:monospace;padding:30px;line-height:1.6;'><h3>Sync Triggered!</h3><p>Draft was sent to your Google Drive 'E-Type Drafts' folder.</p><p><a href='/'>&larr; Return to Portal</a></p></body>");
 }
 
 void startWiFiExport() {
