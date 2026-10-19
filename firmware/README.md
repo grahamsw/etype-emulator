@@ -125,7 +125,7 @@ The **TP4056** charges the battery via its USB port and protects against over-di
 | :--- | :--- | :--- |
 | **Battery Red (+)** | TP4056 **`B+`** | Battery charge / discharge positive |
 | **Battery Black (-)** | TP4056 **`B-`** | Battery ground with DW01 protection |
-| TP4056 **`OUT+`** | MH-CD42 **`BAT`** (or `BAT+` / `VIN`) | Protected 3.0V–4.2V input to boost converter |
+| TP4056 **`OUT+`** | MH-CD42 **`BAT`** (or `BAT+`) | Protected 3.0V–4.2V input to boost converter *(Do NOT use VIN!)* |
 | TP4056 **`OUT-`** | MH-CD42 **`GND`** | Ground return to boost converter |
 | MH-CD42 **`5V / VOUT`** | Screw Terminal **`5V` (or `VIN`)** | Regulated 5.0V rail for ESP32 and USB keyboard |
 | MH-CD42 **`GND`** | Screw Terminal **`GND`** | Common system ground |
