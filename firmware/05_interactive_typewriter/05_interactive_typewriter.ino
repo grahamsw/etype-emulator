@@ -11,8 +11,14 @@
  *   - #60: Edit Mode (MODE_EDIT) overhaul: high-contrast inverted block cursor (█) at the
  *          active column, batched multi-row partial updates (single refresh cycle across line
  *          transitions), in-place character insertion/deletion, and smooth line-boundary navigation.
- *   - Battery Keep-Alive: Periodic silent load pulse during idle to prevent 18650 battery
- *          shields (e.g. FORIOT / MH-CD42) from auto-shutting off under light load.
+ *   - Smart Power Management (FORIOT 18650 Shield):
+ *       1. Continuous 8s keep-alive pulses during both active typing and short pauses (<5 min)
+ *          so the battery shield never cuts power mid-thought or mid-sentence.
+ *       2. Fast 800ms auto-save to LittleFS flash + persistent active draft tracking (/last_draft.txt)
+ *          so the latest words are never lost.
+ *       3. Automatic 5-minute idle shutdown: saves the current buffer to flash, displays
+ *          "[Saved - Sleeping]" on the status bar, hibernates the e-paper panel, and enters
+ *          ESP32-S3 deep sleep so the FORIOT shield powers off cleanly.
  */
 
 #include <Arduino.h>
@@ -27,6 +33,7 @@
 #include <Update.h>
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
+#include <esp_sleep.h>
 
 // -------------------------------------------------------------------------
 // Display Driver: Waveshare 4.2" V2 B&W (SSD1683 / GDEY042T81)
@@ -54,6 +61,13 @@ const int PIN_SPI_CS   = 10;
 #define STATUS_LINE_Y       272  // Dividing line above status bar
 #define STATUS_TEXT_Y       290  // Baseline of bottom status text
 #define RENAME_INPUT_Y      146  // Baseline of '> filename_' input in MODE_RENAME
+
+// -------------------------------------------------------------------------
+// Power Management & Auto-Save Thresholds
+// -------------------------------------------------------------------------
+#define AUTO_SAVE_PAUSE_MS      800UL               // Auto-save buffer 0.8s after last keystroke
+#define KEEP_ALIVE_INTERVAL_MS  8000UL              // Pulse every 8s to keep FORIOT 18650 shield awake
+#define IDLE_SHUTDOWN_MS        (5UL * 60UL * 1000UL) // 5 minutes idle -> save buffer & power off
 
 // -------------------------------------------------------------------------
 // Writing Modes & Sprint System
@@ -100,7 +114,7 @@ bool statusBarDirty = false;
 unsigned long lastTypeTime = 0;
 unsigned long lastKeyActivityTime = 0;
 
-// Battery Keep-Alive (prevents FORIOT 18650 / MH-CD42 auto-shutoff on idle)
+// Battery Keep-Alive (prevents FORIOT 18650 / MH-CD42 auto-shutoff until 5-min timeout)
 bool batteryKeepAlive = true;
 unsigned long lastKeepAlivePulse = 0;
 
@@ -149,6 +163,7 @@ struct KeyMessage {
 // Forward Declarations
 // -------------------------------------------------------------------------
 void saveCurrentDraft();
+void saveLastDraftName();
 void createNewDraft();
 void loadDraft(const char* filename);
 void scanDraftFiles();
@@ -157,6 +172,7 @@ void saveConfig(const String &ssid, const String &pass, const String &url);
 void syncToGoogleDrive();
 void startWiFiExport();
 void stopWiFiExport();
+void saveAndPowerOff();
 void redrawEntirePage();
 void renderRowsPartial(int minRow, int maxRow);
 void renderLinePartial(int row);
@@ -328,6 +344,15 @@ void saveConfig(const String &ssid, const String &pass, const String &url) {
 // -------------------------------------------------------------------------
 // LittleFS Storage Subsystem
 // -------------------------------------------------------------------------
+void saveLastDraftName() {
+  if (strlen(activeDraft) == 0) return;
+  File f = LittleFS.open("/last_draft.txt", "w");
+  if (f) {
+    f.print(activeDraft);
+    f.close();
+  }
+}
+
 void initStorage() {
   if (!LittleFS.begin(true)) {
     Serial.println("[LittleFS] Mount failed! Formatting...");
@@ -341,7 +366,20 @@ void initStorage() {
   if (draftCount == 0) {
     createNewDraft();
   } else {
-    loadDraft(draftList[0].name);
+    String lastDraft = "";
+    if (LittleFS.exists("/last_draft.txt")) {
+      File f = LittleFS.open("/last_draft.txt", "r");
+      if (f) {
+        lastDraft = f.readString();
+        lastDraft.trim();
+        f.close();
+      }
+    }
+    if (lastDraft.length() > 0 && LittleFS.exists(lastDraft)) {
+      loadDraft(lastDraft.c_str());
+    } else {
+      loadDraft(draftList[0].name);
+    }
   }
 }
 
@@ -359,7 +397,7 @@ void scanDraftFiles() {
     if (!fname.startsWith("/")) fname = "/" + fname;
 
     if (fname.endsWith(".txt") || fname.endsWith(".md")) {
-      if (fname != "/config.txt") {
+      if (fname != "/config.txt" && fname != "/last_draft.txt") {
         strncpy(draftList[draftCount].name, fname.c_str(), sizeof(draftList[draftCount].name));
         draftList[draftCount].size = file.size();
 
@@ -492,6 +530,7 @@ void populatePageBufferFromText(const String &text) {
 
 void loadDraft(const char* filename) {
   strncpy(activeDraft, filename, sizeof(activeDraft));
+  saveLastDraftName();
   File f = LittleFS.open(activeDraft, "r");
   if (!f) {
     Serial.printf("[LittleFS] Could not open %s\n", activeDraft);
@@ -546,6 +585,7 @@ void createNewDraft() {
   maxUsedRow = 0;
 
   saveCurrentDraft();
+  saveLastDraftName();
   Serial.printf("[LittleFS] Created fresh new draft: %s\n", activeDraft);
 }
 
@@ -1283,7 +1323,7 @@ void stopWiFiExport() {
 }
 
 // -------------------------------------------------------------------------
-// Battery Keep-Alive Pulse (Prevents 18650 Shield Idle Auto-Shutoff)
+// Battery Keep-Alive Pulse & 5-Minute Idle Save + Power-Off
 // -------------------------------------------------------------------------
 void pulseBatteryKeepAlive() {
   if (!batteryKeepAlive || wifiActive) return;
@@ -1300,6 +1340,43 @@ void pulseBatteryKeepAlive() {
     if (uxQueueMessagesWaiting(keyQueue) > 0) break; // Abort immediately on keystroke
   }
   WiFi.mode(WIFI_OFF);
+}
+
+void saveAndPowerOff() {
+  Serial.println("[Power] 5 minutes of inactivity reached. Saving buffer and powering off...");
+
+  // 1. Flush and save the current draft buffer and active draft pointer to LittleFS
+  if (currentWritingMode == MODE_EDIT) {
+    syncDraftTextFromPageBuffer();
+    totalDraftWords = countWords(currentDraftText);
+  }
+  saveCurrentDraft();
+  saveLastDraftName();
+  LittleFS.end();
+
+  // 2. Show "[Saved - Sleeping]" on the e-ink screen before hibernating
+  statusNotice = "[Saved - Sleeping]";
+  if (currentMode == MODE_TYPING) {
+    // Erase cursor on active line and update status bar cleanly
+    keyboardConnected = false;
+    renderLinePartial(cursorRow);
+    renderStatusBarPartial();
+  } else {
+    keyboardConnected = false;
+    currentMode = MODE_TYPING;
+    redrawEntirePage();
+  }
+
+  // 3. Put e-paper controller into deep hibernate and shut down ESP32-S3
+  display.hibernate();
+  stopWiFiExport();
+  WiFi.mode(WIFI_OFF);
+  batteryKeepAlive = false;
+
+  Serial.println("[Power] Entering deep sleep (FORIOT shield will now auto-shutoff).");
+  Serial.flush();
+  delay(100);
+  esp_deep_sleep_start();
 }
 
 // -------------------------------------------------------------------------
@@ -1362,7 +1439,7 @@ void setup() {
 }
 
 // -------------------------------------------------------------------------
-// Main Loop: Keystrokes, Auto-Save, Battery Keep-Alive & Web Server
+// Main Loop: Keystrokes, Auto-Save, Battery Keep-Alive & 5-Min Shutdown
 // -------------------------------------------------------------------------
 void loop() {
   static unsigned long lastSprintCheck = 0;
@@ -1371,21 +1448,29 @@ void loop() {
     server.handleClient();
   }
 
-  // Periodic Battery Keep-Alive pulse every 8s when idle (>4s since last keystroke)
-  if (batteryKeepAlive && !wifiActive && (millis() - lastKeyActivityTime > 4000)) {
-    if (millis() - lastKeepAlivePulse > 8000) {
-      lastKeepAlivePulse = millis();
-      pulseBatteryKeepAlive();
-    }
+  unsigned long now = millis();
+  unsigned long idleMs = now - lastKeyActivityTime;
+
+  // 1. Fast Auto-Save: commit buffer to flash 800ms after pausing typing
+  if (draftDirty && (now - lastTypeTime >= AUTO_SAVE_PAUSE_MS)) {
+    saveCurrentDraft();
+  }
+  if (currentMode == MODE_TYPING && statusBarDirty && (now - lastTypeTime >= AUTO_SAVE_PAUSE_MS)) {
+    renderStatusBarPartial();
   }
 
-  // Periodic Auto-save & deferred Status Bar refresh in Typing Mode (after 2s of typing pause)
-  if (currentMode == MODE_TYPING && (millis() - lastTypeTime > 2000)) {
-    if (draftDirty) {
-      saveCurrentDraft();
-    }
-    if (statusBarDirty) {
-      renderStatusBarPartial();
+  // 2. 5-Minute Idle Shutdown: save buffer and power off after 5 minutes of no keystrokes
+  if (currentMode != MODE_WIFI_EXPORT && idleMs >= IDLE_SHUTDOWN_MS) {
+    saveAndPowerOff();
+    return;
+  }
+
+  // 3. Battery Keep-Alive Pulse: fire every 8s during active sessions & short pauses (<5 min)
+  //    (Runs between keystrokes once >400ms has elapsed so typing alone never starves the pulse)
+  if (batteryKeepAlive && !wifiActive && idleMs < IDLE_SHUTDOWN_MS && idleMs > 400) {
+    if (now - lastKeepAlivePulse >= KEEP_ALIVE_INTERVAL_MS && uxQueueMessagesWaiting(keyQueue) == 0) {
+      lastKeepAlivePulse = now;
+      pulseBatteryKeepAlive();
     }
   }
 
@@ -1394,7 +1479,6 @@ void loop() {
 
   if (xQueueReceive(keyQueue, &key, waitTicks) == pdTRUE) {
     lastKeyActivityTime = millis();
-    lastKeepAlivePulse = millis();
 
     // -----------------------------------------------------------------------
     // Connect / Disconnect Hardware Events (Partial update only in MODE_TYPING)
@@ -1544,6 +1628,7 @@ void loop() {
               statusNotice = "[Name Unchanged]";
             } else if (LittleFS.rename(activeDraft, newName.c_str())) {
               strncpy(activeDraft, newName.c_str(), sizeof(activeDraft));
+              saveLastDraftName();
               statusNotice = "[Draft Renamed]";
             } else {
               statusNotice = "[Rename Failed]";
