@@ -11,7 +11,8 @@ This directory contains the firmware and hardware verification suite for the sta
 | [`01_system_check/`](./01_system_check/01_system_check.ino) | Verifies chip rev, dual 240MHz cores, 16MB Flash, 8MB Octal PSRAM, and LittleFS file persistence. | ✅ Tested & Verified |
 | [`02_display_test/`](./02_display_test/02_display_test.ino) | Waveshare 4.2" SPI test: full screen clear, typewriter title card, and fast partial refresh line typing. | ⏳ Ready for cables |
 | [`03_keyboard_test/`](./03_keyboard_test/03_keyboard_test.ino) | Native USB Host keyboard test: detects plug/unplug and echoes keystrokes live to Serial Monitor. | ⏳ Ready for keyboard |
-| [`04_interactive_typewriter/`](./04_interactive_typewriter/04_interactive_typewriter.ino) | **Full Live Typing Prototype**: Real-time keystrokes render straight to the e-paper using fast partial updates, with thread-safe FreeRTOS queuing and F5 screen refresh. | 🚀 **Ready to Test** |
+| [`04_interactive_typewriter/`](./04_interactive_typewriter/04_interactive_typewriter.ino) | **Full Live Typing Prototype (v1.3)**: Real-time keystrokes, LittleFS drafts, Flow sprints, Web OTA, and Google Drive sync. | ✅ Verified |
+| [`05_interactive_typewriter/`](./05_interactive_typewriter/05_interactive_typewriter.ino) | **Optimized Typewriter Firmware (v1.4)**: Resolves #58 (idle menu flashes), #59 (partial rename updates), #60 (high-contrast block cursor & batched Edit Mode redraws), plus 18650 battery keep-alive. | 🚀 **Ready to Flash** |
 
 ---
 
