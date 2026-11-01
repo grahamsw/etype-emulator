@@ -222,3 +222,58 @@ Install these via the Arduino Library Manager (**`Cmd/Ctrl + Shift + I`**):
 4. **On-Demand Manual Override (`F5` Key)**:
    * Always give the writer control: pressing **`F5`** (or `Ctrl + L`) triggers an immediate full refresh whenever they desire.
 
+---
+
+## 🔋 Battery Indicator & Hardware Power Switch
+
+### 1. Battery Fuel Gauge Circuit (GPIO 1 Voltage Divider)
+To measure battery state-of-charge without damaging the ESP32-S3's 3.3V ADC, a **1:1 voltage divider (two 100kΩ resistors)** halves the Li-ion cell's 3.0V–4.2V range down to a safe 1.5V–2.1V:
+
+```
+   Battery (+) / TP4056 OUT+ [3.0V - 4.2V]
+             |
+             +---+
+                 |
+               [100kΩ] (1% metal film)
+                 |
+                 +-----> Screw Terminal GPIO 1 (ESP32-S3 ADC1_CH0)
+                 |
+               [100kΩ] (1% metal film)
+                 |
+             +---+
+             |
+            GND (Common Ground)
+```
+
+* **Software**: Already implemented in [`05_interactive_typewriter.ino`](./05_interactive_typewriter/05_interactive_typewriter.ino) via `getBatteryPercentage()`.
+* **Calibration**: Uses a multi-point piecewise linear curve matching real Li-ion discharge characteristics (4.18V = 100%, 3.78V = 60%, 3.27V = 0%).
+* **Display**: Shows `[BAT 85%]` live on the menu and status bar. If the divider is disconnected, the pin reads <2.5V and automatically falls back to showing `[OTA v1.6]`.
+
+### 2. Hardware On/Off Switch Wiring
+A physical toggle or rocker switch provides true zero-drain power cutoff when stored in a bag or desk drawer:
+
+* **Recommended Placement**: Wire the switch **inline between TP4056 `OUT+` and MH-CD42 `BAT`**.
+  * **Switch ON**: Battery feeds the MH-CD42 boost board $\rightarrow$ powers 5V rail $\rightarrow$ ESP32 boots up in <1 second.
+  * **Switch OFF**: Completely isolates the boost circuit from the battery $\rightarrow$ **0.0 µA standby drain**. The battery can sit for months without losing charge.
+  * **Charging while OFF**: Because the switch is on the `OUT+` side, plugging a USB-C charger into the TP4056 still charges the battery safely even when the typewriter power switch is OFF!
+
+---
+
+## 🧰 Enclosure & Casing Roadmap (GitHub Issue #56)
+
+### 1. Design Requirements
+* **Ergonomic Incline**: 7° to 10° fixed desk angle for comfortable reading and typing posture.
+* **Bezel Protection**: Front bezel that holds the 4.2" Waveshare glass panel flush with soft gasket backing to prevent mechanical torsion on the delicate glass substrate.
+* **Port Cutouts**:
+  1. USB-C cutout for TP4056 battery charging.
+  2. USB-A female cutout (or dedicated USB-C socket) for plugging in wired keyboards.
+  3. Rocker / toggle switch cutout on side or rear.
+  4. Recessed reset/boot button access hole.
+
+### 2. Internal Packaging Options
+| Approach | Pros | Cons | Recommendation |
+| :--- | :--- | :--- | :--- |
+| **Option A: Screw Terminal Chassis** | Retains current screw breakout base; zero soldering required; easy component swapping. | Thicker enclosure (~32mm – 38mm height). | Best for rapid prototyping & field serviceability. |
+| **Option B: Slim Integrated Chassis** | Move from screw terminals to direct soldered perfboard/PCB; flat pouch LiPo (2500mAh) instead of 18650 cell. | Requires soldering connections. | Best for production portable unit (<20mm thickness). |
+
+

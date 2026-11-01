@@ -1,0 +1,846 @@
+=== E-TYPE BLUETOOTH BLE & DAEMON LOG REPORT (v5) ===
+Sat Oct 31 18:46:45 UTC 2026
+--- [1] PREVIOUS BT-DAEMON / BSA_SERVER LOGS (NO CVM SPAM) ---
+261031:184503 system: I tinyrot:def:Removing /var/local/log/messages_00001660_*.gz to save storage space
+261031:184503 system: I tinyrot:def:Removing /var/local/log/messages_00001661_*.gz to save storage space
+261031:184503 system: I tinyrot:def:Removing /var/local/log/messages_00001662_*.gz to save storage space
+261031:184503 system: I tinyrot:def:Removing /var/local/log/messages_00001663_*.gz to save storage space
+261031:184504 root: Filesystem                Size      Used Available Use% Mounted on
+261031:184504 system: I tinyrot:def::Rotating file /var/log/bsa_server_log with max size 256
+261031:184526 cmd[2959]: I def:req::Got a connection request:~:
+261031:184526 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 1:
+261031:184556 todo[2971]: I conutils:conEnsureConnectionInternal::setting cmd property
+261031:184556 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 1:
+261031:184556 cmd[2959]: I def:req::Got a connection request:~:
+261031:184556 todo[2971]: I conutils:unlockAny::Unlocking shared lock for all connections
+261031:184556 todo[2971]: I conutils:conEnsureConnectionResponse::response=1
+261031:184556 todo[2971]: E todo_get_document:GetToDoFailed:reason=ensureConnectionFailed,error=1:
+261031:184626 root: SQLiteDatabase::executeQuery failed to prepare statement: unable to open database file
+261031:184626 root: SQLiteDatabase::execute failed with result_code[21] err_msg[unable to open database file], re-opening connection and retrying execution.SQLiteDatabase failed to open a DB connection: unable to open database file
+261031:184626 root: SQLiteDatabase::executeQuery failed to prepare statement: unable to open database file
+261031:184626 root: SQLiteDatabase::execute failed with result_code[21] err_msg[unable to open database file], re-opening connection and retrying execution.SQLiteDatabase failed to open a DB connection: unable to open database file
+261031:184626 cmd[2959]: I def:req::Got a connection request:~:
+261031:184626 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 1:
+261031:184634 BT-DAEMON[13913]: I MGR-UTILS:LipcClientEventCallback:eventName=t1TimerReset:Enqueue status=0
+261031:184634 BT-DAEMON[13913]: I MGR-UTILS:LipcClientEventCallback:eventName=usbUnconfigured:Enqueue status=0
+261031:184634 winmgr[4634]: I winmgr:driveModeStateChanged:event received:
+261031:184634 stored[15232]: I (null):JunoWidgetUserAgent::onUsbDisconnect:entered:
+261031:184634 volumd[2973]: I lipc:evts:name=userstoreAvailable, origin=com.lab126.volumd:Event sent
+261031:184634 volumd[2973]: I def:USB_EVENT_MONITOR:usb stop drive mode:user store is available
+261031:184634 contentpackd[10966]: I def:volumdEventCallback:userStoreAvailable:
+261031:184634 contentpackd[10966]: I def:UserStoreAvailableRequestProcessing::
+261031:184634 winmgr[4634]: I winmgr:driveModeStateChanged:event received:
+261031:184634 wifid[3120]: I spectator:conn-start:t=1847.242685, essid=any:
+261031:184634 wifid[3120]: I spectator:conn-freq:t=1847.242758, freq=2462:
+261031:184634 wifid[3120]: I wmgr:wconn:scanning freq=2462 hidden=0...::~:
+261031:184634 wifid[3120]: I wmgr:scan:hidden-nets=0 freq=2462:starting...::~:
+261031:184634 fastmetrics[10554]: E fastmetrics:startAppSession:[1770.602606]: AppSessionstart: marketPlace fetch fail, setting to default :
+261031:184634 fastmetrics[10554]: E fastmetrics:startAppSession:[1770.602752]: AppSessionstart: marketPlace fetch fail, setting to default :
+261031:184634 root: SQLiteDatabase::executeQuery failed to prepare statement: unable to open database file
+261031:184635 system: I asr_bt_userstore:winmgr_running=true. winmgr is ready::
+261031:184635 wifid[3120]: I wmgr:wconn:networks-in-range=2/3::~:
+261031:184635 wifid[3120]: I wmgr:wconn:ssid=l********6, prio=19 :connecting...::~:
+261031:184635 wifid[3120]: I spectator:conn-assoc-done:t=1848.266823:
+261031:184635 [ 1848.194714] Connecting with 6c:67:a8 ssid "l********6" len (10) channel=1
+261031:184635 [ 1848.212214] wl_bss_connect_done succeeded with 6c:67:a8
+261031:184635 [ 1848.300243] wl_bss_connect_done succeeded with 6c:67:a8
+261031:184635 scan[10984]: I watchdir:success:path=/mnt/us/audible:watching directory
+261031:184635 pmond[10408]: W def:::Unable to fetch the proc
+261031:184636 pmond[10408]: W def:::Unable to fetch the proc
+261031:184636 pmond[10408]: W def:::Unable to fetch the proc
+261031:184636 pmond[10408]: W def:::Unable to fetch the proc
+261031:184636 wifid[3120]: I spectator:conn-ip-ok:t=1848.834475:
+261031:184636 wifid[3120]: I spectator:conn-done:t=1848.866902:
+261031:184636 wifid[3120]: I wmgr:wconn:rssi=5::~:
+261031:184636 pmond[10408]: W def:::Unable to fetch the proc
+261031:184636 cmd[2959]: I def:interfaceChange::New interface=wifi:~:
+261031:184636 cmd[2959]: I def:ipchandler:wifi_disconnection was =130.000000 sec:~:
+261031:184636 dmld[10406]: I dmld:cmd_internet_connected_event_callback:Unused Event 0 received:
+261031:184636 JunoStatusBarDriver: [5290] [JunoStatusBarUI:INFO] Received network connection interface changed callback with event: interfaceChange, new interface: wifi
+261031:184636 phd[3162]: I udp_tphv3:restarting_on_wan_connection:network=1:
+261031:184636 tmd[3017]: I lipc_cb_cmd:Connection Util Event:event = 0:
+261031:184636 tmd[3017]: I lipc_cb_cmd:Connection Util Event:event = 3:
+261031:184636 cmd[2959]: I def:statechange::Old State[1] = READY, new State = CONNECTED :~:
+261031:184636 todo[2971]: I conutils:lockAny::Locking shared lock for all connections
+261031:184636 root: SQLiteDatabase::execute failed with result_code[21] err_msg[unable to open database file], re-opening connection and retrying execution.
+261031:184636 root: (process:10554): GLib-CRITICAL **: g_hash_table_foreach: assertion `hash_table != NULL' failed
+261031:184636 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184636 cmd[2959]: I def:req::Got a connection request:~:
+261031:184636 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184636 tmd[3017]: I conutils:conEnsureConnectionInternal::setting cmd property
+261031:184636 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184637 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184637 tmd[3017]: I conutils:conEnsureConnectionResponse::response=0
+261031:184637 cmd[2959]: I def:req::Got a connection request:~:
+261031:184637 todo[2971]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184637 todo[2971]: I conutils:unlockAny::Unlocking shared lock for all connections
+261031:184637 KPPMainApp: [10464] [ksdk::library::ICUCollator:INFO] Numeric Collation is enabled successfully
+261031:184637 pmond[10408]: W def:::Unable to fetch the proc
+261031:184637 btfd[3003]: I btfdUtils:btfd_lipcPfmChangeHandlerCallback:Got registrationChanged for processing:
+261031:184637 btfd[3003]: I gmainUtils:Pushing to Audio queue::
+261031:184637 btfd[3003]: I btfdUtils:fetchNonASRAudioAvailableForPfmCallback::
+261031:184637 btfd[3003]: I btfdUtils:btfd_lipcCcdbEventsHandlerCallback:Got updated for processing:
+261031:184637 btfd[3003]: I gmainUtils:Pushing to Audio queue::
+261031:184637 appmgrd[3000]: I appmgr_history:stoppingApp:app=com.lab126.KPPStoreShopping:
+261031:184637 ADM[16283]: I Main: Received wifi connection event.
+261031:184637 ADM[16283]: I Main: Received missed TPH event: interfaceChange.
+261031:184637 lipc-set-prop[16277]: W lipc:axstime:prop=interfaceChange, source=amazon.device.messaging, ms=421:lipc property access time in milliseconds
+261031:184637 fastmetrics[10554]: E fastmetrics:startAppSession:[1773.400133]: AppSessionstart: marketPlace fetch fail, setting to default :
+261031:184637 fastmetrics[10554]: E fastmetrics:startAppSession:[1773.400271]: AppSessionstart: marketPlace fetch fail, setting to default :
+261031:184637 archive[2970]: E archive_sync_metadata:DownloadArchiveItems:reason=getDynamicConfigValueMarketplaceFailed,error=-2,marketplace=(null):
+261031:184637 btfd[3003]: W lipc:axstime:prop=isPfmAudibleSupported, source=com.lab126.btService, ms=287:lipc property access time in milliseconds
+261031:184637 root: (playermgr:3118): GStreamer-CRITICAL **: gst_object_unref: assertion `object != NULL' failed
+261031:184637 btfd[3003]: I btfdUtils:fetchAudibleBookAvailableCallback::
+261031:184637 playermgr[3118]: I playermgr:lipcSetterCallback:property=Close:
+261031:184637 playermgr[3118]: I playermgr:dispatchLipcProperty:property=Close:
+261031:184637 playermgr[3118]: I playermgr:stop::Pipeline already in GST_STATE_NULL
+261031:184637 playermgr[3118]: I playermgr:emitEvent:eventName=PlayerClosed:Queuing event to be sent
+261031:184637 playermgr[3118]: I playermgr:dispatchLipcEvent:playerType=AUDIBLE,eventName=PlayerClosed:Processing LIPC Event
+261031:184637 playermgr[3118]: I lipc:evts:name=PlayerClosed, origin=com.lab126.playermgr, fparam={"type":"AUDIBLE","data":{"sour:Event sent
+261031:184637 playermgr[3118]: I playermgr:checkForScreensaverMetrics:checkForScreensaverMetrics:Not in screensaver
+261031:184638 framework: "Thread-1196" #1282 prio=5 os_prio=0 tid=0x72897788 nid=0x274d runnable [0x7293c000]
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 framework: "ThreadPool:QueryThread_56" #1245 daemon prio=5 os_prio=0 tid=0x01306d88 nid=0x3fb4 runnable [0x69d36000]
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 framework: "ThreadPool:RegistrationListener class com.amazon.kindle.restricted.identity.impl.MarketplaceImpl$1" #1243 daemon prio=5 os_prio=0 tid=0x01300800 nid=0x3fb0 runnable [0x698a3000]
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 framework: 	at com.amazon.kindle.restricted.identity.impl.MarketplaceImpl.JI(MarketplaceImpl.java:275)
+261031:184638 framework: 	at com.amazon.kindle.restricted.identity.impl.MarketplaceImpl.Ss(MarketplaceImpl.java:218)
+261031:184638 framework: 	at com.amazon.kindle.restricted.identity.impl.MarketplaceImpl.b(MarketplaceImpl.java:62)
+261031:184638 framework: 	at com.amazon.kindle.restricted.identity.impl.MarketplaceImpl$1.onRegistrationInfoChanged(MarketplaceImpl.java:168)
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 framework: "ThreadPool:WirelessEvent" #1140 daemon prio=5 os_prio=0 tid=0x01137ce8 nid=0x3ad7 runnable [0x694e5000]
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 framework: "ThreadPool:Syncing on marketplace data change" #1138 daemon prio=5 os_prio=0 tid=0x01034f28 nid=0x3ad4 runnable [0x69826000]
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 framework: "ThreadPool:DPC GDPR Request" #1133 daemon prio=5 os_prio=0 tid=0x01033c40 nid=0x3ad1 runnable [0x69871000]
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 framework: "ThreadPool:ReadingStreamsStatusSync" #1120 daemon prio=5 os_prio=0 tid=0x00a2a5b0 nid=0x3ac9 runnable [0x69c87000]
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 framework: "WifiCCUpdatorServiceThread" #344 daemon prio=6 os_prio=-1 tid=0x6ab76238 nid=0x2c46 runnable [0x6e852000]
+261031:184638 framework:    java.lang.Thread.State: RUNNABLE
+261031:184638 KPPMainApp: [10464] [ksdk::library::ICUCollator:INFO] Numeric Collation is enabled successfully
+261031:184638 fastmetrics[10554]: E fastmetrics:startAppSession:[1774.263382]: AppSessionstart: marketPlace fetch fail, setting to default :
+261031:184638 fastmetrics[10554]: E fastmetrics:startAppSession:[1774.263488]: AppSessionstart: marketPlace fetch fail, setting to default :
+261031:184639 framework: "Thread-191" #227 prio=5 os_prio=0 tid=0x6ab8b228 nid=0x2ace in Object.wait() [0x6a5c8000]
+261031:184639 framework: "Timer-15" #94 prio=5 os_prio=0 tid=0x6b0f66a8 nid=0x282d in Object.wait() [0x6ace7000]
+261031:184639 framework: "GrokService" #13 prio=5 os_prio=0 tid=0x6b0af1c8 nid=0x2825 runnable [0x6b148000]
+261031:184639 framework:    java.lang.Thread.State: RUNNABLE
+261031:184639 framework: 	at SQLite.Database.get_table(Database.java:318)
+261031:184639 framework: 	at SQLite.Database.get_table(Database.java:347)
+261031:184639 framework: "GCI Event Thread" #10 daemon prio=7 os_prio=-2 tid=0x7238b468 nid=0x2753 runnable [0x7054e000]
+261031:184639 framework:    java.lang.Thread.State: RUNNABLE
+261031:184639 framework:    java.lang.Thread.State: RUNNABLE
+261031:184639 framework: "Signal Dispatcher" #4 daemon prio=9 os_prio=-4 tid=0x7628ab00 nid=0x26a1 runnable [0x00000000]
+261031:184639 framework:    java.lang.Thread.State: RUNNABLE
+261031:184639 framework: "VM Thread" os_prio=-4 tid=0x76297540 nid=0x2601 runnable 
+261031:184639 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184639 cmd[2959]: I def:req::Got a connection request:~:
+261031:184639 btfd[3003]: I btfdUtils:btfd_lipcPfmChangeHandlerCallback:Got marketplaceChanged for processing:
+261031:184639 btfd[3003]: I gmainUtils:Pushing to Audio queue::
+261031:184639 btfd[3003]: I btfdUtils:fetchNonASRAudioAvailableForPfmCallback::
+261031:184639 btfd[3003]: I btfdUtils:btfd_lipcPfmChangeHandlerCallback:Got registrationChanged for processing:
+261031:184639 btfd[3003]: I gmainUtils:Pushing to Audio queue::
+261031:184639 btfd[3003]: I btfdUtils:fetchNonASRAudioAvailableForPfmCallback::
+261031:184639 appmgrd[3000]: I appmgr_history:stoppingApp:app=com.lab126.KPPStoreShopping:
+261031:184639 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184639 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184639 rcm_main[2980]: I refreshcache:trySortClients:status=16:Unable to lock mutex
+261031:184639 rcm_main[2980]: I refreshcache::id queryDSTS, target com.lab126.ota, triggerTime 0s:0ns, successTime 0s:0ns, failureTime 0s:0ns, readyTime 1793470559s:902980750ns, time 1793472398s:417027375ns, interval 86400, isWifiOnly 0, activeInterface 2:
+261031:184639 rcm_main[2980]: I refreshcache::id certmand, target com.lab126.certmand, triggerTime 1793470575s:637610000ns, successTime 0s:0ns, failureTime 0s:0ns, readyTime 1793470559s:902981375ns, time 1793472398s:544870375ns, interval 86400, isWifiOnly 0, activeInterface 2:
+261031:184639 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184639 rcm_main[2980]: I refreshcache::id IdentityService, target com.lab126.IdentityService, triggerTime 1793472240s:453535625ns, successTime 0s:0ns, failureTime 1793472398s:322299125ns, readyTime 1793470559s:902986375ns, time 1793472398s:617711875ns, interval 60, isWifiOnly 0, activeInterface 2:
+261031:184639 rcm_main[2980]: I refreshcache::id cacheStoreFile1, target com.lab126.stored, triggerTime 1793472255s:469216375ns, successTime 0s:0ns, failureTime 1793472255s:484486625ns, readyTime 1793470559s:902978750ns, time 1793472398s:663057875ns, interval 86400, isWifiOnly 0, activeInterface 2:
+261031:184639 rcm_main[2980]: I refreshcache::id cacheStoreHtml, target com.lab126.stored, triggerTime 1793472270s:478714750ns, successTime 0s:0ns, failureTime 1793472270s:484783500ns, readyTime 1793470559s:902977750ns, time 1793472398s:672864875ns, interval 86400, isWifiOnly 0, activeInterface 2:
+261031:184639 rcm_main[2980]: I refreshcache::id contentpack, target com.lab126.LocalizationServices, triggerTime 1793472285s:484178375ns, successTime 0s:0ns, failureTime 1793472285s:564791000ns, readyTime 1793470559s:902976000ns, time 1793472398s:779702875ns, interval 604800, isWifiOnly 0, activeInterface 2:
+261031:184639 rcm_main[2980]: I refreshcache:trySortClients:status=16:Unable to lock mutex
+261031:184639 KPPMainApp: [10464] [MobileWeblabNativeAdapter:INFO] unable to add Weblab Experiment for experiment - BACCHUS_EXPERIMENT_394750
+261031:184639 KPPMainApp: [10464] [MobileWeblabNativeAdapter:INFO] unable to add Weblab Experiment for experiment - BACCHUS_EXPERIMENT_394750
+261031:184639 tmd[3017]: I rate_stats1:COMPLETED:id=16,t1_tmdreq=@184637.23,t2_enq=0ms,t3_actv=6ms,t4_hprt1=0ms,t5_hprt=@184637.23,t6_hpet1=35ms,t7_hpet=@184637.27,t8_start1=@184637.27,t9_start=@184637.27,t10_start=0ms,t11_work=0ms,t12_dns=0ms,t13_conn=0ms,t14_ssl=0ms,t15_reqsent=0ms,t16_respst=0ms,t17_eoh=0ms,t18_dstart=0ms,t19_dend=2657ms,t20_end=@184639.93,try=1:
+261031:184639 tmd[3017]: I rate_stats2:COMPLETED:id=16,session_time=2658ms,chunk_time=2657ms,chunk_len=4625 of 4625,adj_len=4625,session_rate=1740 B/sec,chunk_rate=1740 B/sec,overall=2s,active=2s,lost=0s,type=(unknown),start_wss=-1,end_wss=-1,c1_redir=0ms,c2_dns=134ms,c3_conn=77ms,c4_ssl=2405ms,c5_pret=0ms,c6_dstart=0ms,c7_dend=38ms,c8_total=2657ms,try=1,mcc=,mnc=:
+261031:184639 tmd[3017]: I rate_stats1:FAILED:id=16,t1_tmdreq=@184637.23,t2_enq=0ms,t3_actv=6ms,t4_hprt1=0ms,t5_hprt=@184637.23,t6_hpet1=35ms,t7_hpet=@184637.27,t8_start1=@184637.27,t9_start=@184637.27,t10_start=0ms,t11_work=0ms,t12_dns=0ms,t13_conn=0ms,t14_ssl=0ms,t15_reqsent=0ms,t16_respst=0ms,t17_eoh=0ms,t18_dstart=0ms,t19_dend=2657ms,t20_end=@184639.93,try=1:
+261031:184639 tmd[3017]: I rate_stats2:FAILED:id=16,session_time=2658ms,chunk_time=2657ms,chunk_len=4625 of 4625,adj_len=4625,session_rate=1740 B/sec,chunk_rate=1740 B/sec,overall=2s,active=2s,lost=0s,type=(unknown),start_wss=-1,end_wss=-1,c1_redir=0ms,c2_dns=134ms,c3_conn=77ms,c4_ssl=2405ms,c5_pret=0ms,c6_dstart=0ms,c7_dend=38ms,c8_total=2657ms,try=1,mcc=,mnc=:
+261031:184640 cmd[2959]: I def:req::Got a connection request:~:
+261031:184640 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184640 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184642 cmd[2959]: I def:req::Got a connection request:~:
+261031:184642 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184642 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184644 cmd[2959]: I def:req::Got a connection request:~:
+261031:184644 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184644 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+
+--- [2] BLUETOOTH LIBRARIES, UPSTART JOBS & SYMBOLS ---
+ls: /usr/bin/*hci*: No such file or directory
+ls: /usr/sbin/*hci*: No such file or directory
+-rwxr-xr-x    1 root     root           239 Aug  1  2023 /usr/bin/bsaLogOff.sh
+-rwxr-xr-x    1 root     root           240 Aug  1  2023 /usr/bin/bsaLogOn.sh
+-rwxr-xr-x    1 root     root       2067644 Aug  1  2023 /usr/bin/bsa_server
+-rwxr-xr-x    1 root     root          6984 Apr  5  2016 /usr/bin/btconnectionhelper
+-rwxr-xr-x    1 root     root        241796 Aug  1  2023 /usr/bin/btd
+-rwxr-xr-x    1 root     root          8244 Aug  1  2023 /usr/bin/btfd
+-rwxr-xr-x    1 root     root         60292 Aug  1  2023 /usr/bin/btui
+-rwxr-xr-x    1 root     root         10068 Aug  1  2023 /usr/bin/slabtop
+lrwxrwxrwx    1 root     root            14 Aug  1  2023 /usr/lib/libaipc.so -> libaipc.so.1.0
+lrwxrwxrwx    1 root     root            14 Aug  1  2023 /usr/lib/libaipc.so.1 -> libaipc.so.1.0
+-rwxr-xr-x    1 root     root         41152 Aug  1  2023 /usr/lib/libaipc.so.1.0
+lrwxrwxrwx    1 root     root            23 Aug  1  2023 /usr/lib/libaudibleaaxsdk.so -> libaudibleaaxsdk.so.1.0
+lrwxrwxrwx    1 root     root            23 Aug  1  2023 /usr/lib/libaudibleaaxsdk.so.1 -> libaudibleaaxsdk.so.1.0
+-rwxr-xr-x    1 root     root        200468 Aug  1  2023 /usr/lib/libaudibleaaxsdk.so.1.0
+lrwxrwxrwx    1 root     root            13 Aug  1  2023 /usr/lib/libbsa.so -> libbsa.so.1.0
+lrwxrwxrwx    1 root     root            13 Aug  1  2023 /usr/lib/libbsa.so.1 -> libbsa.so.1.0
+-rwxr-xr-x    1 root     root        256384 Aug  1  2023 /usr/lib/libbsa.so.1.0
+lrwxrwxrwx    1 root     root            15 Aug  1  2023 /usr/lib/libbtcli.so -> libbtcli.so.1.0
+lrwxrwxrwx    1 root     root            15 Aug  1  2023 /usr/lib/libbtcli.so.1 -> libbtcli.so.1.0
+-rwxr-xr-x    1 root     root         27044 Aug  1  2023 /usr/lib/libbtcli.so.1.0
+-rwxr-xr-x    1 root     root         74724 Apr  7  2016 /usr/lib/libbtconnector.so
+lrwxrwxrwx    1 root     root            17 Aug  1  2023 /usr/lib/libbtfdlib.so -> libbtfdlib.so.1.0
+lrwxrwxrwx    1 root     root            17 Aug  1  2023 /usr/lib/libbtfdlib.so.1 -> libbtfdlib.so.1.0
+-rwxr-xr-x    1 root     root        134712 Aug  1  2023 /usr/lib/libbtfdlib.so.1.0
+lrwxrwxrwx    1 root     root            15 Aug  1  2023 /usr/lib/libbthal.so -> libbthal.so.1.0
+lrwxrwxrwx    1 root     root            15 Aug  1  2023 /usr/lib/libbthal.so.1 -> libbthal.so.1.0
+-rwxr-xr-x    1 root     root        212404 Aug  1  2023 /usr/lib/libbthal.so.1.0
+lrwxrwxrwx    1 root     root            31 Aug  1  2023 /usr/lib/libgstinterfaces-0.10.so -> libgstinterfaces-0.10.so.0.18.0
+lrwxrwxrwx    1 root     root            31 Aug  1  2023 /usr/lib/libgstinterfaces-0.10.so.0 -> libgstinterfaces-0.10.so.0.18.0
+-rwxr-xr-x    1 root     root         58864 Aug  1  2023 /usr/lib/libgstinterfaces-0.10.so.0.18.0
+lrwxrwxrwx    1 root     root            11 Aug  1  2023 /usr/lib/libtag.so -> libtag.so.1
+lrwxrwxrwx    1 root     root            15 Aug  1  2023 /usr/lib/libtag.so.1 -> libtag.so.1.5.0
+-rwxr-xr-x    1 root     root        329232 Aug  1  2023 /usr/lib/libtag.so.1.5.0
+lrwxrwxrwx    1 root     root            13 Aug  1  2023 /usr/lib/libtag_c.so -> libtag_c.so.0
+lrwxrwxrwx    1 root     root            17 Aug  1  2023 /usr/lib/libtag_c.so.0 -> libtag_c.so.0.0.0
+-rwxr-xr-x    1 root     root         13536 Aug  1  2023 /usr/lib/libtag_c.so.0.0.0
+lrwxrwxrwx    1 root     root            17 Aug  1  2023 /usr/lib/libtasn1.so -> libtasn1.so.6.4.2
+lrwxrwxrwx    1 root     root            17 Aug  1  2023 /usr/lib/libtasn1.so.6 -> libtasn1.so.6.4.2
+-rwxr-xr-x    1 root     root         57480 Aug  1  2023 /usr/lib/libtasn1.so.6.4.2
+lrwxrwxrwx    1 root     root            27 Aug  1  2023 /usr/lib/libthread_db.so -> ../../lib/libthread_db.so.1
+lrwxrwxrwx    1 root     root            33 Aug  1  2023 /usr/lib/libtinysegmenter-icuplugin.so -> libtinysegmenter-icuplugin.so.1.0
+lrwxrwxrwx    1 root     root            33 Aug  1  2023 /usr/lib/libtinysegmenter-icuplugin.so.1 -> libtinysegmenter-icuplugin.so.1.0
+-rwxr-xr-x    1 root     root        160592 Aug  1  2023 /usr/lib/libtinysegmenter-icuplugin.so.1.0
+lrwxrwxrwx    1 root     root            19 Aug  1  2023 /usr/lib/libtmd_utils.so -> libtmd_utils.so.1.0
+lrwxrwxrwx    1 root     root            19 Aug  1  2023 /usr/lib/libtmd_utils.so.1 -> libtmd_utils.so.1.0
+-rwxr-xr-x    1 root     root         41444 Aug  1  2023 /usr/lib/libtmd_utils.so.1.0
+lrwxrwxrwx    1 root     root            14 Aug  1  2023 /usr/lib/libtodo.so -> libtodo.so.1.0
+lrwxrwxrwx    1 root     root            14 Aug  1  2023 /usr/lib/libtodo.so.1 -> libtodo.so.1.0
+-rwxr-xr-x    1 root     root         25048 Aug  1  2023 /usr/lib/libtodo.so.1.0
+lrwxrwxrwx    1 root     root            20 Aug  1  2023 /usr/lib/libtodoKindle.so -> libtodoKindle.so.1.0
+lrwxrwxrwx    1 root     root            20 Aug  1  2023 /usr/lib/libtodoKindle.so.1 -> libtodoKindle.so.1.0
+-rwxr-xr-x    1 root     root         52496 Aug  1  2023 /usr/lib/libtodoKindle.so.1.0
+-rwxr-xr-x    1 root     root       1711036 Aug  1  2023 /usr/lib/libtts_engine.so
+lrwxrwxrwx    1 root     root            16 Aug  1  2023 /usr/lib/libtts_engine.so.1.6 -> libtts_engine.so
+lrwxrwxrwx    1 root     root            19 Aug  1  2023 /usr/lib/libxtables.so -> libxtables.so.7.1.0
+lrwxrwxrwx    1 root     root            19 Aug  1  2023 /usr/lib/libxtables.so.7 -> libxtables.so.7.1.0
+-rwxr-xr-x    1 root     root         37400 Aug  1  2023 /usr/lib/libxtables.so.7.1.0
+
+/usr/lib/xtables:
+total 663
+drwxr-xr-x    2 root     root          3072 Aug  1  2023 .
+drwxr-xr-x   35 root     root         26624 Aug  1  2023 ..
+-rwxr-xr-x    1 root     root          7096 Aug  1  2023 libipt_CLUSTERIP.so
+-rwxr-xr-x    1 root     root          7544 Aug  1  2023 libipt_DNAT.so
+-rwxr-xr-x    1 root     root          5760 Aug  1  2023 libipt_ECN.so
+-rwxr-xr-x    1 root     root          7176 Aug  1  2023 libipt_LOG.so
+-rwxr-xr-x    1 root     root          5940 Aug  1  2023 libipt_MASQUERADE.so
+-rwxr-xr-x    1 root     root          4292 Aug  1  2023 libipt_MIRROR.so
+-rwxr-xr-x    1 root     root          5168 Aug  1  2023 libipt_NETMAP.so
+-rwxr-xr-x    1 root     root          6060 Aug  1  2023 libipt_REDIRECT.so
+-rwxr-xr-x    1 root     root          7024 Aug  1  2023 libipt_REJECT.so
+-rwxr-xr-x    1 root     root          6960 Aug  1  2023 libipt_SAME.so
+-rwxr-xr-x    1 root     root          7524 Aug  1  2023 libipt_SNAT.so
+-rwxr-xr-x    1 root     root          5496 Aug  1  2023 libipt_TTL.so
+-rwxr-xr-x    1 root     root          6060 Aug  1  2023 libipt_ULOG.so
+-rwxr-xr-x    1 root     root          5332 Aug  1  2023 libipt_ah.so
+-rwxr-xr-x    1 root     root          7916 Aug  1  2023 libipt_icmp.so
+-rwxr-xr-x    1 root     root          6160 Aug  1  2023 libipt_realm.so
+-rwxr-xr-x    1 root     root          5604 Aug  1  2023 libipt_ttl.so
+-rwxr-xr-x    1 root     root          4292 Aug  1  2023 libipt_unclean.so
+-rwxr-xr-x    1 root     root          5324 Aug  1  2023 libxt_AUDIT.so
+-rwxr-xr-x    1 root     root          4932 Aug  1  2023 libxt_CHECKSUM.so
+-rwxr-xr-x    1 root     root          5248 Aug  1  2023 libxt_CLASSIFY.so
+-rwxr-xr-x    1 root     root          8684 Aug  1  2023 libxt_CONNMARK.so
+-rwxr-xr-x    1 root     root          5476 Aug  1  2023 libxt_CONNSECMARK.so
+-rwxr-xr-x    1 root     root          8352 Aug  1  2023 libxt_CT.so
+-rwxr-xr-x    1 root     root          6204 Aug  1  2023 libxt_DSCP.so
+-rwxr-xr-x    1 root     root         11556 Aug  1  2023 libxt_HMARK.so
+-rwxr-xr-x    1 root     root          5052 Aug  1  2023 libxt_IDLETIMER.so
+-rwxr-xr-x    1 root     root          6024 Aug  1  2023 libxt_LED.so
+-rwxr-xr-x    1 root     root          7432 Aug  1  2023 libxt_MARK.so
+-rwxr-xr-x    1 root     root          5748 Aug  1  2023 libxt_NFLOG.so
+-rwxr-xr-x    1 root     root          7140 Aug  1  2023 libxt_NFQUEUE.so
+-rwxr-xr-x    1 root     root          4304 Aug  1  2023 libxt_NOTRACK.so
+-rwxr-xr-x    1 root     root          6976 Aug  1  2023 libxt_RATEEST.so
+-rwxr-xr-x    1 root     root          5136 Aug  1  2023 libxt_SECMARK.so
+-rwxr-xr-x    1 root     root         11236 Aug  1  2023 libxt_SET.so
+-rwxr-xr-x    1 root     root          5672 Aug  1  2023 libxt_TCPMSS.so
+-rwxr-xr-x    1 root     root          7000 Aug  1  2023 libxt_TCPOPTSTRIP.so
+-rwxr-xr-x    1 root     root          5736 Aug  1  2023 libxt_TEE.so
+-rwxr-xr-x    1 root     root          7324 Aug  1  2023 libxt_TOS.so
+-rwxr-xr-x    1 root     root          7292 Aug  1  2023 libxt_TPROXY.so
+-rwxr-xr-x    1 root     root          4288 Aug  1  2023 libxt_TRACE.so
+-rwxr-xr-x    1 root     root          8124 Aug  1  2023 libxt_addrtype.so
+-rwxr-xr-x    1 root     root          6184 Aug  1  2023 libxt_cluster.so
+-rwxr-xr-x    1 root     root          4932 Aug  1  2023 libxt_comment.so
+-rwxr-xr-x    1 root     root          6972 Aug  1  2023 libxt_connbytes.so
+-rwxr-xr-x    1 root     root          7308 Aug  1  2023 libxt_connlimit.so
+-rwxr-xr-x    1 root     root          5568 Aug  1  2023 libxt_connmark.so
+-rwxr-xr-x    1 root     root         17852 Aug  1  2023 libxt_conntrack.so
+-rwxr-xr-x    1 root     root          4924 Aug  1  2023 libxt_cpu.so
+-rwxr-xr-x    1 root     root          7636 Aug  1  2023 libxt_dccp.so
+-rwxr-xr-x    1 root     root          6948 Aug  1  2023 libxt_devgroup.so
+-rwxr-xr-x    1 root     root          6220 Aug  1  2023 libxt_dscp.so
+-rwxr-xr-x    1 root     root          5812 Aug  1  2023 libxt_ecn.so
+-rwxr-xr-x    1 root     root          5252 Aug  1  2023 libxt_esp.so
+-rwxr-xr-x    1 root     root         16212 Aug  1  2023 libxt_hashlimit.so
+-rwxr-xr-x    1 root     root          5056 Aug  1  2023 libxt_helper.so
+-rwxr-xr-x    1 root     root          8616 Aug  1  2023 libxt_iprange.so
+-rwxr-xr-x    1 root     root          8548 Aug  1  2023 libxt_ipvs.so
+-rwxr-xr-x    1 root     root          5204 Aug  1  2023 libxt_length.so
+-rwxr-xr-x    1 root     root          6944 Aug  1  2023 libxt_limit.so
+-rwxr-xr-x    1 root     root          5068 Aug  1  2023 libxt_mac.so
+-rwxr-xr-x    1 root     root          5496 Aug  1  2023 libxt_mark.so
+-rwxr-xr-x    1 root     root          9864 Aug  1  2023 libxt_multiport.so
+-rwxr-xr-x    1 root     root          5180 Aug  1  2023 libxt_nfacct.so
+-rwxr-xr-x    1 root     root          5868 Aug  1  2023 libxt_osf.so
+-rwxr-xr-x    1 root     root         11672 Aug  1  2023 libxt_owner.so
+-rwxr-xr-x    1 root     root          7036 Aug  1  2023 libxt_physdev.so
+-rwxr-xr-x    1 root     root          5776 Aug  1  2023 libxt_pkttype.so
+-rwxr-xr-x    1 root     root         11428 Aug  1  2023 libxt_policy.so
+-rwxr-xr-x    1 root     root          4924 Aug  1  2023 libxt_quota.so
+-rwxr-xr-x    1 root     root         10440 Aug  1  2023 libxt_rateest.so
+-rwxr-xr-x    1 root     root         10224 Aug  1  2023 libxt_recent.so
+-rwxr-xr-x    1 root     root          5592 Aug  1  2023 libxt_rpfilter.so
+-rwxr-xr-x    1 root     root         11236 Aug  1  2023 libxt_sctp.so
+-rwxr-xr-x    1 root     root          9204 Aug  1  2023 libxt_set.so
+-rwxr-xr-x    1 root     root          5032 Aug  1  2023 libxt_socket.so
+-rwxr-xr-x    1 root     root          4476 Aug  1  2023 libxt_standard.so
+-rwxr-xr-x    1 root     root          5992 Aug  1  2023 libxt_state.so
+-rwxr-xr-x    1 root     root          6392 Aug  1  2023 libxt_statistic.so
+-rwxr-xr-x    1 root     root          8284 Aug  1  2023 libxt_string.so
+-rwxr-xr-x    1 root     root          8972 Aug  1  2023 libxt_tcp.so
+-rwxr-xr-x    1 root     root          5156 Aug  1  2023 libxt_tcpmss.so
+-rwxr-xr-x    1 root     root         11356 Aug  1  2023 libxt_time.so
+-rwxr-xr-x    1 root     root          6340 Aug  1  2023 libxt_tos.so
+-rwxr-xr-x    1 root     root          7664 Aug  1  2023 libxt_u32.so
+-rwxr-xr-x    1 root     root          6116 Aug  1  2023 libxt_udp.so
+ls: /etc/upstart/*ble*: No such file or directory
+ls: /etc/upstart/*ace*: No such file or directory
+ls: /etc/upstart/*aipc*: No such file or directory
+-rw-r--r--    1 root     root           730 Aug  1  2023 /etc/upstart/asr_bt_reboot.conf
+-rw-r--r--    1 root     root           909 Aug  1  2023 /etc/upstart/asr_bt_userstore.conf
+-rw-r--r--    1 root     root          1007 Aug  1  2023 /etc/upstart/btd.conf
+-rw-r--r--    1 root     root          1246 Aug  1  2023 /etc/upstart/btfd.conf
+>>> libbtcli / libacebt exported functions:
+aceBT_getSupportedSession
+aceBT_openSession
+aceBT_closeSession
+aceBT_bleAddIncludedService
+aceBT_bleAddCharacteristicsByValue
+aceBT_initBeaconData
+aceBT_appendManufactureId
+aceBT_appendServiceData
+aceBT_appendServiceUUIDs
+aceBT_RegisterBeaconClient
+aceBT_startBeaconWithScanResponse
+aceBT_startBeacon
+aceBT_stopBeacon
+aceBT_deregisterBeaconClient
+ble_cb_handler
+aceBT_bleRegister
+aceBT_getMtu
+aceBT_bleRequestConnectionPriority
+gatts_cb_handler
+aceBT_bleRegisterGattServer
+aceBT_bleGattSendResponse
+aceBT_bleGattNotifyCharacteristicsChanged
+aceBT_bleGattConfigureMTU
+aceBT_bleDeRegisterGattServer
+aceBT_bleCreateGattService
+aceBT_bleAddCharacteristics
+aceBT_bleAddCharacteristicsWithDesc
+aceBT_bleAddDescriptor
+aceBT_RegisterBeaconClient
+aceBT_startBeaconWithScanResponse
+aceBT_stopBeacon
+aceBT_deregisterBeaconClient
+aceBT_bleRegister
+aceBT_getMtu
+aceBT_bleRequestConnectionPriority
+aceBT_bleRegisterGattServer
+aceBT_bleGattSendResponse
+aceBT_bleGattNotifyCharacteristicsChanged
+aceBT_bleDeRegisterGattServer
+aceBT_bleAddIncludedService
+aceBT_bleAddCharacteristics
+aceBT_bleAddCharacteristicsWithDesc
+aceBT_bleAddCharacteristicsByValue
+aceBT_getSupportedSession
+aceBT_openSession
+aceBT_closeSession
+aceBT_bleAddIncludedService
+aceBT_bleAddCharacteristicsByValue
+aceBT_initBeaconData
+aceBT_appendManufactureId
+aceBT_appendServiceData
+aceBT_appendServiceUUIDs
+aceBT_RegisterBeaconClient
+aceBT_startBeaconWithScanResponse
+aceBT_startBeacon
+aceBT_stopBeacon
+aceBT_deregisterBeaconClient
+ble_cb_handler
+aceBT_bleRegister
+aceBT_getMtu
+aceBT_bleRequestConnectionPriority
+gatts_cb_handler
+aceBT_bleRegisterGattServer
+aceBT_bleGattSendResponse
+aceBT_bleGattNotifyCharacteristicsChanged
+aceBT_bleGattConfigureMTU
+aceBT_bleDeRegisterGattServer
+aceBT_bleCreateGattService
+aceBT_bleAddCharacteristics
+aceBT_bleAddCharacteristicsWithDesc
+aceBT_bleAddDescriptor
+aceBT_RegisterBeaconClient
+aceBT_startBeaconWithScanResponse
+aceBT_stopBeacon
+aceBT_deregisterBeaconClient
+aceBT_bleRegister
+aceBT_getMtu
+aceBT_bleRequestConnectionPriority
+aceBT_bleRegisterGattServer
+aceBT_bleGattSendResponse
+aceBT_bleGattNotifyCharacteristicsChanged
+aceBT_bleDeRegisterGattServer
+aceBT_bleAddIncludedService
+aceBT_bleAddCharacteristics
+aceBT_bleAddCharacteristicsWithDesc
+aceBT_bleAddCharacteristicsByValue
+aceBT_getSupportedSession
+aceBT_openSession
+aceBT_closeSession
+aceBT_bleAddIncludedService
+aceBT_bleAddCharacteristicsByValue
+aceBT_initBeaconData
+aceBT_appendManufactureId
+aceBT_appendServiceData
+aceBT_appendServiceUUIDs
+aceBT_RegisterBeaconClient
+aceBT_startBeaconWithScanResponse
+aceBT_startBeacon
+aceBT_stopBeacon
+aceBT_deregisterBeaconClient
+ble_cb_handler
+aceBT_bleRegister
+aceBT_getMtu
+aceBT_bleRequestConnectionPriority
+gatts_cb_handler
+aceBT_bleRegisterGattServer
+aceBT_bleGattSendResponse
+aceBT_bleGattNotifyCharacteristicsChanged
+aceBT_bleGattConfigureMTU
+aceBT_bleDeRegisterGattServer
+aceBT_bleCreateGattService
+aceBT_bleAddCharacteristics
+aceBT_bleAddCharacteristicsWithDesc
+aceBT_bleAddDescriptor
+aceBT_RegisterBeaconClient
+aceBT_startBeaconWithScanResponse
+aceBT_stopBeacon
+aceBT_deregisterBeaconClient
+aceBT_bleRegister
+aceBT_getMtu
+aceBT_bleRequestConnectionPriority
+aceBT_bleRegisterGattServer
+aceBT_bleGattSendResponse
+aceBT_bleGattNotifyCharacteristicsChanged
+aceBT_bleDeRegisterGattServer
+aceBT_bleAddIncludedService
+aceBT_bleAddCharacteristics
+aceBT_bleAddCharacteristicsWithDesc
+aceBT_bleAddCharacteristicsByValue
+connectionInitStateEnter
+connectionInitStateExit
+connectionInitStateEventHandler
+connectionExitStateEnter
+connectionExitStateExit
+connectionExitStateEventHandler
+connectWaitStateEnter
+connectWaitStateExit
+connectWaitStateEventHandler
+btDiscoveryInProgress
+btConfirmationAlert
+btConfirmationEvent
+btDiscoveryCompleted
+btNotConfirmed
+BTConnectionHelper
+Connect_Result
+Bond_Result
+connectionInitStateEnter
+connectionInitStateExit
+pairTimeoutCb
+pairStateEnter
+
+--- [3] TESTING BTUI BLE_MODE (Mode 4 -> BLE_MODE 0 -> pairconnect) ---
+*** Welcome to TESTUI :) ***
+Available commands:
+ 1. TurnOnBluetoothvalue 0 = voice view, 2 = audible 4 = ble_provision
+ 2. TurnOffBluetooth-{value}
+ 3. Scan
+ 4. A2DPDiscovery
+ 5. CancelScan
+ 6. Pair
+ 7. CancelPairing
+ 8. Unpair
+ 9. Connect
+10. Disconnect
+11. Play
+12. Pause
+13. Stop
+14. SetDiscoverable
+15. SetNonDiscoverable
+16. SetConnectable
+17. SetNonConnectable
+18. ShowPaired
+19. ShowConnected
+20. ShowDiscovered
+21. ShowAllDevice
+22. Disable_auto_connect
+23. Enable_auto_connect
+24. Disable_PTS_Mode
+25. Enable_PTS_Mode
+26. Enable_BT_Perf_Logging
+27. Enable_BT_Snoop_Logging
+28. Disable_BT_perf_logging
+29. Disable_BT_Snoop_Logging
+30. Set_bsatrace_level-{value}
+31. Enable_BT_log_to_file
+32. Disable_BT_log_to_file
+33. UpdatePlayBackState<playback_state 1= stopped, 2=> paused, 3 =>playing, 4=>fastfwd , 5 =>rewinding, 6=>skip backwards> :<playpos (ms)>
+34. UpdateMetaData<track_title>:<track_artist>:<album_name>:number of track>:<track number>:<genre>:<playing time (ms)>
+35. PairUserConfirmation<value 0= declined 1=confirmed>-{value}
+36. UpdateBtMode<mode 0 =voiceview 1= audible-{value}
+37. Discover_script
+38. On_Off_Script
+39. Connect_Disconnect_script
+40. BLE_MODEvalue 0
+
+Enter a command: UpdateBtMode [4]
+
+Enter a command: TurnOnBluetooth [4]
+
+Enter a command: 
+ BT_EnableCallbackResult = 0 
+_Mode = 4 
+INFO[16425]: BT Client :: start
+Client count: 0
+cleanGarbageBufferPool()
+resetHandlerTable()
+mutexConditionInit(1)
+initRingBuffer(1)
+Before:
+Handler count: 0
+After:
+Handler count: 1
+uuid[0] = 61440, handler[0] = 1995315308
+INFO[16425]: BT Client :: opened session with 30234856 main_done =0
+>INFO[16425]: ****************************************************
+INFO[16425]: help :: lists all available console commands
+INFO[16425]: quit :: Exit
+INFO[16425]: enable :: enables bluetooth
+INFO[16425]: disable :: disables bluetooth
+INFO[16425]: radiostate :: Retrieves the Adapter state
+INFO[16425]: scan :: Initiates device scan
+INFO[16425]: stopscan :: Stops device scan
+INFO[16425]: pair :: Initiates device pairing
+INFO[16425]: pairconnect :: Performs device pairing and connection
+INFO[16425]: unpair :: Initiates device unpairing
+INFO[16425]: paircancel :: Cancels an ongoing device pairing
+INFO[16425]: accept :: Accept incoming connection (y or n)
+INFO[16425]: pin :: Enter pairing pin
+INFO[16425]: connect :: Initiates profile connect calls
+INFO[16425]: disconnect :: Initiates profile disconnect calls
+INFO[16425]: discoverable :: Set the discoverability state (y or n)
+INFO[16425]: bondedlist :: gets list of bonded devices
+INFO[16425]: connectedlist :: gets list of connected devices
+INFO[16425]: bondedcount :: gets number of bonded devices
+INFO[16425]: connectedcount :: gets number of connected devices
+INFO[16425]: bondstate :: gets bond state of given device
+INFO[16425]: connstate ::gets connection state of given device
+INFO[16425]: getuuids :: Retrieves the UUID list
+INFO[16425]: getuuidscount :: Retrieves UUID count
+INFO[16425]: getremotename :: gets name of remote bluetooth device
+INFO[16425]: getadaptername :: gets adapter name of bluetooth device
+INFO[16425]: setadaptername :: sets adapter name of bluetooth device
+INFO[16425]: startbeacon :: Start beaconing 
+INFO[16425]: startbeaconScanResp :: Start beaconing with scan response 
+INFO[16425]: stopbeacon :: Start beaconing with scan response 
+INFO[16425]: createGattServer ::creteGattServer 
+INFO[16425]: sendResponse ::sendResponse 
+INFO[16425]: sendNotify ::sendNotification 
+INFO[16425]: configureMtu ::mtu change request 
+INFO[16425]: getMtu ::mtu get request 
+INFO[16425]: unRegisterAll ::unRegisterAll 
+INFO[16425]: connPrioReq ::connection priority change request 
+INFO[16425]: ****************************************************
+>>>>>>>>INFO[16425]: shutdown client test app
+Client count: 1
+Client[0]: uuid=61440, pid=16425, tid=37904
+Handler count: 1
+uuid[0] = 61440, handler[0] = 1995315308
+Handler count: 0
+Handler count: 0
+mutexConditionDestroy(1)
+mutexConditionDestroy(1) done
+serverId is bigger than MAX_TOTAL_SERVER_NUM
+
+--- [4] SYSLOG AFTER BLE_MODE TEST (NO CVM SPAM) ---
+261031:184639 tmd[3017]: I rate_stats2:FAILED:id=16,session_time=2658ms,chunk_time=2657ms,chunk_len=4625 of 4625,adj_len=4625,session_rate=1740 B/sec,chunk_rate=1740 B/sec,overall=2s,active=2s,lost=0s,type=(unknown),start_wss=-1,end_wss=-1,c1_redir=0ms,c2_dns=134ms,c3_conn=77ms,c4_ssl=2405ms,c5_pret=0ms,c6_dstart=0ms,c7_dend=38ms,c8_total=2657ms,try=1,mcc=,mnc=:
+261031:184639 tmd[3017]: I moreinfo:FAILED:id=16,curl=0 "No error",err=10 (The specified transfer request has been obliterated by the client):
+261031:184640 cmd[2959]: I def:req::Got a connection request:~:
+261031:184640 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184640 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184642 cmd[2959]: I def:req::Got a connection request:~:
+261031:184642 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184642 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184644 cmd[2959]: I def:req::Got a connection request:~:
+261031:184644 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184644 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184646 pmond[10408]: W def:::Unable to fetch the proc
+261031:184646 TESTUI[16425]: I BT-UI:Starting BT TEST UI::
+261031:184646 TESTUI[16425]: I BT-UI:BTUI::Subscribing to bluetooth events
+261031:184646 TESTUI[16425]: I BT-UI:InMainLoop::Looping on user input
+261031:184646 TESTUI[16425]: I BT-UI:mplay Starting::
+261031:184646 TESTUI[16425]: I BT-UI:::Waiting for play start
+261031:184646 TESTUI[16425]: I BT-UI:ProcessCommandIntParam::
+261031:184646 TESTUI[16425]: I lipc:evts:name=UpdateBtMode, origin=com.lab126.btui, fparam=4:Event sent
+261031:184646 BT-DAEMON[13913]: I MGR-UTILS:::result=4
+261031:184646 BT-DAEMON[13913]: I MGR-UTILS:LipcClientEventCallback:eventName=UpdateBtMode:Enqueue status=0
+261031:184646 BT-DAEMON[13913]: I MGR:BluetoothManager:Handle Event:UPDATE_BT_MODE new mode = 4.
+261031:184646 BT-DAEMON[13913]: I MGR:BluetoothManager:Updating new mode: 
+261031:184646 BT-DAEMON[13913]: I MGR-UTILS:PackRequestValue::eventName=SetMaxReconnectDevices
+261031:184646 BT-DAEMON[13913]: I AUTO-CONNECT:BluetoothAutoConnectManager:HandleEvent = SetMaxReconnectDevices:auto_connect_state=0
+261031:184646 BT-DAEMON[13913]: I AUTO-CONNECT:BluetoothAutoConnectStateMachineIdle:command = SetMaxReconnectDevices:m_auto_connect_state=0
+261031:184646 BT-DAEMON[13913]: I AUTO-CONNECT:::SetNumDeviceToReconnect = 1
+261031:184646 cmd[2959]: I def:req::Got a connection request:~:
+261031:184646 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184646 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184648 TESTUI[16425]: I BT-UI:ProcessCommandIntParam::
+261031:184648 TESTUI[16425]: I lipc:evts:name=TurnOnBluetooth, origin=com.lab126.btui, fparam=4:Event sent
+261031:184648 BT-DAEMON[13913]: I MGR-UTILS:::result=4
+261031:184648 BT-DAEMON[13913]: I MGR-UTILS:LipcClientEventCallback:eventName=TurnOnBluetooth:Enqueue status=0
+261031:184648 BT-DAEMON[13913]: I MGR:BluetoothManager:HandleEvent:Mode Updated mode = 4
+261031:184648 BT-DAEMON[13913]: I MGR:BluetoothManager:HandleEvent:TURN_ON_BLUETOOTH
+261031:184648 BT-DAEMON[13913]: I MGR:BLE ON, ACE Init::
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::aceAIPC_open()
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::aceAIPC_open 
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::aceAIPC_open FD 13
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::mlock failed.Success
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::resetAIPC()
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::resetMempool()
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::resetServerTable()
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::resetSubscriberTable()
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::resetClientTable()
+261031:184648 BT-DAEMON[13913]: I ACEBT-Manager:::bt_hal_init
+261031:184648 BT-DAEMON[13913]: I BTHAL-STACK:getGattInterface::
+261031:184648 BT-DAEMON[13913]: I ACEBT-Manager:::bt_gatt_init() Gatt HAL initialised 1995407880
+261031:184648 BT-DAEMON[13913]: I ACEBT-Manager:::acebt_beacon_mgr_ipc_init
+261031:184648 BT-DAEMON[13913]: I ACEBT-Manager:::register_ipc_handler() 4 MinAPI 191 MAXAPI 500
+261031:184648 BT-DAEMON[13913]: I ACEBT-Manager:::acebt_gatts_ipc_init
+261031:184648 BT-DAEMON[13913]: I ACEBT-Manager:::register_ipc_handler() 5 MinAPI 1f5 MAXAPI 600
+261031:184648 BT-DAEMON[13913]: I ACEBT-Manager:::acebt_ble_ipc_init
+261031:184648 BT-DAEMON[13913]: I ACEBT-Manager:::register_ipc_handler() 6 MinAPI 259 MAXAPI 700
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::aceAIPC_registerServiceHandler server_id: 65535
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::registerServer(100)
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::shmemOpen()
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::shmemOpen(already OPEN)
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::Before:
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::allocateResourceForServer(100)
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::server count 0
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::allocaed server UUID 100, id 0, pid 13913, tid 37968 server type 0
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::After:
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::server UUID 100, id 0, pid 13913, tid 37968 type 0 alive 1
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::serviceId = 0
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::aceAIPC_registerHandler(100)
+261031:184648 BT-DAEMON[13913]: I BTHAL-DM:::Set BLE Local Privacy : 1
+261031:184648 BT-DAEMON[13913]: I BSA_SERVER:::BSA_DmSetConfigInit
+261031:184648 BT-DAEMON[13913]: I BSA_SERVER:::BSA_DmSetConfig
+261031:184648 BT-DAEMON[13913]: I BTHAL-DM:::BluetoothHalDmSetVisibility
+261031:184648 BT-DAEMON[13913]: I BTHAL-DM:::Set Visibility Discoverable:0 Connectable:0
+261031:184648 BT-DAEMON[13913]: I BSA_SERVER:::BSA_DmSetConfigInit
+261031:184648 BT-DAEMON[13913]: I BSA_SERVER:::BSA_DmSetConfig
+261031:184648 BT-DAEMON[13913]: I UTILS:GetBluetoothManagerLipcHandle::
+261031:184648 BT-DAEMON[13913]: I UTILS:GetBluetoothManagerLipcHandle::
+261031:184648 BT-DAEMON[13913]: I UTILS:safeLipcSendEvent::
+261031:184648 BT-DAEMON[13913]: I lipc:evts:name=Enable_Result, origin=com.lab126.btmd, fparam=0:Event sent
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::serverThread()
+261031:184648 BT-DAEMON[13913]: I ACE-AIPC:::Server thread Id:0 started.
+261031:184648 btfd[3003]: I btfdUtils:btfd_lipcBtdEventHandlerCallback:ev=Enable_Result:
+261031:184648 btfd[3003]: I btfdUtils:BTFD state change ignored:previous=0, current=1, new=1:
+261031:184648 btfd[3003]: I btfdPowerSave:handleBtPowerSaveLogic:Entry :: prevBTstate=0 :: currentBTstate=1        :: previousMode=MODE_ASR :: currentMode=MODE_NONE :: PlaybackInProgress=0:
+261031:184648 btfd[3003]: I gmainUtils:stopPowerSaveTimer:Timer is not running. No need to stop:
+261031:184648 cmd[2959]: I def:req::Got a connection request:~:
+261031:184648 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184648 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184649 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184650 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184650 cmd[2959]: I def:req::Got a connection request:~:
+261031:184650 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184650 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184651 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184651 TESTUI[16425]: I ACEBT:::aceBT_openSession session type = dual mode session
+261031:184651 TESTUI[16425]: I ACE-AIPC:::aceAIPC_registerClient()
+261031:184651 TESTUI[16425]: I ACE-AIPC:::shmemOpen()
+261031:184651 TESTUI[16425]: I ACE-AIPC:::Find a slot 0 for client uuid 61440
+261031:184651 TESTUI[16425]: I ACE-AIPC:::aceAIPC_registerCallbackHandler() m_serverId = ffff  
+261031:184651 TESTUI[16425]: I ACE-AIPC:::registerServer(61440)
+261031:184651 TESTUI[16425]: I ACE-AIPC:::shmemOpen()
+261031:184651 TESTUI[16425]: I ACE-AIPC:::shmemOpen(already OPEN)
+261031:184651 TESTUI[16425]: I ACE-AIPC:::Before:
+261031:184651 TESTUI[16425]: I ACE-AIPC:::server UUID 100, id 0, pid 13913, tid 37968 type 0 alive 1
+261031:184651 TESTUI[16425]: I ACE-AIPC:::allocateResourceForServer(61440)
+261031:184651 TESTUI[16425]: I ACE-AIPC:::server count 1
+261031:184651 TESTUI[16425]: I ACE-AIPC:::allocaed server UUID 61440, id 1, pid 16425, tid 37904 server type 1
+261031:184651 TESTUI[16425]: I ACE-AIPC:::After:
+261031:184651 TESTUI[16425]: I ACE-AIPC:::server UUID 100, id 0, pid 13913, tid 37968 type 0 alive 1
+261031:184651 TESTUI[16425]: I ACE-AIPC:::server UUID 61440, id 1, pid 16425, tid 37904 type 1 alive 1
+261031:184651 TESTUI[16425]: I ACE-AIPC:::callback serviceId = 1
+261031:184651 TESTUI[16425]: I ACE-AIPC:::aceAIPC_registerHandler(61440)
+261031:184651 TESTUI[16425]: I ACEBT:::Register for client_id : 61440 server_id : 0 callback_id : 1
+261031:184651 TESTUI[16425]: I ACEBT:::### OpenSession() session Id:1cd58e8
+261031:184651 TESTUI[16425]: I ACE-AIPC:::aceAIPC_rpcSync(): pid 16425, serverId 1, remoteServerId 0, functionId 0, length 11
+261031:184651 TESTUI[16425]: I ACE-AIPC:::Allocate buffer from pool:0 and size =11
+261031:184651 TESTUI[16425]: I ACE-AIPC:::successfully reserved one buffer size 10, type 0, slot 0
+261031:184651 TESTUI[16425]: I ACE-AIPC:::signalServerAndWait(0)
+261031:184651 TESTUI[16425]: I ACE-AIPC:::SYNC Call returned on: 0 
+261031:184651 TESTUI[16425]: I ACEBT:::Session is successfuly  opened with session id:1cd58e8
+261031:184651 TESTUI[16425]: I ACE-AIPC:::callbackThread()
+261031:184651 TESTUI[16425]: I ACE-AIPC:::Callback Serverthread id:1 started. pid=16425, tid=21584
+261031:184651 BT-DAEMON[13913]: I ACE-AIPC:::process sync call from pid 16425, uuid 61440, function id 0, length 11
+261031:184651 BT-DAEMON[13913]: I ACE-AIPC:::serviceHandler()
+261031:184651 BT-DAEMON[13913]: I UTILS::: server_handler
+261031:184651 BT-DAEMON[13913]: I ACEBT-Manager:::WorkerForAipcEvent() 0 
+261031:184651 BT-DAEMON[13913]: I ACEBT-Manager:::SESSION_OPEN >>>
+261031:184651 BT-DAEMON[13913]: I ACEBT-Manager:::API_SESSION_OPEN :: Register  session:1cd58e8 clientId:61440 callbackId:1 @ index:0
+261031:184651 BT-DAEMON[13913]: I UTILS:::server_handler, Data handle=1953254876, dataLength=11,
+261031:184651 BT-DAEMON[13913]: I ACE-AIPC:::Allocate buffer from pool:0 and size =11
+261031:184651 BT-DAEMON[13913]: I ACE-AIPC:::successfully reserved one buffer size 10, type 0, slot 0
+261031:184652 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184652 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184652 cmd[2959]: I def:req::Got a connection request:~:
+261031:184652 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184652 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184653 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184653 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184653 rcm_main[2980]: I refreshcache:trySortClients:status=16:Unable to lock mutex
+261031:184654 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184654 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184654 cmd[2959]: I def:req::Got a connection request:~:
+261031:184654 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184654 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184655 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184655 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184656 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184656 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184656 cmd[2959]: I def:req::Got a connection request:~:
+261031:184656 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184656 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184657 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184657 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184658 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184658 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184658 cmd[2959]: I def:req::Got a connection request:~:
+261031:184658 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184658 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184659 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184659 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184700 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184700 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184700 cmd[2959]: I def:req::Got a connection request:~:
+261031:184700 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184700 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184701 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184701 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184702 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184702 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184702 cmd[2959]: I def:req::Got a connection request:~:
+261031:184702 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184702 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184703 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184703 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184704 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184704 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184704 cmd[2959]: I def:req::Got a connection request:~:
+261031:184704 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184704 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184705 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184705 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184706 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184706 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184706 cmd[2959]: I def:req::Got a connection request:~:
+261031:184706 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184706 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184707 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184707 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184708 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184708 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184708 cmd[2959]: I def:req::Got a connection request:~:
+261031:184708 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184708 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:184708 rcm_main[2980]: I refreshcache:trySortClients:status=16:Unable to lock mutex
+261031:184709 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184709 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!
+261031:184709 TESTUI[16425]: I ACEBT:::aceBT_closeSession session session = 30234856
+261031:184709 TESTUI[16425]: I ACE-AIPC:::aceAIPC_rpcSync(): pid 16425, serverId 1, remoteServerId 0, functionId 1, length 9
+261031:184709 TESTUI[16425]: I ACE-AIPC:::Allocate buffer from pool:0 and size =9
+261031:184709 TESTUI[16425]: I ACE-AIPC:::successfully reserved one buffer size 10, type 0, slot 0
+261031:184709 TESTUI[16425]: I ACE-AIPC:::signalServerAndWait(0)
+261031:184709 TESTUI[16425]: I ACE-AIPC:::SYNC Call returned on: 0 
+261031:184709 TESTUI[16425]: I ACEBT:::cleanupSession() index = 0
+261031:184709 TESTUI[16425]: I ACE-AIPC:::aceAIPC_deregisterClient()
+261031:184709 TESTUI[16425]: I ACE-AIPC:::Find at slot 0 the client uuid 61440, deregister it
+261031:184709 TESTUI[16425]: I ACE-AIPC:::removeHandler(61440)
+261031:184709 TESTUI[16425]: I ACE-AIPC:::Before:
+261031:184709 TESTUI[16425]: I ACE-AIPC:::After:
+261031:184709 TESTUI[16425]: I ACE-AIPC:::Deregister the handler for this client
+261031:184709 TESTUI[16425]: I ACE-AIPC:::aceAIPC_deregisterServer(61440)
+261031:184709 TESTUI[16425]: I ACE-AIPC:::removeHandler(61440)
+261031:184709 TESTUI[16425]: I ACE-AIPC:::Before:
+261031:184709 TESTUI[16425]: I ACE-AIPC:::UUID 61440 not found
+261031:184709 TESTUI[16425]: I ACE-AIPC:::Before deregisterServer:
+261031:184709 TESTUI[16425]: I ACE-AIPC:::server UUID 100, id 0, pid 13913, tid 37968 type 0 alive 1
+261031:184709 TESTUI[16425]: I ACE-AIPC:::server UUID 61440, id 1, pid 16425, tid 37904 type 1 alive 1
+261031:184709 TESTUI[16425]: I ACE-AIPC:::deallocateResourceForServer(1)
+261031:184709 TESTUI[16425]: I ACE-AIPC:::server count 1, client count 0
+261031:184709 TESTUI[16425]: I ACE-AIPC:::server UUID 100, id 0, pid 13913, tid 37968 type 0 alive 1
+261031:184709 BT-DAEMON[13913]: I ACE-AIPC:::process sync call from pid 16425, uuid 61440, function id 1, length 9
+261031:184709 BT-DAEMON[13913]: I ACE-AIPC:::serviceHandler()
+261031:184709 BT-DAEMON[13913]: I UTILS::: server_handler
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::WorkerForAipcEvent() 1 
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::0 >>> 1cd58e8
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::API_SESSION_CLOSE :: Client found : 1cd58e8
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Dispatching to handle index 12 : 84
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Dispatching to handle index 1
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Dispatching to handle index 2
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Dispatching to handle index 3
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Dispatching to handle index 4
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::beacon_mgr_ipc_handler() ipc_function_id 1 length 9
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::close beacon session for session handle 1cd58e8
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Get gatt interface uuid app uuid e858cd01-0100-0000-0000-000000000000 
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::get_gattIdbyuuid() unable to find gatt ID
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager::: Unable to un-register client
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Dispatching to handle index 5
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::gatts_ipc_handler() ipc_function_id 1
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::close beacon session for session handle 1cd58e8
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Get gatt interface uuid app uuid e858cd01-0200-0000-0000-000000000000 
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::get_gattIdbyuuid() unable to find gatt ID
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Gatt Server un Registration failed
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::Dispatching to handle index 6
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::ble_ipc_handler() ipc_function_id 1
+261031:184709 BT-DAEMON[13913]: I ACEBT-Manager:::funcid 1 is not supported
+261031:184709 BT-DAEMON[13913]: I UTILS:::server_handler, Data handle=1953254876, dataLength=9,
+261031:184709 BT-DAEMON[13913]: I ACE-AIPC:::Allocate buffer from pool:0 and size =9
+261031:184709 BT-DAEMON[13913]: I ACE-AIPC:::successfully reserved one buffer size 10, type 0, slot 0
+261031:184710 TESTUI[16425]: I ACE-AIPC:::Client wait on server 1 timeout!
+261031:184710 TESTUI[16425]: I ACE-AIPC:::callbackThread(EXIT)
+261031:184710 TESTUI[16425]: I ACE-AIPC:::deallocateResourceForServer(65535)
+261031:184710 BT-DAEMON[13913]: I ACE-AIPC:::Client wait on server 0 timeout!

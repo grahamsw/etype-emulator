@@ -1,0 +1,697 @@
+=== E-TYPE BLUETOOTH SCAN & PAIR REPORT (v3) ===
+Sat Oct 31 18:35:01 UTC 2026
+--- [1] WIFI / OTA SAFETY CHECK ---
+-rw-r--r--    1 root     root          1062 Aug  1  2023 /etc/upstart/bootactions.conf
+-rw-r--r--    1 root     root          3150 Aug  1  2023 /etc/upstart/bootactions_monitor.conf
+-rw-r--r--    1 root     root          3981 Aug  1  2023 /etc/upstart/ota-update.conf
+-rw-r--r--    1 root     root           239 Aug  1  2023 /etc/upstart/otaupd.conf
+-rw-r--r--    1 root     root           238 Aug  1  2023 /etc/upstart/otav3.conf
+-rwxr-xr-x    1 root     root          5340 Aug  1  2023 /usr/bin/otaupd.bck
+-rwxr-xr-x    1 root     root        130360 Aug  1  2023 /usr/bin/otav3.bck
+--- [2] BTD / BSA_SERVER HID & SCAN CAPABILITIES ---
+_Jv_RegisterClasses
+_ITM_deregisterTMCloneTable
+_ITM_registerTMCloneTable
+_ZTVN10__cxxabiv117__class_type_infoE
+_ZTVN10__cxxabiv120__si_class_type_infoE
+_ZN9BLUELOTUS8BTHAL_DM32BluetoothHalDmSetBleLocalPrivacyEh
+_ZN9BLUELOTUS13BTHAL_MANAGER29BluetoothHalGetBtSnoopEnabledEv
+_ZN9BLUELOTUS8BTHAL_AV21BluetoothHalAvMsSleepEi
+_ZN9BLUELOTUS11BTHAL_UTILS24BluetoothHalGetCodStringEPKh
+_ZN9BLUELOTUS8BTHAL_AV19BluetoothHalAvStartEiii
+_ZN9BLUELOTUS13BTHAL_MANAGER38BluetoothHalManagerGetReconnectDevicesEPNS_12tBTM_HAL_DATE
+_ZN9BLUELOTUS13BTHAL_MANAGER35BluetoothHalManagerUpdateNameAndCodEPhS1_S1_
+_ZN9BLUELOTUS13BTHAL_MANAGER23BluetoothHalSetSecurityEh
+_ZN9BLUELOTUS8BTHAL_DM27BluetoothHalDmSetVisibilityEhh
+_ZN9BLUELOTUS13BTHAL_MANAGER41BluetoothHalManagerUpdateReconnectDevicesEPNS_12tBTM_HAL_DATEi
+_ZN9BLUELOTUS13BTHAL_MANAGER28BluetoothHalGetBsaLogEnabledEv
+_ZN9BLUELOTUS8BTHAL_AV19BluetoothHalAvCloseEPh
+_ZN9BLUELOTUS13BTHAL_MANAGER28BluetoothHalSetBsaLogEnabledEh
+_ZN9BLUELOTUS8BTHAL_AV20BluetoothHalAvResumeEv
+_ZN9BLUELOTUS8BTHAL_AV27BluetoothHalAvDisconnectAclEPh
+_ZN9BLUELOTUS13BTHAL_MANAGER31BluetoothHalManagerSetBtLoggingEP22tBSA_DM_LOGGING_PARAMS
+_ZN9BLUELOTUS8BTHAL_AV18BluetoothHalAvOpenEPh
+_ZN9BLUELOTUS13BTHAL_MANAGER30BluetoothHalManagerUpdateKeyDbEPhS1_h
+_ZN9BLUELOTUS8BTHAL_DM26BluetoothHalDmSetRemoteVIDEPhttt
+_ZN9BLUELOTUS13BTHAL_MANAGER34BluetoothHalManagerSetDiscoverableEh
+_ZN9BLUELOTUS13BTHAL_MANAGER29BluetoothHalSetBtSnoopEnabledEh
+_ZN9BLUELOTUS13BTHAL_MANAGER33BluetoothHalManagerSetConnectableEh
+_ZN9BLUELOTUS8BTHAL_AV22BluetoothHalAvRegisterEv
+_ZN9BLUELOTUS8BTHAL_AV19BluetoothHalAvPauseEv
+_ZN9BLUELOTUS13BTHAL_MANAGER31BluetoothHalManagerUpdateVidPidEPhtt
+_ZN9BLUELOTUS8BTHAL_AV18BluetoothHalAvStopEv
+_ZN9BLUELOTUS13BTHAL_MANAGER42BluetoothHalManagerUpdateTrustedServicesDbEPh
+_ZN9BLUELOTUS8BTHAL_AV21BluetoothHalAvMetaRspEPhPNS_22tBTHAL_AV_META_RSP_CMDE
+_ZN9BLUELOTUS13BTHAL_MANAGER21BluetoothHalSetEnableEh
+_ZN9BLUELOTUS8BTHAL_AV18BluetoothHalAvInitEh
+_ZN9BLUELOTUS13BTHAL_MANAGER45BluetoothHalManagerUpdateExplicitDisconnectedEPhi
+_ZN9BLUELOTUS13BTHAL_MANAGER35BluetoothHalManagerGetPairedDevicesEPNS_12tBTM_HAL_DATE
+_ZN9BLUELOTUS13BTHAL_MANAGER27BluetoothHalGetDiscoverableEv
+_ZN9BLUELOTUS8BTHAL_AV26BluetoothHalAvChannelWriteEPhi
+_ZN9BLUELOTUS13BTHAL_MANAGER30BluetoothHalManagerSetBtConfigEh
+g_hash_table_destroy
+g_hash_table_insert
+g_hash_table_new_full
+E UTILS:Error: safeLipcSendEvent  LipcSendEvent Failed:errorCode=%d:
+E UTILS:Error: safeLipcSendEventWithoutLogging  LipcSendEventWithoutLogging Failed:errorCode=%d:
+I UTILS:ConvertBDAddrToString:got null input:
+E UTILS:::BluetoothHalLockMutex pthread_mutex_lock failure Reason:%d
+E UTILS:::BluetoothHalUnlockMutex pthread_mutex_unlock failure Reason:%d
+I UTILS:::	Class of device:%02x:%02x:%02x => %s
+BTHAL_SEC_BLE_KEY_EVT
+BTHAL_SEC_BLE_PASSKEY_REQ_EVT
+Disable_auto_connect
+I POWER:BluetoothManager::PackRequest(DISABLE_AUTO_CONNECT, NULL,NULL, client_request.userData):failed, reason=%d:
+SetNonDiscoverable
+I POWER:BluetoothManager::PackRequest(SET_NON_DISCOVERABLE, NULL,NULL, client_request.userData):failed, reason=%d:
+SetNonConnectable
+I POWER:BluetoothManager::PackRequest(SET_NON_CONNECTABLE, NULL, NULL, client_request.userData):failed, reason=%d:
+I POWER:BluetoothManager::PackRequestValue(TURN_OFF_BLUETOOTH, NULL,(btm->GetBtMode() | BT_DISABLE_REASON_SUSPEND), this):failed, reason=%d:
+I POWER:BluetoothManager::PackRequestValue(TURN_ON_BLUETOOTH, NULL, (btm->GetBtMode() | BT_ENABLE_REASON_RESUME), client_request.userData):failed, reason=%d:
+Enable_auto_connect
+I POWER:BluetoothManager::PackRequest(ENABLE_AUTO_CONNECT, NULL,NULL, client_request.userData):failed, reason=%d:
+SetConnectable
+I POWER:BluetoothManager::PackRequest(SET_CONNECTABLE, NULL, NULL, client_request.userData):failed, reason=%d:
+Pincode Entry
+I PAIR:::BT device: Pin code reply status = %d
+E metrics:Could not allocate new metrics hash table::
+E metrics:Could not allocate new clickstream hash table::
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_BLE_KEY_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_BLE_PASSKEY_REQ_EVT from device 0x%x
+E MGR-UTILS:SetupLIPCFailed:reason=unableToSubscribeToEvent,error=%d:
+class_of_device
+is_discovered
+E MGR-UTILS:TurnOffBluetooth:Error: Unable to set wl PM to disable:WIFEXITED ret: %d, WEXITSTATUS ret: %d
+I MGR-UTILS:TurnOffBluetooth:main:wl PM has been set to disable
+I MGR-UTILS:BTM_UTILS::m_bt_interface->disable():failed, reason=%d:
+I MGR-UTILS:BTM_UTILS::m_bt_interface->disable():failed:reason=%d
+E MGR-UTILS:TurnOffBluetooth:Error: Unable to set wl PM to enable:WIFEXITED ret: %d, WEXITSTATUS ret: %d
+I MGR-UTILS:main:TurnOffBluetooth:wl PM has been set to enable
+I MGR-UTILS:TurnOffBluetooth:main:wl PM has been set to enable
+Disable
+Discover
+DiscoverA2DP
+EnableAutomation
+BTSnoopEnable
+BTDebugLogEnable
+BTPerfLogEnable
+I MGR-UTILS:SetBluetoothIntProperty:Enable :%d
+I MGR-UTILS:SetBluetoothIntProperty:Disable :%d
+CancelScan
+A2DPDiscovery
+SetDiscoverable
+Disable_BT_Snoop_Logging
+Enable_BT_Snoop_Logging
+Disable_BT_Debug_Logging
+Enable_BT_Debug_Logging
+Disable_BT_perf_logging
+Enable_BT_Perf_Logging
+E MGR-UTILS:TurnOnBluetooth:Error: Unable to set wl PM to disable:WIFEXITED ret: %d, WEXITSTATUS ret: %d
+I MGR-UTILS:TurnOnBluetooth:wl PM has been set to disable:main
+E MGR-UTILS:Error: Unable to launch BSA_SERVER::
+I MGR-UTILS:::enable bluetooth interface
+E MGR-UTILS:TurnOnBluetooth:Error: Unable to set wl PM to enable:WIFEXITED ret: %d, WEXITSTATUS ret: %d
+I MGR-UTILS:TurnOnBluetooth:main:wl PM has been set to enable
+I MGR-UTILS:BTM_UTILS::m_bt_interface->enable():failed, reason=%d:
+I MGR-UTILS:BTM_UTILS::m_bt_interface->enable():failed:reason=%d
+I MGR-UTILS:main:TurnOnBluetooth:wl PM has been set to enable
+E MGR-UTILS:RegisterManager:Input is NULL pointer:
+I MGR-UTILS:::	Class of device:%02x:%02x:%02x => %s
+I MGR-UTILS:GetDiscoveredList:prop=%s:
+I MGR-UTILS:::	Device is not discovered, by pass
+I MGR:PackRequestValue(TURN_OFF_BLUETOOTH, NULL,BT_DISABLE_REASON_ERROR, this):failed, reason=%d:
+echo 30880000.serial  > /sys/class/tty/ttymxc0/device/driver/unbind
+echo 30880000.serial > /sys/class/tty/ttymxc0/device/driver/bind
+Enable_Result
+I MGR::BluetoothManager:Set Connectable Success
+I MGR::BluetoothManager:Set Connectable Fail
+I MGR:BLE ON, ACE Init::
+I MGR:BLE ON failed, NO AIPC::
+I MGR:BluetoothManager:HandleEvent:BLE OFF
+Disable_Result
+>>> bsa_server strings:
+/dev/ttymxc2
+UIPC_Open ChId:%d
+I BSA_SERVER:::UIPC_Open ChId:%d
+UIPC_Close ChId:%d
+I BSA_SERVER:::UIPC_Close ChId:%d
+UIPC_Ioctl ChId:%d Request:%s (%d)
+I BSA_SERVER:::UIPC_Ioctl ChId:%d Request:%s (%d)
+Number Of HID Device(s)
+HID Device[%d]
+VSC [Get HID Dev List]
+VSC [Add HID Dev]
+VSC [Write HID Dev NVRAM]
+VSC [Del HID Dev]
+VSC [LE HID Dev Add]
+ATTR_ID_GROUP_ID, IP_SUBNET, VER_NUM_LIST, SPEC_ID, or HID_DEVICE_RELNUM
+ATTR_ID_SERVICE_DATABASE_STATE, VENDOR_ID, or HID_PARSER_VERSION
+DI_PRODUCT_ID or HID_DEVICE_SUBCLASS
+DI_PRODUCT_VERSION or HID_COUNTRY_CODE
+DI_PRIMARY_RECORD or HID_VIRTUAL_CABLE
+ATTR_ID_HID_RECONNECT_INITIATE
+ATTR_ID_HID_DESCRIPTOR_LIST
+ATTR_ID_HID_LANGUAGE_ID_BASE
+ATTR_ID_HID_SDP_DISABLE
+ATTR_ID_HID_BATTERY_POWER
+ATTR_ID_HID_REMOTE_WAKE
+ATTR_ID_HID_PROFILE_VERSION
+ATTR_ID_HID_LINK_SUPERVISION_TO
+ATTR_ID_HID_NORMALLY_CONNECTABLE
+ATTR_ID_HID_BOOT_DEVICE
+PROTOCOL_HIDP
+    -d device         set the hci device interface (e.g. /dev/ttyHS0)
+Example:    bsa_server -d /dev/com10
+This command would force the HCI to use /dev/com10
+Example:    bsa_server -d /dev/com10 -hci -l2c -app -a2d
+--- [3] START BTD & RUN BTUI 'Scan' (GENERAL SCAN, NOT A2DP) ---
+btd start/running, process 13913
+*** Welcome to TESTUI :) ***
+Available commands:
+ 1. TurnOnBluetoothvalue 0 = voice view, 2 = audible 4 = ble_provision
+ 2. TurnOffBluetooth-{value}
+ 3. Scan
+ 4. A2DPDiscovery
+ 5. CancelScan
+ 6. Pair
+ 7. CancelPairing
+ 8. Unpair
+ 9. Connect
+10. Disconnect
+11. Play
+12. Pause
+13. Stop
+14. SetDiscoverable
+15. SetNonDiscoverable
+16. SetConnectable
+17. SetNonConnectable
+18. ShowPaired
+19. ShowConnected
+20. ShowDiscovered
+21. ShowAllDevice
+22. Disable_auto_connect
+23. Enable_auto_connect
+24. Disable_PTS_Mode
+25. Enable_PTS_Mode
+26. Enable_BT_Perf_Logging
+27. Enable_BT_Snoop_Logging
+28. Disable_BT_perf_logging
+29. Disable_BT_Snoop_Logging
+30. Set_bsatrace_level-{value}
+31. Enable_BT_log_to_file
+32. Disable_BT_log_to_file
+33. UpdatePlayBackState<playback_state 1= stopped, 2=> paused, 3 =>playing, 4=>fastfwd , 5 =>rewinding, 6=>skip backwards> :<playpos (ms)>
+34. UpdateMetaData<track_title>:<track_artist>:<album_name>:number of track>:<track number>:<genre>:<playing time (ms)>
+35. PairUserConfirmation<value 0= declined 1=confirmed>-{value}
+36. UpdateBtMode<mode 0 =voiceview 1= audible-{value}
+37. Discover_script
+38. On_Off_Script
+39. Connect_Disconnect_script
+40. BLE_MODEvalue 0
+Enter a command: TurnOnBluetooth [0]
+Enter a command: 
+ BT_EnableCallbackResult = 0 
+_Mode = 0 
+SetConnectable...
+Enter a command: Scan...
+Enter a command: 
+ BT_StartDiscoverCallbackResult = 0 
+ BT_SetPowerModeCallbackResult = 0 
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -57
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+ShowDiscovered...
+Enter a command: 
+ BT_ShowDiscoveredCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -57
+Paired = 0
+Connected = 0
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -57
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+ BT_DiscoverCallback
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -60
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+ BT_DiscoverCompleteCallbackResult = 0 
+ BT_EnableAutoConnectCallbackResult = 0 
+ShowAllDevice...
+Enter a command: 
+ BT_ShowAllDeviceCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -57
+Paired = 0
+Connected = 0
+Discovered = 1
+ BT_ShowAllDeviceCallback
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -60
+Paired = 0
+Connected = 0
+Discovered = 1
+CancelScan...
+Enter a command: 
+ BT_CancelDiscoverCallbackResult = 1 
+E
+--- [4] TESTING BTUI mode 4 (ble_provision) & BLE_MODE ---
+*** Welcome to TESTUI :) ***
+Available commands:
+ 1. TurnOnBluetoothvalue 0 = voice view, 2 = audible 4 = ble_provision
+ 2. TurnOffBluetooth-{value}
+ 3. Scan
+ 4. A2DPDiscovery
+ 5. CancelScan
+ 6. Pair
+ 7. CancelPairing
+ 8. Unpair
+ 9. Connect
+10. Disconnect
+11. Play
+12. Pause
+13. Stop
+14. SetDiscoverable
+15. SetNonDiscoverable
+16. SetConnectable
+17. SetNonConnectable
+18. ShowPaired
+19. ShowConnected
+20. ShowDiscovered
+21. ShowAllDevice
+22. Disable_auto_connect
+23. Enable_auto_connect
+24. Disable_PTS_Mode
+25. Enable_PTS_Mode
+26. Enable_BT_Perf_Logging
+27. Enable_BT_Snoop_Logging
+28. Disable_BT_perf_logging
+29. Disable_BT_Snoop_Logging
+30. Set_bsatrace_level-{value}
+31. Enable_BT_log_to_file
+32. Disable_BT_log_to_file
+33. UpdatePlayBackState<playback_state 1= stopped, 2=> paused, 3 =>playing, 4=>fastfwd , 5 =>rewinding, 6=>skip backwards> :<playpos (ms)>
+34. UpdateMetaData<track_title>:<track_artist>:<album_name>:number of track>:<track number>:<genre>:<playing time (ms)>
+35. PairUserConfirmation<value 0= declined 1=confirmed>-{value}
+36. UpdateBtMode<mode 0 =voiceview 1= audible-{value}
+37. Discover_script
+38. On_Off_Script
+39. Connect_Disconnect_script
+40. BLE_MODEvalue 0
+Enter a command: TurnOnBluetooth [4]
+Enter a command: 
+ BT_EnableCallbackResult = 1 
+_Mode = 4 
+ERR[14095]: Unable to open BT session. Error : 2
+INFO[14095]: BT Client :: start
+INFO[14095]: BT Client :: Closed session 0, status: 7
+INFO[14095]: Exit client test app
+Enter a command: Scan...
+Enter a command: 
+ BT_StartDiscoverCallbackResult = 0 
+ BT_SetPowerModeCallbackResult = 0 
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -55
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+ShowDiscovered...
+Enter a command: 
+ BT_ShowDiscoveredCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -55
+Paired = 0
+Connected = 0
+ShowAllDevice...
+Enter a command: 
+ BT_ShowAllDeviceCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -55
+Paired = 0
+Connected = 0
+Discovered = 1
+ BT_ShowAllDeviceCallback
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -60
+Paired = 0
+Connected = 0
+Discovered = 0
+Enter a command: "" is not 
+--- [5] SYSLOG (/var/log/messages) FROM THIS SCAN ---
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183530 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 TESTUI[14095]: I lipc:evts:name=ShowDiscovered, origin=com.lab126.btui:Event sent
+261031:183531 BT-DAEMON[13913]: I MGR-UTILS:LipcClientEventCallback:eventName=ShowDiscovered:Enqueue status=0
+261031:183531 BT-DAEMON[13913]: I DISC:BluetoothDiscoveryManager:HandleEvent:SHOW_DISCOVERED
+261031:183531 BT-DAEMON[13913]: I DISC-UTILS:ShowDiscovered::
+261031:183531 BT-DAEMON[13913]: I UTILS:GetBluetoothManagerLipcHandle::
+261031:183531 BT-DAEMON[13913]: I UTILS:GetBluetoothManagerLipcHandle::
+261031:183531 BT-DAEMON[13913]: I UTILS:safeLipcSendEventWithoutLogging::
+261031:183531 BT-DAEMON[13913]: I lipc:evts:name=ShowDiscovered, origin=com.lab126.btmd:Event sent
+261031:183531 btfd[3003]: I btfdUtils:btfd_lipcBtdEventHandlerCallback:ev=ShowDiscovered:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183531 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 TESTUI[14095]: I lipc:evts:name=ShowAllDevice, origin=com.lab126.btui:Event sent
+261031:183532 BT-DAEMON[13913]: I MGR-UTILS:LipcClientEventCallback:eventName=ShowAllDevice:Enqueue status=0
+261031:183532 BT-DAEMON[13913]: I DISC:BluetoothDiscoveryManager:HandleEvent:SHOW_ALL_DEVICE
+261031:183532 BT-DAEMON[13913]: I DISC-UTILS:ShowAllDevices::
+261031:183532 BT-DAEMON[13913]: I UTILS:GetBluetoothManagerLipcHandle::
+261031:183532 BT-DAEMON[13913]: I UTILS:GetBluetoothManagerLipcHandle::
+261031:183532 BT-DAEMON[13913]: I UTILS:safeLipcSendEventWithoutLogging::
+261031:183532 BT-DAEMON[13913]: I lipc:evts:name=ShowAllDevice, origin=com.lab126.btmd:Event sent
+261031:183532 BT-DAEMON[13913]: I UTILS:GetBluetoothManagerLipcHandle::
+261031:183532 BT-DAEMON[13913]: I UTILS:GetBluetoothManagerLipcHandle::
+261031:183532 BT-DAEMON[13913]: I UTILS:safeLipcSendEventWithoutLogging::
+261031:183532 BT-DAEMON[13913]: I lipc:evts:name=ShowAllDevice, origin=com.lab126.btmd:Event sent
+261031:183532 btfd[3003]: I btfdUtils:btfd_lipcBtdEventHandlerCallback:ev=ShowAllDevice:
+261031:183532 btfd[3003]: I btfdUtils:btfd_lipcBtdEventHandlerCallback:ev=ShowAllDevice:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183532 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 rcm_main[2980]: I refreshcache:tryRefreshCacheRun:status=16:Unable to lock mutex
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183533 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:Firing SyncComplete:type=dataset,namespace=Apps_Device_Settings,dataset=<private>,status=false:
+261031:183534 cvm[9604]: I WhisperSyncV2PaginateServiceImpl:DataSetCommit:namespace=Apps_Device_Settings,dataset=<private>:
+--- [6] ALL DISCOVERED DEVICES IN REPORT ---
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+--- [7] PAIRING D5:24:53:14:5A:C7 ---
+*** Welcome to TESTUI :) ***
+Available commands:
+ 1. TurnOnBluetoothvalue 0 = voice view, 2 = audible 4 = ble_provision
+ 2. TurnOffBluetooth-{value}
+ 3. Scan
+ 4. A2DPDiscovery
+ 5. CancelScan
+ 6. Pair
+ 7. CancelPairing
+ 8. Unpair
+ 9. Connect
+10. Disconnect
+11. Play
+12. Pause
+13. Stop
+14. SetDiscoverable
+15. SetNonDiscoverable
+16. SetConnectable
+17. SetNonConnectable
+18. ShowPaired
+19. ShowConnected
+20. ShowDiscovered
+21. ShowAllDevice
+22. Disable_auto_connect
+23. Enable_auto_connect
+24. Disable_PTS_Mode
+25. Enable_PTS_Mode
+26. Enable_BT_Perf_Logging
+27. Enable_BT_Snoop_Logging
+28. Disable_BT_perf_logging
+29. Disable_BT_Snoop_Logging
+30. Set_bsatrace_level-{value}
+31. Enable_BT_log_to_file
+32. Disable_BT_log_to_file
+33. UpdatePlayBackState<playback_state 1= stopped, 2=> paused, 3 =>playing, 4=>fastfwd , 5 =>rewinding, 6=>skip backwards> :<playpos (ms)>
+34. UpdateMetaData<track_title>:<track_artist>:<album_name>:number of track>:<track number>:<genre>:<playing time (ms)>
+35. PairUserConfirmation<value 0= declined 1=confirmed>-{value}
+36. UpdateBtMode<mode 0 =voiceview 1= audible-{value}
+37. Discover_script
+38. On_Off_Script
+39. Connect_Disconnect_script
+40. BLE_MODEvalue 0
+Enter a command: Pair...
+Enter a command: 
+ BT_DiscoverCallback
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -46
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -55
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+ BT_DiscoverCompleteCallbackResult = 0 
+ BT_EnableAutoConnectCallbackResult = 0 
+PairUserConfirmation [1]
+Enter a command: Connect...
+Enter a command: 
+ BT_ConnectCallbackResult = 2 
+ShowPaired...
+Enter a command: ShowConnected...
+Enter a command: "" is not a re

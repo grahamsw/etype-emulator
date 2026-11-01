@@ -1,0 +1,628 @@
+=== E-TYPE BLUETOOTH SCAN & PAIR REPORT ===
+Sat Oct 31 18:23:07 UTC 2026
+
+--- [1] HELP / COMMAND TABLES ---
+>>> hidraw help:
+Unable to open device: No such file or directory
+>>> btui help:
+*** Welcome to TESTUI :) ***
+Available commands:
+ 1. TurnOnBluetoothvalue 0 = voice view, 2 = audible 4 = ble_provision
+ 2. TurnOffBluetooth-{value}
+ 3. Scan
+ 4. A2DPDiscovery
+ 5. CancelScan
+ 6. Pair
+ 7. CancelPairing
+ 8. Unpair
+ 9. Connect
+10. Disconnect
+11. Play
+12. Pause
+13. Stop
+14. SetDiscoverable
+15. SetNonDiscoverable
+16. SetConnectable
+17. SetNonConnectable
+18. ShowPaired
+19. ShowConnected
+20. ShowDiscovered
+21. ShowAllDevice
+22. Disable_auto_connect
+23. Enable_auto_connect
+24. Disable_PTS_Mode
+25. Enable_PTS_Mode
+26. Enable_BT_Perf_Logging
+27. Enable_BT_Snoop_Logging
+28. Disable_BT_perf_logging
+29. Disable_BT_Snoop_Logging
+30. Set_bsatrace_level-{value}
+31. Enable_BT_log_to_file
+32. Disable_BT_log_to_file
+33. UpdatePlayBackState<playback_state 1= stopped, 2=> paused, 3 =>playing, 4=>fastfwd , 5 =>rewinding, 6=>skip backwards> :<playpos (ms)>
+34. UpdateMetaData<track_title>:<track_artist>:<album_name>:number of track>:<track number>:<genre>:<playing time (ms)>
+35. PairUserConfirmation<value 0= declined 1=confirmed>-{value}
+36. UpdateBtMode<mode 0 =voiceview 1= audible-{value}
+37. Discover_script
+38. On_Off_Script
+39. Connect_Disconnect_script
+40. BLE_MODEvalue 0
+
+Enter a command: Available commands:
+ 1. TurnOnBluetoothvalue 0 = voice view, 2 = audible 4 = ble_provision
+ 2. TurnOffBluetooth-{value}
+ 3. Scan
+ 4. A2DPDiscovery
+ 5. CancelScan
+ 6. Pair
+ 7. CancelPairing
+ 8. Unpair
+ 9. Connect
+10. Disconnect
+11. Play
+12. Pause
+13. Stop
+14. SetDiscoverable
+15. SetNonDiscoverable
+16. SetConnectable
+17. SetNonConnectable
+18. ShowPaired
+19. ShowConnected
+20. ShowDiscovered
+21. ShowAllDevice
+22. Disable_auto_connect
+23. Enable_auto_connect
+24. Disable_PTS_Mode
+25. Enable_PTS_Mode
+26. Enable_BT_Perf_Logging
+27. Enable_BT_Snoop_Logging
+28. Disable_BT_perf_logging
+29. Disable_BT_Snoop_Logging
+30. Set_bsatrace_level-{value}
+31. Enable_BT_log_to_file
+32. Disable_BT_log_to_file
+33. UpdatePlayBackState<playback_state 1= stopped, 2=> paused, 3 =>playing, 4=>fastfwd , 5 =>rewinding, 6=>skip backwards> :<playpos (ms)>
+34. UpdateMetaData<track_title>:<track_artist>:<album_name>:number of track>:<track number>:<genre>:<playing time (ms)>
+35. PairUserConfirmation<value 0= declined 1=confirmed>-{value}
+36. UpdateBtMode<mode 0 =voiceview 1= audible-{value}
+37. Discover_script
+38. On_Off_Script
+39. Connect_Disconnect_script
+40. BLE_MODEvalue 0
+
+Enter a command: Quiting BT TestUI
+
+--- [2] ENABLING BLUETOOTH RADIO ---
+btd start/running, process 11809
+BTstate after lipc:
+0
+
+--- [3] SCANNING VIA BTUI (12 SECONDS) ---
+*** Welcome to TESTUI :) ***
+Available commands:
+ 1. TurnOnBluetoothvalue 0 = voice view, 2 = audible 4 = ble_provision
+ 2. TurnOffBluetooth-{value}
+ 3. Scan
+ 4. A2DPDiscovery
+ 5. CancelScan
+ 6. Pair
+ 7. CancelPairing
+ 8. Unpair
+ 9. Connect
+10. Disconnect
+11. Play
+12. Pause
+13. Stop
+14. SetDiscoverable
+15. SetNonDiscoverable
+16. SetConnectable
+17. SetNonConnectable
+18. ShowPaired
+19. ShowConnected
+20. ShowDiscovered
+21. ShowAllDevice
+22. Disable_auto_connect
+23. Enable_auto_connect
+24. Disable_PTS_Mode
+25. Enable_PTS_Mode
+26. Enable_BT_Perf_Logging
+27. Enable_BT_Snoop_Logging
+28. Disable_BT_perf_logging
+29. Disable_BT_Snoop_Logging
+30. Set_bsatrace_level-{value}
+31. Enable_BT_log_to_file
+32. Disable_BT_log_to_file
+33. UpdatePlayBackState<playback_state 1= stopped, 2=> paused, 3 =>playing, 4=>fastfwd , 5 =>rewinding, 6=>skip backwards> :<playpos (ms)>
+34. UpdateMetaData<track_title>:<track_artist>:<album_name>:number of track>:<track number>:<genre>:<playing time (ms)>
+35. PairUserConfirmation<value 0= declined 1=confirmed>-{value}
+36. UpdateBtMode<mode 0 =voiceview 1= audible-{value}
+37. Discover_script
+38. On_Off_Script
+39. Connect_Disconnect_script
+40. BLE_MODEvalue 0
+
+Enter a command: Usage: TurnOnBluetoothinteger value
+
+Enter a command: SetConnectable...
+
+Enter a command: 
+ BT_EnableCallbackResult = 0 
+_Mode = 1 
+Discover_script...
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -58
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -66
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -58
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -66
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -62
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -62
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_StartDiscoverCallbackResult = 4 
+
+ BT_DiscoverCallback
+ BD_Name = 08:EF:3B:CA:49:AC
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -67
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -58
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -66
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -58
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -66
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -67
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -59
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -59
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -67
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -63
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -63
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -72
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -58
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -58
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -72
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -61
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -61
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -61
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -81
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -61
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -81
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -72
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -70
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCallback
+ BD_Name = LG LAS551H(AC)
+BD_Address = 08:EF:3B:CA:49:AC
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -70
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 1
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -72
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+
+ BT_DiscoverCompleteCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 

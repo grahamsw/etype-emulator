@@ -1,5 +1,5 @@
 /*
- * E-Type Hardware: Step 5 - Live Interactive E-Ink Typewriter (v1.4)
+ * E-Type Hardware: Step 5 - Live Interactive E-Ink Typewriter (v1.6)
  * Hardware: ESP32-S3 (N16R8) + Waveshare 4.2" E-Paper (400x300) + USB Keyboard
  * 
  * Resolves GitHub Issues:
@@ -34,6 +34,7 @@
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <esp_sleep.h>
+#include <nvs_flash.h>
 
 // -------------------------------------------------------------------------
 // Display Driver: Waveshare 4.2" V2 B&W (SSD1683 / GDEY042T81)
@@ -114,8 +115,8 @@ bool statusBarDirty = false;
 unsigned long lastTypeTime = 0;
 unsigned long lastKeyActivityTime = 0;
 
-// Battery Keep-Alive (prevents FORIOT 18650 / MH-CD42 auto-shutoff until 5-min timeout)
-bool batteryKeepAlive = true;
+// Battery Keep-Alive (disabled by default; typewriter hardware draw >90mA keeps shield awake)
+bool batteryKeepAlive = false;
 unsigned long lastKeepAlivePulse = 0;
 
 const char* statusNotice = nullptr;
@@ -168,6 +169,7 @@ void createNewDraft();
 void loadDraft(const char* filename);
 void scanDraftFiles();
 void loadConfig();
+int getBatteryPercentage(float &outVolts);
 void saveConfig(const String &ssid, const String &pass, const String &url);
 void syncToGoogleDrive();
 void startWiFiExport();
@@ -306,6 +308,61 @@ String serializeRowRange(int startRow, int endRow, bool includeTrailingSeparator
 void syncDraftTextFromPageBuffer() {
   recomputeMaxUsedRow();
   currentDraftText = draftPrefixText + serializeRowRange(0, maxUsedRow, false);
+}
+
+// -------------------------------------------------------------------------
+// Battery Fuel Gauge Subsystem (50% Voltage Divider on GPIO 1)
+// Wiring: PowerBoost BAT -> 100k -> ESP32 GPIO 1 -> 100k -> GND
+// -------------------------------------------------------------------------
+const int PIN_BAT_ADC = 1;
+
+int getBatteryPercentage(float &outVolts) {
+  // Average multiple ADC samples to eliminate high-frequency ripple
+  uint32_t sumMv = 0;
+  for (int i = 0; i < 8; i++) {
+    sumMv += analogReadMilliVolts(PIN_BAT_ADC);
+    delay(1);
+  }
+  uint32_t avgPinMv = sumMv / 8;
+
+  // 1:1 voltage divider (two 100k resistors) halves the voltage: Vbat = Vpin * 2
+  uint32_t batMv = avgPinMv * 2;
+  outVolts = batMv / 1000.0f;
+
+  // Disconnected / floating pin check (<2.5V means no battery divider is attached)
+  if (batMv < 2500) {
+    return -1;
+  }
+
+  if (batMv >= 4180) return 100;
+  if (batMv <= 3270) return 0;
+
+  // Piecewise linear interpolation across the true LiPo discharge curve
+  struct BatPoint { uint32_t mv; int pct; };
+  static const BatPoint curve[] = {
+    { 4180, 100 },
+    { 4050, 90 },
+    { 3920, 80 },
+    { 3840, 70 },
+    { 3780, 60 },
+    { 3720, 50 },
+    { 3680, 40 },
+    { 3630, 30 },
+    { 3570, 20 },
+    { 3480, 10 },
+    { 3380, 5 },
+    { 3270, 0 }
+  };
+  const int nPoints = sizeof(curve) / sizeof(curve[0]);
+
+  for (int i = 0; i < nPoints - 1; i++) {
+    if (batMv <= curve[i].mv && batMv >= curve[i + 1].mv) {
+      float span = (float)(curve[i].mv - curve[i + 1].mv);
+      float frac = (float)(batMv - curve[i + 1].mv) / span;
+      return curve[i + 1].pct + (int)(frac * (curve[i].pct - curve[i + 1].pct));
+    }
+  }
+  return 0;
 }
 
 // -------------------------------------------------------------------------
@@ -812,7 +869,21 @@ void drawControlMenu() {
     display.setFont(&FreeMonoBold9pt7b);
     display.setTextColor(GxEPD_BLACK);
     display.setCursor(MARGIN_X, 32);
-    display.print("E-TYPE MENU [OTA v1.4]");
+    display.print("E-TYPE MENU");
+
+    float batVolts = 0;
+    int batPct = getBatteryPercentage(batVolts);
+    char headerRight[32];
+    if (batPct >= 0) {
+      snprintf(headerRight, sizeof(headerRight), "[BAT %d%%]", batPct);
+    } else {
+      snprintf(headerRight, sizeof(headerRight), "[OTA v1.6]");
+    }
+    int16_t bx, by; uint16_t bw, bh;
+    display.getTextBounds(headerRight, 0, 0, &bx, &by, &bw, &bh);
+    display.setCursor(display.width() - MARGIN_X - bw, 32);
+    display.print(headerRight);
+
     display.drawLine(MARGIN_X, 42, display.width() - MARGIN_X, 42, GxEPD_BLACK);
 
     display.setFont(&FreeMono9pt7b);
@@ -995,8 +1066,14 @@ void drawWiFiExportScreen() {
 void syncToGoogleDrive() {
   bool wasAP = wifiActive;
   loadConfig();
-  if (wifiSSID.length() == 0 || googleScriptUrl.length() == 0) {
-    statusNotice = "[No Wi-Fi/URL Saved - Press E]";
+  if (wifiSSID.length() == 0) {
+    statusNotice = "[Missing Wi-Fi: Press E]";
+    statusNoticeTime = millis();
+    drawControlMenu();
+    return;
+  }
+  if (googleScriptUrl.length() == 0) {
+    statusNotice = "[Missing Google URL: Press E]";
     statusNoticeTime = millis();
     drawControlMenu();
     return;
@@ -1009,6 +1086,7 @@ void syncToGoogleDrive() {
   WiFi.disconnect(true);
   delay(100);
   WiFi.mode(WIFI_STA);
+  delay(50);
   WiFi.begin(wifiSSID.c_str(), wifiPass.c_str());
 
   int attempts = 0;
@@ -1124,7 +1202,15 @@ void handleWebRoot() {
   html += "label { font-size: 0.8rem; color: var(--accent); display: block; }";
   html += ".footer { margin-top: 28px; text-align: center; font-size: 0.8rem; color: var(--accent); border-top: 1px solid var(--border); padding-top: 14px; }";
   html += "</style></head><body><div class='container'>";
-  html += "<header><h1>E - T Y P E v1.4</h1><span>Control Portal</span></header>";
+  float bVolts = 0;
+  int bPct = getBatteryPercentage(bVolts);
+  if (bPct >= 0) {
+    char bStr[64];
+    snprintf(bStr, sizeof(bStr), "<span>Battery: %d%% (%.2fV)</span>", bPct, bVolts);
+    html += "<header><h1>E - T Y P E v1.6</h1>" + String(bStr) + "</header>";
+  } else {
+    html += "<header><h1>E - T Y P E v1.6</h1><span>Control Portal</span></header>";
+  }
 
   html += "<h2 style='font-size:1.1rem;margin-bottom:12px;'>Saved Drafts</h2>";
 
@@ -1267,8 +1353,19 @@ void handleSyncWeb() {
 
 void startWiFiExport() {
   Serial.println("[WiFi] Starting Access Point 'EType-Drafts'...");
+  WiFi.persistent(false);
+  WiFi.disconnect(true, true);
+  delay(50);
   WiFi.mode(WIFI_AP);
-  WiFi.softAP("EType-Drafts");
+  delay(50);
+
+  IPAddress localIp(192, 168, 4, 1);
+  IPAddress gateway(192, 168, 4, 1);
+  IPAddress subnet(255, 255, 255, 0);
+  WiFi.softAPConfig(localIp, gateway, subnet);
+
+  bool apOk = WiFi.softAP("EType-Drafts", nullptr, 1, 0, 4);
+  Serial.printf("[WiFi] SoftAP started: %s (IP: %s)\n", apOk ? "YES" : "NO", WiFi.softAPIP().toString().c_str());
 
   static bool routesConfigured = false;
   if (!routesConfigured) {
@@ -1373,8 +1470,9 @@ void saveAndPowerOff() {
   WiFi.mode(WIFI_OFF);
   batteryKeepAlive = false;
 
-  Serial.println("[Power] Entering deep sleep (FORIOT shield will now auto-shutoff).");
+  Serial.println("[Power] Entering deep sleep. Press BOOT button or toggle power switch to resume.");
   Serial.flush();
+  esp_sleep_enable_ext0_wakeup(GPIO_NUM_0, 0); // Wake on GPIO 0 (BOOT button) pressed LOW
   delay(100);
   esp_deep_sleep_start();
 }
@@ -1385,10 +1483,16 @@ void saveAndPowerOff() {
 void setup() {
   Serial.begin(115200);
   delay(500);
-  Serial.println("\n[E-Type] Initializing Typewriter Hardware (v1.4)...");
+  Serial.println("\n[E-Type] Initializing Typewriter Hardware (v1.6)...");
 
   currentDraftText.reserve(32768);
   draftPrefixText.reserve(16384);
+
+  esp_err_t nvsErr = nvs_flash_init();
+  if (nvsErr == ESP_ERR_NVS_NO_FREE_PAGES || nvsErr == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    ESP_ERROR_CHECK(nvs_flash_erase());
+    nvs_flash_init();
+  }
 
   initStorage();
 
@@ -1398,6 +1502,27 @@ void setup() {
 
   display.init(115200, true, 2, false);
   display.setRotation(0);
+
+  // Black-Box Diagnostic: detect exact hardware reason if recovering from a reboot
+  esp_reset_reason_t reason = esp_reset_reason();
+  static char rBuf[32];
+  if (reason == ESP_RST_BROWNOUT) {
+    statusNotice = "[RESET: BROWNOUT]";
+  } else if (reason == ESP_RST_PANIC) {
+    statusNotice = "[RESET: CRASH (PANIC)]";
+  } else if (reason == ESP_RST_TASK_WDT || reason == ESP_RST_INT_WDT || reason == ESP_RST_WDT) {
+    statusNotice = "[RESET: WATCHDOG]";
+  } else if (reason == ESP_RST_SW) {
+    statusNotice = "[RESET: SOFTWARE RESTART]";
+  } else if (reason == ESP_RST_DEEPSLEEP) {
+    statusNotice = "[Woke from Sleep]";
+  } else if (reason != ESP_RST_POWERON) {
+    snprintf(rBuf, sizeof(rBuf), "[RESET Code %d]", (int)reason);
+    statusNotice = rBuf;
+  } else {
+    statusNotice = "[v1.6 Ready]";
+  }
+  statusNoticeTime = millis();
 
   redrawEntirePage();
 
@@ -1446,6 +1571,7 @@ void loop() {
 
   if (currentMode == MODE_WIFI_EXPORT && wifiActive) {
     server.handleClient();
+    delay(10);
   }
 
   unsigned long now = millis();
@@ -1475,7 +1601,7 @@ void loop() {
   }
 
   KeyMessage key;
-  TickType_t waitTicks = (currentMode == MODE_WIFI_EXPORT) ? pdMS_TO_TICKS(1) : pdMS_TO_TICKS(10);
+  TickType_t waitTicks = pdMS_TO_TICKS(10);
 
   if (xQueueReceive(keyQueue, &key, waitTicks) == pdTRUE) {
     lastKeyActivityTime = millis();
@@ -1486,7 +1612,9 @@ void loop() {
     if (key.keycode == 0xFF || key.keycode == 0xFE) {
       if (currentMode == MODE_TYPING) {
         renderLinePartial(cursorRow);
-        renderStatusBarPartial();
+        if (statusNotice == nullptr) {
+          renderStatusBarPartial();
+        }
       }
       return;
     }
@@ -1562,8 +1690,8 @@ void loop() {
       if (key.ascii == 'e' || key.ascii == 'E') {
         statusNotice = nullptr;
         currentMode = MODE_WIFI_EXPORT;
-        startWiFiExport();
         drawWiFiExportScreen();
+        startWiFiExport();
         return;
       }
 
@@ -2217,8 +2345,9 @@ void loop() {
     }
   }
 
-  // Clear temporary status notice after 3 seconds (STRICTLY in MODE_TYPING - Issue #58)
-  if (currentMode == MODE_TYPING && statusNotice != nullptr && (millis() - statusNoticeTime > 3000)) {
+  // Clear temporary status notice (15s for reset notices, 3s for normal typing notices)
+  unsigned long noticeTimeout = (statusNotice != nullptr && (strncmp(statusNotice, "[RESET", 6) == 0 || strncmp(statusNotice, "[Woke", 5) == 0)) ? 15000 : 3000;
+  if (currentMode == MODE_TYPING && statusNotice != nullptr && (millis() - statusNoticeTime > noticeTimeout)) {
     statusNotice = nullptr;
     renderStatusBarPartial();
   }

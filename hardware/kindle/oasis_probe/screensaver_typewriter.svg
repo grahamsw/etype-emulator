@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1264 1680" width="1264" height="1680">
+  <defs>
+    <style>
+      .serif-title { font-family: "Courier New", Courier, monospace, serif; font-size: 68px; font-weight: 800; fill: #111111; letter-spacing: 14px; text-anchor: middle; }
+      .sub-title { font-family: "Courier New", Courier, monospace, serif; font-size: 24px; font-weight: 600; fill: #444444; letter-spacing: 10px; text-anchor: middle; }
+      .manifesto { font-family: "Courier New", Courier, monospace, serif; font-size: 26px; font-style: italic; fill: #222222; text-anchor: middle; }
+      .manifesto-attr { font-family: "Courier New", Courier, monospace, serif; font-size: 20px; font-weight: bold; fill: #555555; text-anchor: middle; letter-spacing: 4px; }
+      .footer-lead { font-family: "Courier New", Courier, monospace, serif; font-size: 26px; font-weight: bold; fill: #222222; letter-spacing: 8px; text-anchor: middle; }
+      .footer-sub { font-family: "Courier New", Courier, monospace, serif; font-size: 20px; fill: #666666; letter-spacing: 4px; text-anchor: middle; }
+      .badge-text { font-family: "Courier New", Courier, monospace, serif; font-size: 16px; fill: #888888; letter-spacing: 3px; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Clean Warm E-Paper Background -->
+  <rect width="100%" height="100%" fill="#fcfbfa"/>
+
+  <!-- Vintage Outer Double Frame -->
+  <rect x="40" y="40" width="1184" height="1600" fill="none" stroke="#222222" stroke-width="4"/>
+  <rect x="52" y="52" width="1160" height="1576" fill="none" stroke="#555555" stroke-width="1.5"/>
+
+  <!-- Corner Flourishes -->
+  <rect x="44" y="44" width="8" height="8" fill="#222222"/>
+  <rect x="1212" y="44" width="8" height="8" fill="#222222"/>
+  <rect x="44" y="1628" width="8" height="8" fill="#222222"/>
+  <rect x="1212" y="1628" width="8" height="8" fill="#222222"/>
+
+  <!-- ==================== HEADER ==================== -->
+  <text x="632" y="180" class="serif-title">E - T Y P E</text>
+  <text x="632" y="235" class="sub-title">DISTRACTION-FREE TYPEWRITER</text>
+
+  <!-- Header Divider -->
+  <line x1="280" y1="275" x2="570" y2="275" stroke="#333333" stroke-width="2"/>
+  <polygon points="632,267 640,275 632,283 624,275" fill="#222222"/>
+  <line x1="694" y1="275" x2="984" y2="275" stroke="#333333" stroke-width="2"/>
+
+  <!-- ==================== TYPEWRITER ILLUSTRATION ==================== -->
+  <g transform="translate(132, 340)">
+    <!-- Sheet of Paper emerging from platen -->
+    <rect x="250" y="40" width="500" height="340" fill="#ffffff" stroke="#333333" stroke-width="2.5" rx="4"/>
+    <line x1="280" y1="70" x2="720" y2="70" stroke="#dddddd" stroke-width="1.5"/>
+    <line x1="280" y1="110" x2="720" y2="110" stroke="#dddddd" stroke-width="1.5"/>
+
+    <!-- Typed Manuscript on paper -->
+    <text x="500" y="150" class="manifesto">"The secret of all drafting is</text>
+    <text x="500" y="195" class="manifesto">to simply keep pressing forward,</text>
+    <text x="500" y="240" class="manifesto">without turning back."</text>
+    <text x="500" y="300" class="manifesto-attr">— E-TYPE MANIFESTO —</text>
+
+    <!-- Paper Bail Bar -->
+    <rect x="220" y="340" width="560" height="12" fill="#888888" stroke="#222222" stroke-width="2" rx="4"/>
+    <circle cx="360" cy="346" r="6" fill="#333333"/>
+    <circle cx="640" cy="346" r="6" fill="#333333"/>
+
+    <!-- Platen Roller -->
+    <rect x="140" y="360" width="720" height="50" fill="#2b2b2b" stroke="#111111" stroke-width="3" rx="8"/>
+    <!-- Platen Knobs -->
+    <rect x="100" y="370" width="40" height="30" fill="#555555" stroke="#222222" stroke-width="2" rx="4"/>
+    <rect x="860" y="370" width="40" height="30" fill="#555555" stroke="#222222" stroke-width="2" rx="4"/>
+
+    <!-- Carriage Return Lever -->
+    <path d="M 120 375 L 70 340 L 60 260 L 75 250 L 80 330 L 130 365 Z" fill="#666666" stroke="#222222" stroke-width="2"/>
+    <circle cx="67" cy="255" r="14" fill="#333333"/>
+
+    <!-- Typewriter Main Chassis / Housing -->
+    <path d="M 160 410 L 840 410 L 920 740 Q 920 780 870 780 L 130 780 Q 80 780 80 740 Z" fill="#383838" stroke="#111111" stroke-width="4"/>
+
+    <!-- Chassis Accent Inlay -->
+    <path d="M 180 430 L 820 430 L 890 730 Q 890 760 850 760 L 150 760 Q 110 760 110 730 Z" fill="#454545" stroke="#222222" stroke-width="2"/>
+
+    <!-- Ribbon Spools (Left & Right) -->
+    <circle cx="310" cy="485" r="50" fill="#222222" stroke="#111111" stroke-width="3"/>
+    <circle cx="310" cy="485" r="30" fill="#a82222"/>
+    <circle cx="310" cy="485" r="10" fill="#111111"/>
+
+    <circle cx="690" cy="485" r="50" fill="#222222" stroke="#111111" stroke-width="3"/>
+    <circle cx="690" cy="485" r="30" fill="#222222"/>
+    <circle cx="690" cy="485" r="10" fill="#111111"/>
+
+    <!-- Ribbon Guide Segment -->
+    <line x1="360" y1="485" x2="480" y2="460" stroke="#a82222" stroke-width="8"/>
+    <line x1="520" y1="460" x2="640" y2="485" stroke="#222222" stroke-width="8"/>
+
+    <!-- Typebar Segment / Arc -->
+    <path d="M 420 510 C 440 450, 560 450, 580 510 Z" fill="#262626" stroke="#111111" stroke-width="2"/>
+    <line x1="500" y1="455" x2="500" y2="495" stroke="#777777" stroke-width="3"/>
+    <line x1="480" y1="460" x2="490" y2="495" stroke="#777777" stroke-width="2.5"/>
+    <line x1="520" y1="460" x2="510" y2="495" stroke="#777777" stroke-width="2.5"/>
+    <line x1="460" y1="470" x2="480" y2="500" stroke="#777777" stroke-width="2"/>
+    <line x1="540" y1="470" x2="520" y2="500" stroke="#777777" stroke-width="2"/>
+
+    <!-- Keyboard Well Frame -->
+    <rect x="200" y="540" width="600" height="200" fill="#1e1e1e" stroke="#111111" stroke-width="3" rx="10"/>
+
+    <!-- Row 1 Keys (Numbers) -->
+    <g fill="#ece7de" stroke="#111111" stroke-width="2">
+      <circle cx="250" cy="565" r="15"/><circle cx="295" cy="565" r="15"/><circle cx="340" cy="565" r="15"/>
+      <circle cx="385" cy="565" r="15"/><circle cx="430" cy="565" r="15"/><circle cx="475" cy="565" r="15"/>
+      <circle cx="525" cy="565" r="15"/><circle cx="570" cy="565" r="15"/><circle cx="615" cy="565" r="15"/>
+      <circle cx="660" cy="565" r="15"/><circle cx="705" cy="565" r="15"/><circle cx="750" cy="565" r="15"/>
+    </g>
+
+    <!-- Row 2 Keys (QWERTY) -->
+    <g fill="#f5f0e6" stroke="#111111" stroke-width="2">
+      <circle cx="265" cy="605" r="16"/><circle cx="312" cy="605" r="16"/><circle cx="359" cy="605" r="16"/>
+      <circle cx="406" cy="605" r="16"/><circle cx="453" cy="605" r="16"/><circle cx="500" cy="605" r="16"/>
+      <circle cx="547" cy="605" r="16"/><circle cx="594" cy="605" r="16"/><circle cx="641" cy="605" r="16"/>
+      <circle cx="688" cy="605" r="16"/><circle cx="735" cy="605" r="16"/>
+    </g>
+
+    <!-- Row 3 Keys (ASDF) -->
+    <g fill="#ece7de" stroke="#111111" stroke-width="2">
+      <circle cx="280" cy="645" r="16"/><circle cx="327" cy="645" r="16"/><circle cx="374" cy="645" r="16"/>
+      <circle cx="421" cy="645" r="16"/><circle cx="468" cy="645" r="16"/><circle cx="515" cy="645" r="16"/>
+      <circle cx="562" cy="645" r="16"/><circle cx="609" cy="645" r="16"/><circle cx="656" cy="645" r="16"/>
+      <circle cx="703" cy="645" r="16"/><circle cx="750" cy="645" r="16"/>
+    </g>
+
+    <!-- Row 4 Keys (ZXCV) -->
+    <g fill="#f5f0e6" stroke="#111111" stroke-width="2">
+      <circle cx="300" cy="685" r="16"/><circle cx="350" cy="685" r="16"/><circle cx="400" cy="685" r="16"/>
+      <circle cx="450" cy="685" r="16"/><circle cx="500" cy="685" r="16"/><circle cx="550" cy="685" r="16"/>
+      <circle cx="600" cy="685" r="16"/><circle cx="650" cy="685" r="16"/><circle cx="700" cy="685" r="16"/>
+    </g>
+
+    <!-- Spacebar -->
+    <rect x="360" y="714" width="280" height="18" fill="#d8d3c5" stroke="#111111" stroke-width="2.5" rx="6"/>
+  </g>
+
+  <!-- ==================== FOOTER ==================== -->
+  <line x1="280" y1="1380" x2="570" y2="1380" stroke="#333333" stroke-width="2"/>
+  <polygon points="632,1372 640,1380 632,1388 624,1380" fill="#222222"/>
+  <line x1="694" y1="1380" x2="984" y2="1380" stroke="#333333" stroke-width="2"/>
+
+  <text x="632" y="1440" class="footer-lead">FORWARD - ONLY   DRAFTING</text>
+  <text x="632" y="1490" class="footer-sub">No backspace · No editing · Pure momentum</text>
+  <text x="632" y="1540" class="badge-text">STANDALONE HARDWARE EMULATOR · KINDLE OASIS</text>
+</svg>

@@ -19,6 +19,7 @@ Thumbs.db
 public/config.json
 # Firmware build artifacts
 firmware/**/build/
+hardware/**/build/
 *.bin
 *.elf
 *.map

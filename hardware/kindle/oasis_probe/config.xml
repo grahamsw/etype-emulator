@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension>
+	<information>
+		<name>E-Type Oasis Probe</name>
+		<version>1.0</version>
+		<author>E-Type</author>
+		<id>etype-oasis-probe</id>
+	</information>
+	<menus>
+		<menu type="json" dynamic="true">menu.json</menu>
+	</menus>
+</extension>

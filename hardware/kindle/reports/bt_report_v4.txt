@@ -1,0 +1,844 @@
+=== E-TYPE BLUETOOTH PAIR BTMINIZKEY REPORT (v4) ===
+Sat Oct 31 18:40:24 UTC 2026
+--- [1] BTD PAIRING / CONNECTION / PROFILE SYMBOLS ---
+_ITM_deregisterTMCloneTable
+_ITM_registerTMCloneTable
+_ZN9BLUELOTUS8BTHAL_DM32BluetoothHalDmSetBleLocalPrivacyEh
+_ZN9BLUELOTUS13BTHAL_MANAGER29BluetoothHalGetBtSnoopEnabledEv
+_ZN9BLUELOTUS16BluetoothBSAGatt16getGattInterfaceEv
+_ZN9BLUELOTUS8BTHAL_AV21BluetoothHalAvMsSleepEi
+_ZN9BLUELOTUS11BTHAL_UTILS24BluetoothHalGetCodStringEPKh
+_ZN9BLUELOTUS8BTHAL_AV19BluetoothHalAvStartEiii
+_ZN9BLUELOTUS13BTHAL_MANAGER38BluetoothHalManagerGetReconnectDevicesEPNS_12tBTM_HAL_DATE
+_ZN9BLUELOTUS13BTHAL_MANAGER35BluetoothHalManagerUpdateNameAndCodEPhS1_S1_
+_ZN9BLUELOTUS13BTHAL_MANAGER23BluetoothHalSetSecurityEh
+_ZN9BLUELOTUS8BTHAL_DM27BluetoothHalDmSetVisibilityEhh
+_ZN9BLUELOTUS13BTHAL_MANAGER41BluetoothHalManagerUpdateReconnectDevicesEPNS_12tBTM_HAL_DATEi
+_ZN9BLUELOTUS13BTHAL_MANAGER28BluetoothHalGetBsaLogEnabledEv
+_ZN9BLUELOTUS8BTHAL_AV19BluetoothHalAvCloseEPh
+_ZN9BLUELOTUS13BTHAL_MANAGER28BluetoothHalSetBsaLogEnabledEh
+_ZN9BLUELOTUS8BTHAL_AV20BluetoothHalAvResumeEv
+_ZN9BLUELOTUS8BTHAL_AV27BluetoothHalAvDisconnectAclEPh
+_ZN9BLUELOTUS13BTHAL_MANAGER31BluetoothHalManagerSetBtLoggingEP22tBSA_DM_LOGGING_PARAMS
+_ZN9BLUELOTUS8BTHAL_AV18BluetoothHalAvOpenEPh
+_ZN9BLUELOTUS13BTHAL_MANAGER30BluetoothHalManagerUpdateKeyDbEPhS1_h
+_ZN9BLUELOTUS8BTHAL_DM26BluetoothHalDmSetRemoteVIDEPhttt
+_ZN9BLUELOTUS13BTHAL_MANAGER34BluetoothHalManagerSetDiscoverableEh
+_ZN9BLUELOTUS13BTHAL_MANAGER29BluetoothHalSetBtSnoopEnabledEh
+_ZN9BLUELOTUS13BTHAL_MANAGER33BluetoothHalManagerSetConnectableEh
+_ZN9BLUELOTUS8BTHAL_AV22BluetoothHalAvRegisterEv
+_ZN9BLUELOTUS8BTHAL_AV19BluetoothHalAvPauseEv
+_ZN9BLUELOTUS13BTHAL_MANAGER31BluetoothHalManagerUpdateVidPidEPhtt
+_ZN9BLUELOTUS8BTHAL_AV18BluetoothHalAvStopEv
+_ZN9BLUELOTUS13BTHAL_MANAGER42BluetoothHalManagerUpdateTrustedServicesDbEPh
+_ZN9BLUELOTUS8BTHAL_AV21BluetoothHalAvMetaRspEPhPNS_22tBTHAL_AV_META_RSP_CMDE
+_ZN9BLUELOTUS13BTHAL_MANAGER21BluetoothHalSetEnableEh
+_ZN9BLUELOTUS8BTHAL_AV18BluetoothHalAvInitEh
+_ZN9BLUELOTUS13BTHAL_MANAGER45BluetoothHalManagerUpdateExplicitDisconnectedEPhi
+_ZN9BLUELOTUS13BTHAL_MANAGER35BluetoothHalManagerGetPairedDevicesEPNS_12tBTM_HAL_DATE
+_ZN9BLUELOTUS13BTHAL_MANAGER27BluetoothHalGetDiscoverableEv
+_ZN9BLUELOTUS8BTHAL_AV26BluetoothHalAvChannelWriteEPhi
+_ZN9BLUELOTUS13BTHAL_MANAGER30BluetoothHalManagerSetBtConfigEh
+g_hash_table_destroy
+g_hash_table_insert
+g_hash_table_new_full
+g_timeout_add_seconds
+I UTILS:::CleanRemoteUserDisconnectedFlags
+I UTILS:::GetNextPairedDevice
+I UTILS:::Next Paired Device Found %s
+I UTILS:::GetTotalPairedDevice
+I UTILS:::GetTotalRemoteUserDisconnected
+E UTILS:::BluetoothHalLockMutex pthread_mutex_lock failure Reason:%d
+E UTILS:::BluetoothHalUnlockMutex pthread_mutex_unlock failure Reason:%d
+I UTILS:::Find %d paired devices
+I UTILS:::nb_reconnect_devices = %d
+I UTILS:::is explicit disconnected:%d
+BTHAL_SEC_LINK_UP_EVT
+BTHAL_SEC_PIN_REQ_EVT
+BTHAL_SEC_AUTH_CMPL_EVT
+BTHAL_SEC_BOND_CANCEL_CMPL_EVT
+BTHAL_SEC_AUTHORIZE_EVT
+BTHAL_SEC_SP_CFM_REQ_EVT
+BTHAL_SEC_SP_KEY_NOTIF_EVT
+BTHAL_SEC_LOCAL_OOB_DATA_EVT
+BTHAL_SEC_SP_KEYPRESS_EVT
+BTHAL_SEC_BLE_KEY_EVT
+BTHAL_SEC_BLE_PASSKEY_REQ_EVT
+BTHAL_SEC_SUSPEND_EVT
+BTHAL_SEC_RESUMED_EVT
+Disable_auto_connect
+I POWER:BluetoothManager::PackRequest(DISABLE_AUTO_CONNECT, NULL,NULL, client_request.userData):failed, reason=%d:
+DisconnectAll
+I POWER:BluetoothManager::PackRequest(DISCONNECT_ALL, NULL, NULL, client_request.userData):failed, reason=%d:
+SetNonDiscoverable
+I POWER:BluetoothManager::PackRequest(SET_NON_DISCOVERABLE, NULL,NULL, client_request.userData):failed, reason=%d:
+SetNonConnectable
+I POWER:BluetoothManager::PackRequest(SET_NON_CONNECTABLE, NULL, NULL, client_request.userData):failed, reason=%d:
+I POWER:BluetoothManager::PackRequestValue(TURN_OFF_BLUETOOTH, NULL,(btm->GetBtMode() | BT_DISABLE_REASON_SUSPEND), this):failed, reason=%d:
+I POWER:BluetoothManager::PackRequestValue(TURN_ON_BLUETOOTH, NULL, (btm->GetBtMode() | BT_ENABLE_REASON_RESUME), client_request.userData):failed, reason=%d:
+Enable_auto_connect
+I POWER:BluetoothManager::PackRequest(ENABLE_AUTO_CONNECT, NULL,NULL, client_request.userData):failed, reason=%d:
+SetConnectable
+I POWER:BluetoothManager::PackRequest(SET_CONNECTABLE, NULL, NULL, client_request.userData):failed, reason=%d:
+I POWER:BluetoothManager::PackRequest(RECONNECT, NULL,NULL, client_request.userData):failed, reason=%d:
+CancelReconnect
+I POWER:BluetoothManager::PackRequest(CANCEL_RECONNECT, NULL,NULL, client_request.userData):failed, reason=%d:
+I PAIR-UTILS:::StartPairing
+I PAIR-UTILS:StartPairing:m_bt_interface is null.:
+I PAIR-UTILS:StartPairing:bt_device is null.:
+I PAIR-UTILS:::Device is already paired
+I PAIR-UTILS:::Device is busy.
+I PAIR-UTILS:::UnPairing
+I PAIR-UTILS:UnPairing:m_bt_interface is null.:
+I PAIR-UTILS:UnPairing:bt_device is null.:
+RemoveFromReconnectList
+I PAIR-UTILS:::Device is already unpaired
+I PAIR-UTILS:::Device is connected, please disconnected it first!
+I PAIR-UTILS:::CancelPairing
+I PAIR-UTILS:CancelPairing:m_bt_interface is null.:
+I PAIR-UTILS:CancelPairing:bt_device is null.:
+I PAIR-UTILS:::Device is paired,can not be cancelled!
+I PAIR-UTILS:ShowPaired::
+I PAIR-UTILS:HandleDiscNew:fail to get lipc handle:
+ShowPaired
+I PAIR-UTILS:ShowConnected::
+ShowConnected
+N9BLUELOTUS23BluetoothPairingManagerE
+I PAIR:Stop::
+I PAIR:BluetoothPairingManager is destroyed::
+I PAIR:Start::
+I PAIR:Reset::
+I PAIR:Init::
+I PAIR:BluetoothPairingStateMachinePairing:HandleEvent = %d:pairing_state=%d
+Pincode Entry
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_PIN_REQ_EVT from device0x%x
+I PAIR:CancelPairing:m_bt_interface is null.:
+I PAIR:::BT device: Pin code reply status = %d
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_AUTH_CMPL_EVT from device 0x%x
+I PAIR:BluetoothPairingStateMachinePairing: :Ignore BTHAL_SEC_AUTH_CMPL_EVT from  another device 0x%x
+I PAIR:::BT device: %s authentication completed.
+BluetoothPairSuccess
+bt-pair-time
+E PAIR:::Pairing failed 0x%x
+BluetoothPairing
+PairFail
+Pairing Failed error no: 0x%x Pairing state : pairing paring mode : %s mode : %d  vid : %d pid : %d EIRString : %s
+E metrics:Could not allocate new metrics hash table::
+E metrics:Could not allocate new clickstream hash table::
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_AUTHORIZE_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_SP_CFM_REQ_EVT from device 0x%X
+I PAIR:::BT device: %s request simple pairing confirmation.
+btPairNumericPinToDisplay
+I PAIR:::BT device: Simple pairing confirm reply status = %d
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_SP_KEY_NOTIF_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_LOCAL_OOB_DATA_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_SP_KEYPRESS_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_BLE_KEY_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_BLE_PASSKEY_REQ_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_SUSPEND_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_RESUMED_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_LINK_DOWN_EVT from device 0x%x
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_BOND_CANCEL_CMPL_EVT from device 0x%x
+I PAIR:BluetoothPairingStateMachineCancelpairing:HandleEvent = %d:pairing_state =%d
+I PAIR:BluetoothPairingManagerBluetoothPairingManager:HandleEvent:BTHAL_SEC_BOND_CANCEL_CMPL_EVT from device 0x%x
+Cancel_Bond_Result
+PairCancel
+I PAIR:BluetoothPairingStateMachineCancelpairing:HandleEvent:BTHAL_SEC_LINK_DOWN_EVT from device 0x%x
+I PAIR:BluetoothPairingStateMachineCancelpairing:HandleEvent:BTHAL_SEC_PIN_REQ_EVT from device 0x%x
+I PAIR:BluetoothPairingStateMachineCancelpairing:HandleEvent:BTHAL_SEC_AUTH_CMPL_EVT from device 0x%x
+E PAIR:::Pairing failed
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_AUTHORIZE_EVT from device 0x%X
+I PAIR:BluetoothPairingStateMachineWaitforlinkdown:HandleEvent = %d:pairing_state=%d
+I PAIR:BluetoothPairingManager:HandleEvent:BTHAL_SEC_LINK_DOWN_EVT from device 0x%X
+Pairing Failed error no: 0x%x Pairing state : wait for link down pairing mode : %s mode : %d vid : %d pid : %d EIRString : %s
+Pairing Failed error no: 0x%x pairing state : user confirmation pairing mode : %s mode : %d vid : %d pid : %d EIRString : %s
+I PAIR:BluetoothPairingManager:HandleEvent:Unhandled event %d  from device 0x%x
+I PAIR:BluetoothPairingManager is created::
+I PAIR:GetBluetoothPairingManager::
+E PAIR:BluetoothPairingManager can not be created::
+I PAIR:BluetoothPairingStateMachineIdle:HandleEvent = %s:pairing_state=%d
+Pair
+I PAIR:BluetoothPairingStateMachineIdle:HandleEvent:PAIR to device 0x%x
+Unpair
+I PAIR:BluetoothPairingStateMachineIdle:HandleEvent:UNPAIR to device 0x%x
+Unbond_Result
+I PAIR:BluetoothPairingStateMachineIdle:HandleEvent:invalid state to cancelpair 0x%x
+I PAIR:BluetoothA2DPStateMachinePairing:HandleEvent = %s:pairing_state=%d
+I PAIR:BluetoothPairingManager:HandleEvent:CANCEL_PAIR to device 0x%x
+I PAIR:BluetoothPairingStateMachinePairing: :Ignore CANCEL_PAIR command  for  another device 0x%X
+I PAIR:BluetoothPairingStateMachinePairing:HandleEvent:invalid state to unpair 0x%x
+I PAIR:BluetoothPairingStateMachinePairing:HandleEvent:invalid state to pair 0x%x
+I PAIR:BluetoothPairingStateMachineCancelpairing:HandleEvent = %s:pairing_state=%d
+I PAIR:BluetoothPairingStateMachineIdle:HandleEvent:invalid state to unpair 0x%x
+I PAIR:BluetoothPairingStateMachineIdle:HandleEvent:invalid state to pair 0x%x
+I PAIR:BluetoothPairingStateMachineWaitforlinkdown:HandleEvent = %s:pairing_state=%d
+I PAIR:BluetoothPairingStateMachineWaitforlinkdown:HandleEvent:CANCEL_PAIR to device 0x%x
+I PAIR:BluetoothPairingStateMachineWaitforlinkdown:HandleEvent:invalid state to unpair 0x%x
+I PAIR:BluetoothPairingStateMachineWaitforlinkdown:HandleEvent:invalid state to pair 0x%x
+I PAIR:BluetoothPairingStateMachineWaitforUserCnf:HandleEvent = %s:pairing_state=%d
+PairUserConfirmation
+I PAIR:BluetoothPairingManager:HandleEvent = %s:pairing_state=%d
+I PAIR:BluetoothPairingManager:HandleEvent:SHOW_PAIRED
+I PAIR:BluetoothPairingManager:HandleEvent:ShowPaired failed
+I PAIR:BluetoothPairingManager:HandleEvent:SHOW_CONNECTED
+I PAIR:BluetoothPairingManager:HandleEvent:ShowConnected failed
+I PAIR:SubscribeEvent::
+I PAIR:BluetoothPairingStateMachineIdle:HandleEvent = %d:pairing_state=%d
+E PAIR:::CFM_REQ adding device to map add it.
+I PAIR:BluetoothPairingStateMachineIdle: :Remote reauthentication 0x%X
+I PAIR:BluetoothPairingManager:HandleEvent = %d:pairing_state=%d
+E MGR-UTILS:SetupLIPCFailed:reason=unableToSubscribeToEvent,error=%d:
+Failed to put secured into hash array
+is_paired
+is_connected
+E MGR-UTILS:TurnOffBluetooth:Error: Unable to set wl PM to disable:WIFEXITED ret: %d, WEXITSTATUS ret: %d
+I MGR-UTILS:TurnOffBluetooth:main:wl PM has been set to disable
+I MGR-UTILS:BTM_UTILS::m_bt_interface->disable():failed, reason=%d:
+I MGR-UTILS:BTM_UTILS::m_bt_interface->disable():failed:reason=%d
+E MGR-UTILS:TurnOffBluetooth:Error: Unable to set wl PM to enable:WIFEXITED ret: %d, WEXITSTATUS ret: %d
+I MGR-UTILS:main:TurnOffBluetooth:wl PM has been set to enable
+I MGR-UTILS:TurnOffBluetooth:main:wl PM has been set to enable
+killall -9 bsa_server
+E MGR-UTILS:KILL_BSA_SERVER::ret=%d
+Disable
+
+--- [2] BTUI COMMAND PARSER STRINGS ---
+_ITM_deregisterTMCloneTable
+_ITM_registerTMCloneTable
+aceBT_bleGattConfigureMTU
+aceBT_bleGattSendResponse
+aceBT_bleRequestConnectionPriority
+aceBT_bleCreateGattService
+aceBT_bleGattNotifyCharacteristicsChanged
+aceBT_bleRegisterGattServer
+aceBT_bleAddCharacteristics
+aceBT_bleDeRegisterGattServer
+aceBT_startBeaconWithScanResponse
+aceBT_bleAddCharacteristicsWithDesc
+_ZNSt13basic_fstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode
+_ZNSt15basic_streambufIcSt11char_traitsIcEE7seekposESt4fposI11__mbstate_tESt13_Ios_Openmode
+_ZNSt15basic_streambufIcSt11char_traitsIcEE7seekoffExSt12_Ios_SeekdirSt13_Ios_Openmode
+_ZNSt18basic_stringstreamIcSt11char_traitsIcESaIcEEC1ESt13_Ios_Openmode
+_ZNSt18basic_stringstreamIcSt11char_traitsIcESaIcEEC1ERKSsSt13_Ios_Openmode
+_ZNSt14basic_ofstreamIcSt11char_traitsIcEE4openEPKcSt13_Ios_Openmode
+on_ble_gatt_descriptor_read_req_cb
+on_ble_gatt_descriptor_write_req_cb
+on_ble_gatt_characteristis_write_req_cb
+DBG: Connected %d conn_handle %p
+DBG: on_ble_gatt_characteristis_read_req_cb requestId %d conn_handle %p
+INFO[%d]:  on_ble_gatt_mtu_changed_cb conn_handle %p mtu %d
+INFO[%d]: on_ble_gatt_execute_write_req_cb req id %d conn_handle %p execute %d
+INFO[%d]: on_ble_gatt_notification_sent_cb conn_handle %p status %d
+INFO[%d]: aceBT_bleCreateGattService
+DBG: on_ble_gatt_descriptor_read_req_cb %d conn_handle %p connection_handle %p
+INFO[%d]: CLI callback : cli_adapter_state_callback() state: STATE_ENABLED
+INFO[%d]: CLI callback : cli_adapter_state_callback() state: STATE_DISABLED
+INFO[%d]: CLI callback : conn_state_callback() addr: %s state:CONNECTED
+INFO[%d]: CLI callback : conn_state_callback() addr: %s state:CONNECTING
+INFO[%d]: CLI callback : conn_state_callback() addr: %s state:DISCONNECTED
+ERR[%d]: Unable to open BT session. Error : %u
+:: lists all available console commands
+enable
+:: enables bluetooth
+disable
+:: disables bluetooth
+:: Initiates device scan
+stopscan
+:: Stops device scan
+:: Initiates device pairing
+pairconnect
+:: Performs device pairing and connection
+unpair
+:: Initiates device unpairing
+paircancel
+:: Cancels an ongoing device pairing
+:: Accept incoming connection (y or n)
+:: Enter pairing pin
+:: Initiates profile connect calls
+disconnect
+:: Initiates profile disconnect calls
+discoverable
+connectedlist
+:: gets list of connected devices
+connectedcount
+:: gets number of connected devices
+::gets connection state of given device
+startbeaconScanResp
+:: Start beaconing with scan response 
+::connection priority change request 
+ BT_EnableCallback
+ BT_DisableCallback
+Current_Mode = 
+Paired = 
+Connected = 
+ BT_PairCallback
+ BT_CancelPairCallback
+ BT_UnpairCallback
+ BT_ConnectCallback
+ BT_DisconnectCallback
+ BT_SetDiscoverableCallback
+ BT_SetConnectableCallback
+ BT_SetPowerModeCallback
+ BT_EnableAutoConnectCallback
+ BT_ShowPairedCallback
+ BT_ShowConnectedCallback
+Usage: 
+E BT-UI:SetupLIPCFailed:reason=unableToSubscribeToEvent,error=%d:
+I BT-UI:connect_disconnect_script::userinputs[1].c_str() = %s
+Connect
+Disconnect
+Connect_Disconnect_script
+I BT-UI:ProcessCommandStringParam::userinputs[1].c_str() = %s
+I BT-UI:ProcessCommandStringParam::userinputs[1]0.c_str() = %s
+CancelScan
+Pair
+CancelPairing
+Unpair
+SetDiscoverable
+SetNonDiscoverable
+SetConnectable
+SetNonConnectable
+ShowPaired
+ShowConnected
+Disable_auto_connect
+Enable_auto_connect
+Disable_PTS_Mode
+Enable_PTS_Mode
+Enable_BT_Perf_Logging
+Enable_BT_Snoop_Logging
+Disable_BT_perf_logging
+Disable_BT_Snoop_Logging
+Enable_BT_log_to_file
+Disable_BT_log_to_file
+PairUserConfirmation
+UpdateBtMode
+BLE_MODE
+Available commands:
+<mode 0 =voiceview 1= audible
+value 0 = voice view, 2 = audible 4 = ble_provision
+W BT-UI:process hash param::unable to create new hash array
+W BT-UI:btui process hash param:lipc_err=%d,lipc_err_str=%s:unable to add hash to hasharray
+W BT-UI:btui process hash param:lipc_err=%d,lipc_err_str=%s:unable to send hasharray to cmd service
+W BT-UI:btui process hash param:lipc_err=%d,lipc_err_str=%s:unable to destroy hasharray
+W BT-UI:btui process hash param:lipc_err=%d,lipc_err_str=%s:unable to put int value in hasharray
+Enable_Result
+Disable_Result
+Connect_Result
+Disconnect_Result
+Set_Discoverable_Result
+Set_Connectable_Result
+Set_Powermode_Result
+Disable_Reconnect_Result
+Enable_Reconnect_Result
+Usage: Log [fileName]
+
+--- [3] SCAN & PAIR BTMINIZKEY (D5:24:53:14:5A:C7) ---
+start: Job is already running: btd
+*** Welcome to TESTUI :) ***
+Available commands:
+ 1. TurnOnBluetoothvalue 0 = voice view, 2 = audible 4 = ble_provision
+ 2. TurnOffBluetooth-{value}
+ 3. Scan
+ 4. A2DPDiscovery
+ 5. CancelScan
+ 6. Pair
+ 7. CancelPairing
+ 8. Unpair
+ 9. Connect
+10. Disconnect
+11. Play
+12. Pause
+13. Stop
+14. SetDiscoverable
+15. SetNonDiscoverable
+16. SetConnectable
+17. SetNonConnectable
+18. ShowPaired
+19. ShowConnected
+20. ShowDiscovered
+21. ShowAllDevice
+22. Disable_auto_connect
+23. Enable_auto_connect
+24. Disable_PTS_Mode
+25. Enable_PTS_Mode
+26. Enable_BT_Perf_Logging
+27. Enable_BT_Snoop_Logging
+28. Disable_BT_perf_logging
+29. Disable_BT_Snoop_Logging
+30. Set_bsatrace_level-{value}
+31. Enable_BT_log_to_file
+32. Disable_BT_log_to_file
+33. UpdatePlayBackState<playback_state 1= stopped, 2=> paused, 3 =>playing, 4=>fastfwd , 5 =>rewinding, 6=>skip backwards> :<playpos (ms)>
+34. UpdateMetaData<track_title>:<track_artist>:<album_name>:number of track>:<track number>:<genre>:<playing time (ms)>
+35. PairUserConfirmation<value 0= declined 1=confirmed>-{value}
+36. UpdateBtMode<mode 0 =voiceview 1= audible-{value}
+37. Discover_script
+38. On_Off_Script
+39. Connect_Disconnect_script
+40. BLE_MODEvalue 0
+
+Enter a command: TurnOnBluetooth [0]
+
+Enter a command: 
+ BT_EnableCallbackResult = 0 
+_Mode = 0 
+Scan...
+
+Enter a command: 
+ BT_StartDiscoverCallbackResult = 0 
+
+ BT_SetPowerModeCallbackResult = 0 
+
+ BT_DiscoverCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -57
+Paired = 0
+Connected = 0
+A2DP SINK confirmed = 0
+CancelScan...
+
+Enter a command: 
+ BT_CancelDiscoverCallbackResult = 0 
+
+ BT_EnableAutoConnectCallbackResult = 0 
+
+ BT_DiscoverCompleteCallbackResult = 0 
+ShowDiscovered...
+
+Enter a command: 
+ BT_ShowDiscoveredCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -57
+Paired = 0
+Connected = 0
+>>> Target MAC for BTMINIZKEY: D5:24:53:14:5A:C7
+Pair...
+
+Enter a command: 
+ BT_PairCallbackResult = 0 
+PairUserConfirmation [1]
+
+Enter a command: Connect...
+
+Enter a command: 
+ BT_ConnectCallbackResult = 1 
+ShowPaired...
+
+Enter a command: 
+ BT_ShowPairedCallback
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -46
+Paired = 1
+Connected = 0
+ShowConnected...
+
+Enter a command: ShowAllDevice...
+
+Enter a command: 
+ BT_ShowAllDeviceCallback
+ BD_Name = G6
+BD_Address = 41:42:14:E7:AE:76
+Class Of Device = Audio/Video
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -57
+Paired = 0
+Connected = 0
+Discovered = 1
+
+ BT_ShowAllDeviceCallback
+ BD_Name = BTMINIZKEY
+BD_Address = D5:24:53:14:5A:C7
+Class Of Device = Peripheral
+Vendor ID = 0
+Product ID = 0
+Version = 0
+Services = 0
+RSSI = -46
+Paired = 1
+Connected = 0
+Discovered = 0
+
+--- [4] ALSO TRY LIPC BTFD BOND & CONNECT ---
+
+--- [5] SYSLOG (/var/log/messages) AFTER PAIR & CONNECT ---
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184103 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184103 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184104 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184104 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:lockAny::Locking shared lock for all connections
+261031:184105 cvm[9604]: I conutils:conEnsureConnectionInternal::setting cmd property
+261031:184105 cmd[2959]: I def:req::Got a connection request:~:
+261031:184105 cvm[9604]: I conutils:unlockAny::Unlocking shared lock for all connections
+261031:184105 cvm[9604]: I conutils:conEnsureConnectionResponse::response=0
+261031:184105 tmd[3017]: I lipc_cb_cmd:Connect event received:event = 0:
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184105 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184105 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184106 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184106 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184106 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184106 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184106 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184106 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184106 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184106 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184106 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184106 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184106 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184106 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184106 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184106 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+261031:184106 cvm[9604]: I conutils:shortcutEnsureCon::Using cached result for connection request
+261031:184106 cvm[9604]: E WhisperSyncV2PaginateServiceImpl:failure=GetConnectionFailed:reason=getting connection failed while creating a dataset:
+
+--- [6] INPUT DEVICES & DMESG ---
+I: Bus=0019 Vendor=0000 Product=0000 Version=0000
+N: Name="30370000.snvs:snvs-powerkey"
+P: Phys=snvs-pwrkey/input0
+S: Sysfs=/devices/platform/soc/30000000.aips-bus/30370000.snvs/30370000.snvs:snvs-powerkey/input/input0
+U: Uniq=
+H: Handlers=kbd event0 
+B: PROP=0
+B: EV=3
+B: KEY=100000 0 0 0
+
+I: Bus=0000 Vendor=0000 Product=0000 Version=0000
+N: Name="max77796-key"
+P: Phys=max77796-key/input0
+S: Sysfs=/devices/platform/3c.max77796/max77796-key/input/input1
+U: Uniq=
+H: Handlers=kbd event1 
+B: PROP=0
+B: EV=3
+B: KEY=100000 0 0 0
+
+I: Bus=0000 Vendor=0000 Product=0000 Version=0000
+N: Name="hall_sensor_disp"
+P: Phys=
+S: Sysfs=/devices/virtual/input/input2
+U: Uniq=
+H: Handlers=event2 
+B: PROP=0
+B: EV=21
+B: SW=1
+
+I: Bus=0000 Vendor=0000 Product=0000 Version=0000
+N: Name="hall_sensor_usb"
+P: Phys=
+S: Sysfs=/devices/virtual/input/input3
+U: Uniq=
+H: Handlers=event3 
+B: PROP=0
+B: EV=21
+B: SW=1
+
+I: Bus=0019 Vendor=0001 Product=0001 Version=0100
+N: Name="gpio-keys"
+P: Phys=gpio-keys/input0
+S: Sysfs=/devices/platform/gpio-keys/input/input4
+U: Uniq=
+H: Handlers=kbd event4 
+B: PROP=0
+B: EV=3
+B: KEY=2100 0 0 0
+
+I: Bus=0000 Vendor=0000 Product=0000 Version=0000
+N: Name="max44009_als"
+P: Phys=
+S: Sysfs=/devices/virtual/input/input5
+U: Uniq=
+H: Handlers=event5 
+B: PROP=0
+B: EV=9
+B: ABS=100 0
+
+I: Bus=0000 Vendor=0000 Product=0000 Version=0000
+N: Name="max44009_als1"
+P: Phys=
+S: Sysfs=/devices/virtual/input/input6
+U: Uniq=
+H: Handlers=event6 
+B: PROP=0
+B: EV=9
+B: ABS=100 0
+
+I: Bus=0018 Vendor=0000 Product=0000 Version=0000
+N: Name="bma2x2"
+P: Phys=
+S: Sysfs=/devices/virtual/input/input7
+U: Uniq=
+H: Handlers=event7 
+B: PROP=0
+B: EV=9
+B: ABS=100 7
+
+I: Bus=0018 Vendor=0000 Product=0000 Version=0000
+N: Name="bma_interrupt"
+P: Phys=
+S: Sysfs=/devices/virtual/input/input8
+U: Uniq=
+H: Handlers=event8 
+B: PROP=0
+B: EV=d
+B: REL=3c6
+B: ABS=3000000
+
+I: Bus=0000 Vendor=0000 Product=0000 Version=0000
+N: Name="cyttsp5_mt"
+P: Phys=1-0024/input0
+S: Sysfs=/devices/platform/soc/30800000.aips-bus/30a30000.i2c/i2c-1/1-0024/input/input9
+U: Uniq=
+H: Handlers=event9 
+B: PROP=2
+B: EV=f
+B: KEY=6420 0 0 0 0 0 0 0 0 0 0
+B: REL=0
+B: ABS=6608000 0
+
+total 0
+drwxr-xr-x    3 root     root           280 Oct 31 18:15 .
+drwxr-xr-x   17 root     root          1360 Oct 31 18:35 ..
+drwxr-xr-x    2 root     root           120 Oct 31 18:15 by-path
+crw-r-----    1 root     root       13,  64 Oct 31 18:15 event0
+crw-r-----    1 root     root       13,  65 Oct 31 18:15 event1
+crw-r-----    1 root     root       13,  66 Oct 31 18:15 event2
+crw-r-----    1 root     root       13,  67 Oct 31 18:15 event3
+crw-r-----    1 root     root       13,  68 Oct 31 18:15 event4
+crw-r-----    1 root     root       13,  69 Oct 31 18:15 event5
+crw-r-----    1 root     root       13,  70 Oct 31 18:15 event6
+crw-r-----    1 root     root       13,  71 Oct 31 18:15 event7
+crw-r-----    1 root     root       13,  72 Oct 31 18:15 event8
+crw-r-----    1 root     root       13,  73 Oct 31 18:15 event9
+crw-r-----    1 root     root       13,  63 Oct 31 18:15 mice
+[ 1236.265885] cfg80211:   (5250000 KHz - 5330000 KHz @ 80000 KHz, 160000 KHz AUTO), (N/A, 2000 mBm), (0 s)
+[ 1236.265895] cfg80211:   (5490000 KHz - 5730000 KHz @ 160000 KHz), (N/A, 2000 mBm), (0 s)
+[ 1236.265905] cfg80211:   (5735000 KHz - 5835000 KHz @ 80000 KHz), (N/A, 2000 mBm), (N/A)
+[ 1236.265914] cfg80211:   (57240000 KHz - 63720000 KHz @ 2160000 KHz), (N/A, 0 mBm), (N/A)
+[ 1464.055854] Eject....
+[ 1464.055881] send_offline_uevent:996 bitflags: 0x0a, unplug_state: 0, recovery_mode: 0
+[ 1464.126670] max44009_init_automode:1281
+[ 1464.127603] max44009_init_automode:1278
+[ 1465.198048] fsg_store_file:448, file=
+[ 1465.257910] misc als: 
+max44009_report_light_level:919: to upper layer lux=93
+[ 1465.264664] misc als1: 
+max44009_report_light_level:916: to upper layer lux=236
+[ 1466.202167] Connecting with 6c:67:a8 ssid "l********6" len (10) channel=1
+
+[ 1466.217701] wl_bss_connect_done succeeded with 6c:67:a8
+[ 1466.250954] wl_bss_connect_done succeeded with 6c:67:a8
+[ 1482.533844] bluesleep: Asleep false
+[ 1482.583959] bluesleep: Asleep true
+[ 1483.503716] bluesleep: Asleep false
+[ 1483.516469] bluesleep: Asleep true
+[ 1484.821862] bluesleep: Asleep false
+[ 1484.835665] bluesleep: Asleep true
+[ 1492.556420] bluesleep: Asleep false
+[ 1492.606467] bluesleep: Asleep true
+[ 1492.606509] bluesleep: already asleep
+[ 1495.618966] bluesleep: Asleep false
+[ 1495.668942] bluesleep: Asleep true
+[ 1496.476506] bluesleep: Asleep false
+[ 1496.548941] bluesleep: Asleep true
+[ 1496.741424] bluesleep: Asleep false
+[ 1496.816904] bluesleep: Asleep true
+[ 1496.825118] bluesleep: Asleep false
+[ 1496.855582] bluesleep: Asleep true
+[ 1499.618959] bluesleep: Asleep false
+[ 1499.668936] bluesleep: Asleep true
+[ 1499.742219] bluesleep: Asleep false
+[ 1499.793140] bluesleep: Asleep true
+[ 1509.758506] Tx has been idle
+[ 1509.758592] bluesleep: already asleep

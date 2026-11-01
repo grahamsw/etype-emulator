@@ -1,0 +1,52 @@
+{
+	"items": [
+		{
+			"name": "Launch E-Type Zen Mode (Fullscreen)",
+			"priority": 1,
+			"action": "/mnt/us/extensions/oasis_probe/run_zen.sh",
+			"exitmenu": true,
+			"status": true,
+			"checked": true
+		},
+		{
+			"name": "Start E-Type Typewriter (Standard)",
+			"priority": 2,
+			"action": "/mnt/us/extensions/oasis_probe/run_discovery.sh",
+			"exitmenu": false,
+			"status": true,
+			"checked": true
+		},
+		{
+			"name": "Nuke Lockscreen Ads & Recommendations",
+			"priority": 3,
+			"action": "/mnt/us/extensions/oasis_probe/kill_ads.sh",
+			"exitmenu": false,
+			"status": true,
+			"checked": true
+		},
+		{
+			"name": "Display Vintage Typewriter Sleep Screen",
+			"priority": 4,
+			"action": "/mnt/us/extensions/oasis_probe/show_art.sh",
+			"exitmenu": true,
+			"status": true,
+			"checked": true
+		},
+		{
+			"name": "Silence 'Cloud Not Available' Popup (FakeReg)",
+			"priority": 5,
+			"action": "/mnt/us/extensions/oasis_probe/fakereg.sh",
+			"exitmenu": true,
+			"status": true,
+			"checked": true
+		},
+		{
+			"name": "Undo FakeReg (Restore Unregistered State)",
+			"priority": 6,
+			"action": "/mnt/us/extensions/oasis_probe/unfakereg.sh",
+			"exitmenu": true,
+			"status": true,
+			"checked": true
+		}
+	]
+}
