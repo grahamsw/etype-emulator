@@ -5,9 +5,19 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'public/**'
+      - '.github/workflows/deploy.yml'
+      - 'firebase.json'
+      - '.firebaserc'
   pull_request:
     branches:
       - main
+    paths:
+      - 'public/**'
+      - '.github/workflows/deploy.yml'
+      - 'firebase.json'
+      - '.firebaserc'
 
 permissions:
   checks: write
