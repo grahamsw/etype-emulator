@@ -399,32 +399,32 @@ static void disc_callback(int event, void *p_data) {
     int match = 0;
     const char *matched_by = "None";
 
-    // Detect if device is Classic-only (has CoD, but zero BLE HID indicators)
-    int is_classic_only = (cod != 0) && (!has_hid_service) && (!has_keyboard_appearance);
+    // Known Classic-only keyboards from earlier tests
+    int is_old_classic_keyboard = (strcmp(mac_str, "13:07:10:00:05:19") == 0 ||
+                                   strcmp(mac_str, "D5:24:53:14:5A:C7") == 0);
 
-    if (has_hid_service) {
+    if (is_old_classic_keyboard) {
+        printf("[DISCOVERY] Notice: %s (%s) is old Classic-only keyboard. Skipping.\n",
+               name, mac_str);
+        match = 0;
+    } else if (strcasestr(name, "Samsers") || strcasestr(eir_name, "Samsers") ||
+               strcasestr(name, "KF08") || strcasestr(eir_name, "KF08")) {
+        match = 1;
+        matched_by = "Samsers KF08 keyboard string";
+    } else if (has_hid_service) {
         match = 1;
         matched_by = "GATT HID Service UUID (0x1812)";
     } else if (has_keyboard_appearance) {
         match = 1;
         matched_by = "BLE Appearance (0x03C1 Keyboard)";
-    } else if (strcasestr(name, "Samsers") || strcasestr(eir_name, "Samsers")) {
-        match = 1;
-        matched_by = "Samsers keyboard string";
     } else if (strcasestr(name, "5.1") || strcasestr(eir_name, "5.1") ||
                strcasestr(name, "BT5") || strcasestr(eir_name, "BT5")) {
         match = 1;
         matched_by = "BT 5.1 keyboard string";
     } else if ((strcasestr(name, "Keyboard") || strcasestr(name, "Key") ||
-                strcasestr(eir_name, "Keyboard") || strcasestr(eir_name, "Key")) && !is_classic_only) {
+                strcasestr(eir_name, "Keyboard") || strcasestr(eir_name, "Key")) && cod == 0) {
         match = 1;
         matched_by = "BLE Keyboard name string";
-    }
-
-    if (is_classic_only && match) {
-        printf("[DISCOVERY] Notice: %s (%s) is Classic BR/EDR only (CoD=0x%06x). Skipping for BLE.\n",
-               name, mac_str, cod);
-        match = 0; // Prevent status 133 loop
     }
 
     if (match && !g_connecting && !g_connected) {
